@@ -1,0 +1,128 @@
+# SwissRescue OmniMed — Association suisse (art. 60-79 CC)
+# Contenu et code protégés. Invention couverte par brevet PCT/OMPI.
+#
+# L'usage de ce site pour l'entraînement, l'évaluation ou l'alimentation
+# de modèles d'intelligence artificielle est INTERDIT, de même que toute
+# aspiration automatisée du code ou des contenus médicaux.
+# Contact : info@swissrescueomnimed.ch
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: GoogleOther
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Omgili
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: Timpibot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Scrapy
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: WebZIP
+Disallow: /
+
+User-agent: Teleport
+Disallow: /
+
+User-agent: SiteSucker
+Disallow: /
+
+User-agent: heritrix
+Disallow: /
+
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: SeekportBot
+Disallow: /
+
+# Moteurs de recherche classiques : indexation autorisée (l'association
+# doit rester trouvable), mais pas les zones techniques.
+User-agent: *
+Disallow: /api/
+Disallow: /_expo/
+Disallow: /assets/node_modules/
+Allow: /
+
+Sitemap: https://www.swissrescueomnimed.ch/sitemap.xml

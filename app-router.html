@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+  SwissRescue OmniMed — SÉLECTEUR AUTOMATIQUE D'APPLICATION
+  © 2024-2026 Association SwissRescue OmniMed, Genève — art. 60-79 CC
+
+  Loi de placement (docs/DOCTRINE_PLACEMENT.md) appliquée à l'entrée utilisateur :
+  « le maximum de puissance là où le serveur peut le porter ; tout ce qui tient sans
+  réseau reste disponible sans réseau. »
+
+  Ici, la décision est prise POUR l'utilisateur, en mesurant la connectivité RÉELLE :
+    • serveur joignable  → application COMPLÈTE (61 écrans, servie par le serveur) ;
+    • serveur injoignable → application LÉGÈRE, qui fonctionne intégralement hors ligne.
+
+  Pourquoi une mesure et non `navigator.onLine` : cette propriété ment. Elle vaut `true`
+  dès qu'une interface réseau existe — Wi-Fi d'hôtel sans Internet, portail captif,
+  4G à zéro barre. Un secouriste s'en apercevrait au pire moment. On sonde donc
+  réellement /api/health, avec un délai court : en urgence, on ne fait pas attendre.
+-->
+<html lang="fr-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#060E1F">
+<meta name="robots" content="noai, noimageai">
+<title>SwissRescue OmniMed — ouverture de l'application</title>
+<style>
+  html,body{height:100%;margin:0}
+  body{background:#060E1F;color:#F1F5F9;font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       display:grid;place-items:center;padding:24px;text-align:center}
+  .marque{font-weight:800;font-size:18px;letter-spacing:-.01em}
+  .marque span{color:#FF6B6B}
+  .etat{color:#94A3B8;font-size:13.5px;margin-top:10px;min-height:20px}
+  .barre{width:200px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin:18px auto 0;overflow:hidden}
+  .barre i{display:block;height:100%;width:40%;background:#D42C2C;border-radius:2px;animation:go 1.1s ease-in-out infinite}
+  @keyframes go{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
+  .choix{margin-top:26px;display:none;flex-direction:column;gap:10px}
+  a.btn{display:block;padding:13px 20px;border-radius:11px;text-decoration:none;font-weight:700;font-size:14.5px}
+  .p{background:#D42C2C;color:#fff}
+  .s{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#F1F5F9}
+  .note{color:#64748B;font-size:12px;margin-top:14px;max-width:34ch}
+</style>
+</head>
+<body>
+<main>
+  <div class="marque">Swiss<span>Rescue</span> OmniMed</div>
+  <p class="etat" id="etat">Recherche du réseau…</p>
+  <div class="barre" id="barre"><i></i></div>
+
+  <div class="choix" id="choix">
+    <a class="btn p" href="app-complete.html">Application complète</a>
+    <a class="btn s" href="app.html">Version légère (hors ligne)</a>
+    <p class="note">Choisissez vous-même si la détection tarde. La version légère
+      fonctionne sans aucune connexion.</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  var etat = document.getElementById("etat");
+  var choix = document.getElementById("choix");
+  var barre = document.getElementById("barre");
+
+  /* Délai volontairement court : en urgence, une seconde et demie d'attente est déjà
+     beaucoup. Au-delà, on considère le serveur comme injoignable et on sert la version
+     qui marche toujours — mieux vaut l'outil léger tout de suite que le complet trop tard. */
+  var DELAI_MS = 1500;
+
+  function aller(url, pourquoi) {
+    etat.textContent = pourquoi;
+    /* replace() : le bouton « retour » ne ramène pas sur cet écran technique. */
+    setTimeout(function () { location.replace(url); }, 250);
+  }
+
+  function proposerLeChoix() {
+    barre.style.display = "none";
+    etat.textContent = "Impossible de décider automatiquement.";
+    choix.style.display = "flex";
+  }
+
+  /* Sonde RÉELLE du serveur. On ne se fie pas à navigator.onLine (voir en-tête) ;
+     on demande /api/health et on exige du JSON : une page de maintenance ou un portail
+     captif répondent souvent 200 avec du HTML — ce qui tromperait un test naïf. */
+  function serveurJoignable() {
+    if (typeof AbortController !== "function" || typeof fetch !== "function") {
+      return Promise.resolve(false);
+    }
+    var ctl = new AbortController();
+    var minuteur = setTimeout(function () { ctl.abort(); }, DELAI_MS);
+    return fetch("/api/health", { signal: ctl.signal, cache: "no-store" })
+      .then(function (r) {
+        clearTimeout(minuteur);
+        if (!r.ok) return false;
+        var ct = r.headers.get("content-type") || "";
+        if (ct.indexOf("application/json") < 0) return false;  /* portail captif / maintenance */
+        return r.json().then(function (j) { return !!j && j.status === "ok"; }, function () { return false; });
+      })
+      .catch(function () { clearTimeout(minuteur); return false; });
+  }
+
+  /* Cas tranché d'avance : sans aucune interface réseau, inutile de sonder. */
+  if (navigator.onLine === false) {
+    aller("app.html", "Hors réseau — ouverture de la version légère.");
+    return;
+  }
+
+  serveurJoignable().then(function (ok) {
+    if (ok) aller("app-complete.html", "Réseau détecté — ouverture de l'application complète.");
+    else aller("app.html", "Serveur injoignable — ouverture de la version légère, qui fonctionne hors ligne.");
+  }).catch(proposerLeChoix);
+
+  /* Filet : si rien n'a abouti (navigateur exotique, script bloqué), l'utilisateur
+     garde la main plutôt que de rester devant un écran figé. */
+  setTimeout(function () {
+    if (choix.style.display !== "flex" && barre.style.display !== "none") proposerLeChoix();
+  }, DELAI_MS + 2500);
+})();
+</script>
+</body>
+</html>

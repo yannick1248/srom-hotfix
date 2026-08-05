@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H206 L238 190 L272 318 L300 268 H360' fill='none' stroke='white' stroke-width='26' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; form-action 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'">
+<meta name="theme-color" content="#05080F">
+<title>Ouvrir l'application — SwissRescue OmniMed</title>
+<meta name="description" content="Les deux applications SwissRescue OmniMed : complète (34 modules, 1,7 Mio) et légère (essentiel garanti hors ligne, 22,3 Ko). Poids réels mesurés.">
+<meta name="robots" content="noai, noimageai, index, follow">
+<meta property="og:title" content="Ouvrir l'application — SwissRescue OmniMed">
+<meta property="og:description" content="Accès à l'application médicale d'urgence SwissRescue OmniMed. Poids et temps de chargement mesurés.">
+<meta property="og:type" content="website">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}:root{
+ --red:#D42C2C;--red-light:#FF4444;--red-dim:rgba(212,44,44,0.12);
+ --blue:#0F4C81;--blue-light:#1A6EBB;--blue-dim:rgba(15,76,129,0.15);
+ --bg:#060E1F;--bg-2:#0C1828;--bg-3:#112038;
+ --surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);
+ --border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.14);
+ --text-primary:#F1F5F9;--text-secondary:#94A3B8;--text-muted:#64748B;
+ --font:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+ --radius-sm:8px;--radius:14px;--radius-lg:20px;
+ --success:#10B981;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}.container{max-width:1100px;margin:0 auto;padding:0 24px}.section{padding:80px 0}.section-alt{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+/* Nav */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all.3s}
+#nav.scrolled{background:rgba(6,14,31,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}.nav-logo{display:flex;align-items:center;gap:12px}.nav-logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;flex-shrink:0}.nav-logo-text{font-size:15px;font-weight:800;color:var(--text-primary)}.nav-logo-sub{font-size:10px;color:var(--text-muted)}.nav-links{display:flex;align-items:center;gap:4px}.nav-links a{font-size:14px;font-weight:500;color:var(--text-secondary);padding:8px 14px;border-radius:var(--radius-sm);transition:all.2s}.nav-links a:hover{color:var(--text-primary);background:var(--surface)}.nav-links a.active{color:var(--red-light)}.btn-nav{background:var(--red);color:#fff!important;padding:9px 20px!important;border-radius:var(--radius-sm)}.btn-nav:hover{background:var(--red-light)!important}.hamburger{display:none;width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer}.hamburger span{display:block;width:18px;height:1.5px;background:var(--text-primary);border-radius:2px}.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(6,14,31,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px 24px;z-index:999;flex-direction:column;gap:4px}.mobile-menu.open{display:flex}.mobile-menu a{font-size:15px;font-weight:500;color:var(--text-secondary);padding:12px 16px;border-radius:var(--radius-sm)}.mobile-menu a:hover{color:var(--text-primary);background:var(--surface)}
+
+/* Hero */.page-hero{padding:140px 0 80px;text-align:center;position:relative;overflow:hidden}.page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(15,76,129,.18) 0%,transparent 70%),var(--bg);z-index:0}.page-hero-content{position:relative;z-index:1}.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red-light);margin-bottom:16px}.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--red-light);animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{font-size:clamp(34px,5vw,60px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
+h1 span{background:linear-gradient(135deg,var(--red-light),#FF8080 50%,#FFB3B3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-lead{font-size:clamp(16px,1.8vw,19px);color:var(--text-secondary);max-width:580px;margin:0 auto 20px;line-height:1.75}.hero-latin{font-style:italic;font-size:17px;color:var(--text-muted);margin-top:8px}
+h2{font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.8px;color:var(--text-primary);margin-bottom:10px}
+h3{font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:8px}.section-sub{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:36px}.heading-icon{width:40px;height:40px;background:var(--red-dim);border:1px solid rgba(212,44,44,.25);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}.heading-icon svg{width:20px;height:20px;color:var(--red-light)}
+
+/* Pillars grid */.pillars-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}.pillar-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all.25s}.pillar-card:hover{background:var(--surface-hover);border-color:var(--border-strong);transform:translateY(-2px)}.pillar-icon{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--blue-dim);border:1px solid rgba(15,76,129,.25);display:flex;align-items:center;justify-content:center;margin-bottom:16px}.pillar-icon svg{width:22px;height:22px;color:#60A5FA}.pillar-title{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:8px}.pillar-desc{font-size:14px;color:var(--text-secondary);line-height:1.65}
+
+/* Values */.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.value-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:var(--radius-sm) var(--radius) var(--radius) var(--radius-sm);padding:22px}.value-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}.value-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;font-style:italic}
+
+/* Team */.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}.team-card{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:36px;text-align:center;transition:all.3s}.team-card:hover{background:var(--surface-hover);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}.team-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;margin:0 auto 20px;color:#fff;letter-spacing:-1px}.team-name{font-size:20px;font-weight:800;color:var(--text-primary);margin-bottom:6px}.team-role{font-size:13px;font-weight:700;color:var(--red-light);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em}.team-desc{font-size:14px;color:var(--text-secondary);line-height:1.65}.team-badge{display:inline-block;background:var(--blue-dim);border:1px solid rgba(15,76,129,.3);border-radius:100px;padding:4px 12px;font-size:11px;font-weight:700;color:#60A5FA;margin-top:12px}
+
+/* CTA */.cta-block{background:linear-gradient(135deg,var(--bg-3),var(--bg-2));border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:52px;text-align:center}.cta-block h2{margin-bottom:16px}.cta-block.section-sub{margin:0 auto 32px;max-width:480px}.cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--radius-sm);font-size:15px;font-weight:700;transition:all.25s}.btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red-light);transform:translateY(-1px)}.btn-secondary{background:var(--surface);border:1px solid var(--border-strong);color:var(--text-primary)}.btn-secondary:hover{background:var(--surface-hover);transform:translateY(-1px)}.section-divider{border:none;border-top:1px solid var(--border)}
+footer{border-top:1px solid var(--border);padding:40px 0}.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}.footer-left{font-size:13px;color:var(--text-muted)}.footer-links{display:flex;flex-wrap:wrap;gap:6px}.footer-links a{font-size:13px;color:var(--text-muted);padding:4px 10px;border-radius:var(--radius-sm);transition:color.2s}.footer-links a:hover{color:var(--text-secondary)}.footer-motto{font-size:11px;color:var(--text-muted);text-align:center;margin-top:16px;font-style:italic}.reveal{opacity:0;transform:translateY(24px);transition:opacity.7s,transform.7s}.reveal.visible{opacity:1;transform:none}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+</style>
+<link rel="stylesheet" href="assets/pages-v2.css">
+</head>
+<body>
+<!-- Bascule automatique reseau : en ligne -> application COMPLETE (app.html) ; hors-ligne -> application LEGERE (app-light.html). -->
+<nav id="nav">
+ <div class="container">
+ <div class="nav-inner">
+ <a href="index.html" class="nav-logo" aria-label="SwissRescue OmniMed — Accueil">
+ <div class="nav-logo-icon"><svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SwissRescue OmniMed"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+ <div><div class="nav-logo-text">SwissRescue OmniMed</div><div class="nav-logo-sub">Association suisse art. 60-79 CC</div></div>
+ </a>
+ <nav class="nav-links">
+ <a href="index.html">Accueil</a>
+ <a href="mission.html">Mission</a>
+ <a href="technologie.html">Technologie</a>
+ <a href="transparence.html">Transparence</a>
+ <a href="don.html">Soutenir</a>
+ <a href="contact.html">Contact</a>
+ <a href="app.html" class="btn-nav" rel="noopener">Ouvrir l'app →</a>
+ </nav>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+ </div>
+ </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+ <a href="index.html">Accueil</a><a href="mission.html">Mission</a><a href="technologie.html">Technologie</a>
+ <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
+ <a href="app.html" rel="noopener" style="color:#FF8080;font-weight:700">Ouvrir l'app →</a>
+</div>
+<main>
+<section class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:780px;margin:0 auto 30px">
+      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Accès à l'application</div>
+      <h1>Ouvrir <span>SwissRescue OmniMed</span></h1>
+      <p class="hero-lead">Deux versions. La différence n'est pas le confort, c'est la garantie :
+      la complète a <strong>tous les modules</strong>, la légère a <strong>l'essentiel garanti
+      hors ligne</strong>, sur n'importe quel appareil.</p>
+    </div>
+
+    <div class="org-card reveal" style="max-width:780px;margin:0 auto 16px;border-color:rgba(212,44,44,.45)">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+        <span style="background:var(--red);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;
+              text-transform:uppercase;padding:4px 10px;border-radius:100px">Recommandée</span>
+        <span style="font-size:12.5px;color:var(--text-muted)">Application complète</span>
+      </div>
+      <div class="org-title" style="font-size:19px">Tous les modules</div>
+      <p class="principle-desc" style="margin-bottom:14px">
+        <strong>34 modules, sans exception.</strong> Exactement la même application sur ordinateur
+        et sur téléphone : seule la mise en page change, jamais le contenu. Aucun module ne
+        dépend du support. Fichier autonome — une fois chargée, elle fonctionne hors ligne.
+      </p>
+      <div style="margin-bottom:16px"><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Triage clinique unifié</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Chat médical</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Bilan psychosocial</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Protocoles d'urgence</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Guides gestes qui sauvent</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Espace étudiant</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Citoyen sauveteur</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Scores cliniques</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Scores professionnels</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Afflux massif (START)</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Vitales rPPG</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Détresse vocale</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Mesures sur photo et 3D</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Analyse de plaie</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Interactions CYP3A4</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Pictogrammes et synthèse vocale</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">SOS Morse</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Position de secours</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Synchronisation hors ligne</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Accessibilité</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Métronome RCP</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Documents médicaux</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Rapport d'intervention</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Bibliothèque</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Références professionnelles</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Annuaire médical suisse</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Application autonome</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">À propos et légal</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Numéros d'urgence</span><span style="display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:100px;padding:4px 11px;font-size:12.5px;margin:0 5px 6px 0">Soutenir</span></div>
+      <div class="ratio-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px">
+        <div class="ratio-card" style="padding:15px"><span class="ratio-number" style="font-size:21px">1,7 Mio</span>
+          <div class="ratio-label">Poids du fichier<br>mesuré</div></div>
+        <div class="ratio-card" style="padding:15px"><span class="ratio-number highlight" style="font-size:21px">349 Ko</span>
+          <div class="ratio-label">Compressé (gzip)<br>mesuré</div></div>
+        <div class="ratio-card" style="padding:15px"><span class="ratio-number warn" style="font-size:21px">~10 s</span>
+          <div class="ratio-label">Chargement en 3G<br>calcul, non mesuré</div></div>
+      </div>
+      <a href="app.html" data-app="complete" class="btn btn-primary" style="width:100%;justify-content:center">Ouvrir l'application complète →</a>
+    </div>
+
+    <div class="org-card reveal" style="max-width:780px;margin:0 auto">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+        <span style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);color:#34D399;
+              font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+              padding:3px 10px;border-radius:100px">Garantie hors ligne</span>
+        <span style="font-size:12.5px;color:var(--text-muted)">Version légère</span>
+      </div>
+      <div class="org-title" style="font-size:19px">L'essentiel, garanti sans réseau</div>
+      <p class="principle-desc" style="margin-bottom:14px">
+        Le noyau vital. <strong>Règle d'inclusion stricte : un composant n'y figure que s'il
+        fonctionne intégralement sans aucune requête réseau.</strong> Tout ce qui dépendrait
+        d'une connexion en est exclu, par construction.
+      </p>
+      <div class="principles-grid" style="grid-template-columns:1fr;gap:10px;margin-bottom:16px">
+        <div class="principle-card"><div><div class="principle-title">Numéros d'urgence</div>
+          <div class="principle-desc">144, 1414, 117, 118, 145, 143, 147, 112 et la garde cantonale. Appel direct.</div></div></div>
+        <div class="principle-card"><div><div class="principle-title">Gestes qui sauvent — 8 protocoles</div>
+          <div class="principle-desc">Inconscience, arrêt cardiaque, hémorragie, étouffement, signes d'AVC, réaction allergique grave, brûlure, position latérale de sécurité.</div></div></div>
+        <div class="principle-card"><div><div class="principle-title">Urgences hospitalières — 83 services, 26 cantons</div>
+          <div class="principle-desc">Recherche par canton, ville ou établissement. Les données sont dans la page : aucune requête n'est émise pendant la recherche. Mise en cache pour rester disponible sans réseau.</div></div></div>
+      </div>
+      <div class="ratio-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px">
+        <div class="ratio-card" style="padding:15px"><span class="ratio-number" style="font-size:21px">22,3 Ko</span>
+          <div class="ratio-label">Poids du fichier<br>mesuré</div></div>
+        <div class="ratio-card" style="padding:15px"><span class="ratio-number highlight" style="font-size:21px">8,0 Ko</span>
+          <div class="ratio-label">Compressé (gzip)<br>mesuré</div></div>
+        <div class="ratio-card" style="padding:15px"><span class="ratio-number" style="font-size:21px">0,2 s</span>
+          <div class="ratio-label">Chargement en 3G<br>calcul, non mesuré</div></div>
+      </div>
+      <a href="app-light.html" data-app="light" class="btn btn-secondary" style="width:100%;justify-content:center">Ouvrir la version légère →</a>
+      <p class="principle-desc" style="margin-top:14px;font-size:13px;opacity:.82">
+        <strong>Exclus volontairement</strong>, parce qu'ils ne tiennent pas dans la règle
+        d'inclusion ou pèsent trop pour un appareil ancien : chat médical, triage assisté,
+        analyse de plaie et de voix, mesures sur photo, vitales rPPG, scores cliniques
+        détaillés, interactions médicamenteuses, annuaire complet, bibliothèque, rapport
+        d'intervention. Tout cela est dans la version complète.
+      </p>
+    </div>
+
+
+    <div class="org-card reveal" style="max-width:780px;margin:18px auto 0">
+      <div class="org-title" style="font-size:17px">Comment c'est construit</div>
+      <p class="principle-desc" style="margin-bottom:12px">
+        Trois couches, une règle simple : <em>ce qui n'est pas ouvert n'est pas chargé</em>.
+      </p>
+      <div class="principles-grid" style="grid-template-columns:1fr;gap:10px">
+        <div class="principle-card"><div><div class="principle-title">Noyau vital — embarqué, hors ligne</div>
+          <div class="principle-desc">Numéros, gestes qui sauvent, urgences hospitalières. Mis en cache sur l'appareil dès la première visite. Fonctionne sans aucune connexion, y compris après redémarrage. <strong>Zéro requête réseau.</strong></div></div></div>
+        <div class="principle-card"><div><div class="principle-title">Modules lourds — chargés à l'ouverture</div>
+          <div class="principle-desc">Annuaire complet, scores, interactions, analyses. Le code n'est chargé que lorsque vous ouvrez le module, et les longues listes ne rendent que les lignes visibles. Tous les modules sont présents ; le démarrage reste rapide.</div></div></div>
+        <div class="principle-card"><div><div class="principle-title">Modules sensibles — côté serveur</div>
+          <div class="principle-desc">La logique du moteur de raisonnement reste sur le serveur et n'est jamais livrée au navigateur. Si le service ne répond pas, l'application bascule sur le noyau embarqué et vous le signale — jamais d'écran vide en urgence.</div></div></div>
+      </div>
+      <p class="principle-desc" style="margin-top:12px;font-size:12.5px;opacity:.75">
+        Les deux premières couches sont en service. La troisième est en préparation :
+        détail dans la note d'architecture du projet.
+      </p>
+    </div>
+
+    <div class="ratio-note" style="max-width:780px;margin:20px auto 0">
+      <strong>144 Ambulance · 1414 REGA · 117 Police · 118 Pompiers · 145 Tox Info · 143 La Main Tendue</strong><br>
+      Ces numéros fonctionnent depuis n'importe quel téléphone, sans application et sans
+      connexion de données. En urgence vitale, appelez avant d'ouvrir quoi que ce soit.
+    </div>
+
+    <p class="ratio-note" style="max-width:780px;margin:12px auto 0">
+      Poids mesurés le 31.07.2026 par lecture directe des fichiers ; les durées de chargement
+      sont des calculs à partir du débit, pas des mesures terrain. Les deux versions sont des
+      <strong>aides à l'orientation</strong> : elles ne posent pas de diagnostic et ne
+      remplacent ni un professionnel de santé ni le 144. Aucune des deux n'émet de requête
+      vers un service tiers.
+    </p>
+  </div>
+</section>
+
+<section class="section section-alt" id="modules" aria-labelledby="modules-title">
+  <div class="container">
+    <div style="text-align:center;max-width:760px;margin:0 auto 44px">
+      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Le détail de l'application</div>
+      <h2 id="modules-title">Les modules de l'application</h2>
+      <p class="section-sub" style="margin-bottom:0">Les 34 modules de la version complète, regroupés par usage.
+      Chacun est une <strong>aide à l'orientation et à la décision</strong> : aucun ne pose de diagnostic,
+      et aucun ne remplace un professionnel de santé ni le 144.</p>
+    </div>
+
+    <!-- Urgence & premiers secours -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#FF4444;flex-shrink:0"></span>Urgence &amp; premiers secours</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">Triage clinique unifié</div>
+          <p class="pillar-desc">Aide à hiérarchiser les situations selon leur urgence, du patient isolé à l'afflux de blessés. Outil d'orientation, il ne remplace pas l'évaluation d'un professionnel.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">Afflux massif (START)</div>
+          <p class="pillar-desc">Soutient le tri lorsqu'un événement fait de nombreuses victimes, pour ordonner les prises en charge. Intégré au triage clinique.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">Protocoles d'urgence</div>
+          <p class="pillar-desc">Fiches d'action pour les situations critiques : réanimation, position d'attente, signes d'AVC, réaction allergique grave. Des repères clairs pour agir vite.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">Guides gestes qui sauvent</div>
+          <p class="pillar-desc">Fiches illustrées des premiers secours, du grand public aux référentiels de réanimation. Conçues pour être suivies pas à pas, même sous stress.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">Métronome RCP</div>
+          <p class="pillar-desc">Donne le rythme des compressions et rappelle les cycles pendant une réanimation. Un repère audio et visuel pour tenir la cadence.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">SOS Morse</div>
+          <p class="pillar-desc">Transforme le téléphone en signal lumineux et vibrant pour se faire repérer. Utile quand on ne peut ni appeler ni parler.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #FF4444">
+          <div class="pillar-title">Numéros d'urgence</div>
+          <p class="pillar-desc">Accès direct aux numéros de secours suisses et à la garde cantonale. Disponible sans connexion.</p></div>
+      </div>
+    </div>
+
+    <!-- Évaluation & sécurité clinique -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#60A5FA;flex-shrink:0"></span>Évaluation &amp; sécurité clinique</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #60A5FA">
+          <div class="pillar-title">Scores cliniques</div>
+          <p class="pillar-desc">Réunit des scores d'évaluation reconnus pour objectiver l'état d'un patient. Résultats indicatifs, à interpréter par un professionnel.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #60A5FA">
+          <div class="pillar-title">Scores professionnels</div>
+          <p class="pillar-desc">Un large éventail de scores destinés aux soignants, pour couvrir de nombreuses situations cliniques. Aide au raisonnement, jamais un substitut au jugement médical.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #60A5FA">
+          <div class="pillar-title">Interactions CYP3A4</div>
+          <p class="pillar-desc">Signale des interactions médicamenteuses possibles pour attirer l'attention avant une prise. Information de vigilance, à confirmer auprès d'un pharmacien ou d'un médecin.</p></div>
+      </div>
+    </div>
+
+    <!-- Aide à l'observation -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#F59E0B;flex-shrink:0"></span>Aide à l'observation</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #F59E0B">
+          <div class="pillar-title">Vitales rPPG</div>
+          <p class="pillar-desc">Démonstration, à visée pédagogique, d'une lecture de paramètres à partir de la caméra. Ce n'est pas une mesure médicale fiable et cela ne doit pas fonder une décision de soin.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #F59E0B">
+          <div class="pillar-title">Détresse vocale</div>
+          <p class="pillar-desc">Aide à repérer, à partir d'un court échantillon de voix, des signes pouvant évoquer une détresse. Indication exploratoire, jamais un diagnostic.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #F59E0B">
+          <div class="pillar-title">Mesures sur photo et 3D</div>
+          <p class="pillar-desc">Estime, à partir d'une photo, des repères comme un angle articulaire ou l'alignement d'un membre. Aide à la documentation, à titre indicatif.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #F59E0B">
+          <div class="pillar-title">Analyse de plaie</div>
+          <p class="pillar-desc">Aide à documenter et à suivre l'aspect d'une plaie à partir d'une photo. Outil de suivi, pas un dispositif médical de diagnostic.</p></div>
+      </div>
+    </div>
+
+    <!-- Échange, soutien & communication -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#A78BFA;flex-shrink:0"></span>Échange, soutien &amp; communication</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #A78BFA">
+          <div class="pillar-title">Chat médical</div>
+          <p class="pillar-desc">Un espace pour poser une question de santé — physique, psychique ou prévention — et être orienté. Donne des informations générales, sans remplacer une consultation.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #A78BFA">
+          <div class="pillar-title">Bilan psychosocial</div>
+          <p class="pillar-desc">Des questionnaires reconnus pour faire le point sur le bien-être psychique et social, avec une synthèse. Outil de repérage et de dialogue, non un diagnostic.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #A78BFA">
+          <div class="pillar-title">Pictogrammes et synthèse vocale</div>
+          <p class="pillar-desc">Permet de communiquer par images et par voix de synthèse en plusieurs langues. Utile en cas de barrière de langue ou de difficulté à parler.</p></div>
+      </div>
+    </div>
+
+    <!-- Formation & engagement -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#38BDF8;flex-shrink:0"></span>Formation &amp; engagement</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #38BDF8">
+          <div class="pillar-title">Espace étudiant</div>
+          <p class="pillar-desc">Cours, quiz et cas cliniques pour apprendre et réviser à son rythme. Pensé pour l'entraînement et la formation.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #38BDF8">
+          <div class="pillar-title">Citoyen sauveteur</div>
+          <p class="pillar-desc">Sensibilise et forme le grand public aux gestes qui sauvent et à l'alerte des secours. Pour renforcer l'entraide de proximité.</p></div>
+      </div>
+    </div>
+
+    <!-- Terrain, documents & traçabilité -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#34D399;flex-shrink:0"></span>Terrain, documents &amp; traçabilité</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #34D399">
+          <div class="pillar-title">Position de secours</div>
+          <p class="pillar-desc">Aide à repérer et à partager sa position pour guider les secours, avec export aux formats de localisation standard. Utile en terrain isolé.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #34D399">
+          <div class="pillar-title">Documents médicaux</div>
+          <p class="pillar-desc">Aide à lire et à préparer des documents de santé, en version professionnelle ou patient. Facilite la compréhension et la transmission.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #34D399">
+          <div class="pillar-title">Rapport d'intervention</div>
+          <p class="pillar-desc">Permet de consigner une intervention puis de l'exporter ou de la partager. Fait gagner du temps sur la traçabilité.</p></div>
+      </div>
+    </div>
+
+    <!-- Références & annuaires -->
+    <div style="max-width:1040px;margin:0 auto 32px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#2DD4BF;flex-shrink:0"></span>Références &amp; annuaires</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #2DD4BF">
+          <div class="pillar-title">Bibliothèque</div>
+          <p class="pillar-desc">Rassemble des bases de données consultables pour retrouver rapidement une information de référence.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #2DD4BF">
+          <div class="pillar-title">Références professionnelles</div>
+          <p class="pillar-desc">Accès organisé à des références médicales reconnues, pour vérifier une information dans la pratique quotidienne.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #2DD4BF">
+          <div class="pillar-title">Annuaire médical suisse</div>
+          <p class="pillar-desc">Un répertoire d'institutions de santé suisses — urgences, hôpitaux, services — pour trouver le bon interlocuteur. Recherche par canton, ville ou établissement.</p></div>
+      </div>
+    </div>
+
+    <!-- Socle, accès & association -->
+    <div style="max-width:1040px;margin:0 auto 8px">
+      <h3 style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-primary);margin-bottom:16px;text-transform:uppercase">
+        <span aria-hidden="true" style="width:10px;height:10px;border-radius:3px;background:#94A3B8;flex-shrink:0"></span>Socle, accès &amp; association</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #94A3B8">
+          <div class="pillar-title">Application autonome</div>
+          <p class="pillar-desc">L'application est un fichier autonome : une fois chargée, elle fonctionne sans serveur ni connexion. Simple à conserver et à partager.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #94A3B8">
+          <div class="pillar-title">Synchronisation hors ligne</div>
+          <p class="pillar-desc">Conserve les données utiles sur l'appareil pour rester disponible sans réseau, puis se met à jour au retour de la connexion.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #94A3B8">
+          <div class="pillar-title">Accessibilité</div>
+          <p class="pillar-desc">Réglages d'affichage : aides à la lecture, rendus adaptés à la vision des couleurs, contraste renforcé. Pour rester utilisable par le plus grand nombre.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #94A3B8">
+          <div class="pillar-title">À propos et légal</div>
+          <p class="pillar-desc">Réunit les informations sur l'association, la confidentialité et les responsabilités. Pour utiliser l'application en connaissance de cause.</p></div>
+        <div class="pillar-card" style="padding:20px 22px;border-left:3px solid #94A3B8">
+          <div class="pillar-title">Soutenir</div>
+          <p class="pillar-desc">Pour prendre contact avec l'association et la soutenir. Une adresse suffit : info@swissrescueomnimed.ch.</p></div>
+      </div>
+    </div>
+
+    <p class="ratio-note" style="max-width:1040px;margin:26px auto 0">
+      Ces descriptions présentent l'usage de chaque module, pas son fonctionnement interne.
+      L'application est une aide à l'orientation : elle ne pose pas de diagnostic et ne remplace
+      ni un professionnel de santé ni le 144. Aucun module n'émet de requête vers un service tiers.
+    </p>
+  </div>
+</section>
+</main>
+<footer>
+ <div class="container">
+ <div class="footer-inner">
+ <div class="footer-left">© 2024-2026 Association SwissRescue OmniMed · Genève, Suisse · Art. 60-79 CC</div>
+ <div class="footer-links">
+ <a href="index.html">Accueil</a><a href="mission.html">Mission</a><a href="technologie.html">Technologie</a>
+ <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="espace-professionnels.html">Professionnels</a><a href="espace-etudiants.html">Étudiants</a><a href="contact.html">Contact</a>
+ <a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Protection des données</a></div>
+ </div>
+ <p class="footer-motto">info@swissrescueomnimed.ch · <em>Primum non nocere</em></p>
+ </div>
+</footer>
+<script>
+document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('visible');});
+var h=document.querySelector('.hamburger'),m=document.querySelector('.mobile-menu');
+if(h&&m){h.addEventListener('click',function(){m.classList.toggle('open');});}
+</script>
+<script src="assets/app-launch.js"></script>
+<script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
+</body>
+</html>

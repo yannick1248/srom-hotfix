@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H214 L252 170 L300 360 L338 268 H392' fill='none' stroke='%23fff' stroke-width='30' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'">
+<meta name="theme-color" content="#0B1424">
+<meta name="robots" content="noai, noimageai, index, follow">
+<title>SwissRescue OmniMed — version légère</title>
+<meta name="description" content="Version légère de l'application SwissRescue OmniMed : numéros d'urgence et gestes qui sauvent. Fonctionne sur connexion lente et appareil ancien.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#060E1F;--s:#0B1424;--s2:#111C30;--b:rgba(255,255,255,.12);--t:#F1F5F9;--t2:#9AA6B8;--r:#D42C2C;--r2:#FF5A5A;--g:#10B981;--y:#F59E0B;--bl:#3B82F6}
+body{background:var(--bg);color:var(--t);font:16px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;padding:0 0 40px;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:20;background:rgba(6,14,31,.96);border-bottom:1px solid var(--b);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.logo{width:32px;height:32px;border-radius:8px;background:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:900;font-size:19px;color:#fff}
+.ttl{font-size:15px;font-weight:800;line-height:1.2}
+.sub{font-size:11px;color:var(--t2)}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+h2{font-size:15px;font-weight:800;margin:26px 0 10px;letter-spacing:.02em;text-transform:uppercase;color:var(--t2)}
+.call{background:var(--r);border-radius:14px;padding:18px;margin-top:16px;display:block;text-decoration:none;color:#fff;text-align:center}
+.call .n{font-size:40px;font-weight:900;line-height:1}
+.call .l{font-size:14px;font-weight:700;margin-top:4px;opacity:.95}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
+.num{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:14px 8px;text-align:center;text-decoration:none;color:var(--t);display:block;min-height:74px}
+.num b{display:block;font-size:22px;font-weight:900;color:var(--r2)}
+.num span{font-size:11.5px;color:var(--t2);display:block;margin-top:2px;line-height:1.3}
+details{background:var(--s);border:1px solid var(--b);border-radius:12px;margin-bottom:8px;overflow:hidden}
+summary{padding:15px 16px;font-weight:700;font-size:15px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;min-height:52px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-size:22px;color:var(--t2);font-weight:400;line-height:1}
+details[open] summary::after{content:"−"}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.d-r{background:var(--r2)}.d-y{background:var(--y)}.d-g{background:var(--g)}
+.body{padding:0 16px 16px;font-size:14.5px;color:#DDE3EC}
+.body ol{margin:0 0 0 18px}.body ol li{margin-bottom:9px}
+.body p{margin-bottom:9px}
+.warn{background:rgba(212,44,44,.1);border:1px solid rgba(212,44,44,.35);border-radius:9px;padding:11px 13px;font-size:13.5px;margin:10px 0}
+.note{background:rgba(255,255,255,.03);border:1px solid var(--b);border-radius:10px;padding:14px;font-size:13px;color:var(--t2);margin-top:18px}
+.back{display:block;text-align:center;padding:15px;margin-top:22px;background:var(--s2);border:1px solid var(--b);border-radius:12px;text-decoration:none;color:var(--t);font-weight:700;font-size:14.5px}
+kbd{background:var(--s2);border:1px solid var(--b);border-radius:5px;padding:1px 6px;font-size:13px;font-family:inherit}
+@media(max-width:360px){.call .n{font-size:34px}.num b{font-size:19px}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:8px;top:-60px;z-index:100;background:var(--r);color:#fff;padding:10px 16px;border-radius:8px;font-weight:800;text-decoration:none;transition:top .15s}
+.skip:focus{top:8px}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,details:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+</style>
+<style id="srom-logo-fix">.brand-logo,.nav-logo-icon{background:transparent!important;padding:0!important;box-shadow:none!important;border:0!important}.brand-logo>svg,.nav-logo-icon>svg{display:block}</style></head>
+<body>
+<script>/* En ligne, l'application COMPLETE est prioritaire : bascule auto sauf choix explicite (?light=1) ou hors-ligne. Garde anti-boucle. */
+(function(){try{var q=new URLSearchParams(location.search);if(q.get('light')==='1')return;if(sessionStorage.getItem('srom-complete-tried'))return;if(navigator.onLine===false)return;var c=('AbortController'in window)?new AbortController():null;var to=setTimeout(function(){if(c){c.abort();}},2500);fetch('/api/health',{cache:'no-store',signal:c?c.signal:undefined}).then(function(r){clearTimeout(to);if(r&&r.ok){sessionStorage.setItem('srom-complete-tried','1');location.replace('app.html');}}).catch(function(){clearTimeout(to);});}catch(e){}})();</script>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<header>
+  <div class="logo" aria-hidden="true" style="background:transparent;padding:0"><svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SwissRescue OmniMed"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div>
+    <h1 class="ttl">SwissRescue OmniMed</h1>
+    <div class="sub">Version légère · fonctionne hors ligne</div>
+  </div>
+</header>
+
+<main class="wrap" id="contenu">
+
+  <a class="call" href="tel:144">
+    <span class="n">144</span>
+    <span class="l">Ambulance — urgence vitale</span>
+  </a>
+
+  <h2>Autres numéros</h2>
+  <div class="grid">
+    <a class="num" href="tel:1414"><b>1414</b><span>REGA<br>secours héliporté</span></a>
+    <a class="num" href="tel:117"><b>117</b><span>Police</span></a>
+    <a class="num" href="tel:118"><b>118</b><span>Pompiers</span></a>
+    <a class="num" href="tel:145"><b>145</b><span>Tox Info<br>intoxications</span></a>
+    <a class="num" href="tel:143"><b>143</b><span>La Main Tendue<br>24 h/24</span></a>
+    <a class="num" href="tel:147"><b>147</b><span>Pro Juventute<br>enfants et jeunes</span></a>
+    <a class="num" href="tel:0848134134"><b>0848</b><span>Garde médecins,<br>pharmacies, dentistes</span></a>
+    <a class="num" href="tel:112"><b>112</b><span>Urgences<br>depuis l'étranger</span></a>
+  </div>
+
+  <h2>Gestes qui sauvent</h2>
+
+  <details>
+    <summary><span class="dot d-r" aria-hidden="true"></span><span class="sr-only">Priorité vitale : </span>La personne ne réagit pas</summary>
+    <div class="body">
+      <ol>
+        <li><strong>Vérifier la conscience.</strong> Parler fort, secouer doucement les épaules.</li>
+        <li><strong>Appeler le 144</strong> — ou faire appeler par quelqu'un pendant que vous restez auprès de la personne. Mettre le haut-parleur.</li>
+        <li><strong>Libérer les voies aériennes.</strong> Basculer la tête en arrière, menton relevé.</li>
+        <li><strong>Regarder si elle respire</strong> pendant 10 secondes : poitrine qui se soulève, souffle, bruit.</li>
+        <li>Elle respire → <strong>position latérale de sécurité</strong>, surveiller sans quitter.</li>
+        <li>Elle ne respire pas ou respire anormalement (gasps) → <strong>réanimation</strong>, voir ci-dessous.</li>
+      </ol>
+      <div class="warn">Une respiration bruyante, irrégulière et espacée n'est pas une respiration. Traitez-la comme un arrêt cardiaque.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-r" aria-hidden="true"></span><span class="sr-only">Priorité vitale : </span>Arrêt cardiaque — massage</summary>
+    <div class="body">
+      <ol>
+        <li><strong>144 d'abord</strong>, haut-parleur activé. Le régulateur vous guide.</li>
+        <li>Personne allongée sur le dos, sur un plan dur.</li>
+        <li>Talon d'une main <strong>au centre de la poitrine</strong>, l'autre main par-dessus, doigts croisés, bras tendus.</li>
+        <li><strong>30 compressions</strong> : enfoncer de 5 à 6 cm, au rythme de <strong>100 à 120 par minute</strong>. Laisser la poitrine remonter complètement entre chaque.</li>
+        <li>Si vous êtes formé et disposé : <strong>2 insufflations</strong>, puis repartir à 30. Sinon, <strong>massez sans interruption</strong> — c'est déjà très efficace.</li>
+        <li><strong>Défibrillateur (DEA)</strong> : dès que quelqu'un en apporte un, l'allumer et suivre les consignes vocales. Il ne choque que si nécessaire.</li>
+      </ol>
+      <p>Ne vous arrêtez qu'à l'arrivée des secours, si la personne reprend une respiration normale, ou si vous êtes épuisé et pouvez être relayé.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-r" aria-hidden="true"></span><span class="sr-only">Priorité vitale : </span>Hémorragie</summary>
+    <div class="body">
+      <ol>
+        <li><strong>Appuyer fort et directement</strong> sur la plaie, avec un linge propre, la main, un vêtement.</li>
+        <li><strong>Ne pas relâcher.</strong> Si le tissu s'imbibe, ajouter par-dessus sans retirer ce qui est déjà en place.</li>
+        <li><strong>Appeler le 144.</strong></li>
+        <li>Allonger la personne, surélever le membre atteint si c'est possible sans douleur.</li>
+        <li>La couvrir : une personne qui saigne se refroidit vite.</li>
+      </ol>
+      <div class="warn">Ne retirez jamais un objet planté dans la plaie. Stabilisez-le et comprimez autour.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-r" aria-hidden="true"></span><span class="sr-only">Priorité vitale : </span>Étouffement</summary>
+    <div class="body">
+      <p><strong>La personne tousse fortement</strong> → encouragez-la à tousser, ne faites rien d'autre.</p>
+      <p><strong>Elle ne peut plus tousser, ni parler, ni respirer :</strong></p>
+      <ol>
+        <li><strong>5 tapes dans le dos</strong>, entre les omoplates, avec le talon de la main, personne penchée en avant.</li>
+        <li>Sans effet → <strong>5 compressions abdominales</strong> : derrière la personne, poing au creux de l'estomac, tirer vers soi et vers le haut.</li>
+        <li>Alterner 5 et 5 jusqu'à expulsion ou perte de connaissance.</li>
+        <li><strong>Perte de connaissance</strong> → allonger et commencer le massage cardiaque. Appeler le 144.</li>
+      </ol>
+      <div class="warn">Nourrisson : tapes dans le dos et compressions thoraciques, jamais de compressions abdominales.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-y" aria-hidden="true"></span><span class="sr-only">Priorité urgente : </span>Signes d'AVC — agir vite</summary>
+    <div class="body">
+      <p>Trois signes, apparition <strong>brutale</strong> :</p>
+      <ol>
+        <li><strong>Visage</strong> — la bouche ou une paupière tombe d'un côté. Demandez un sourire.</li>
+        <li><strong>Bras</strong> — un bras ne se lève pas ou retombe. Demandez de lever les deux bras.</li>
+        <li><strong>Parole</strong> — troublée, incompréhensible, ou la personne ne trouve plus ses mots.</li>
+      </ol>
+      <p><strong>Un seul de ces signes suffit : appelez le 144 immédiatement.</strong> Notez l'heure exacte du début — elle conditionne le traitement.</p>
+      <div class="warn">Ne donnez ni à boire, ni à manger, ni de médicament. Ne conduisez pas la personne vous-même à l'hôpital.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-y" aria-hidden="true"></span><span class="sr-only">Priorité urgente : </span>Réaction allergique grave</summary>
+    <div class="body">
+      <p>Gonflement du visage, de la gorge ou de la langue, difficulté à respirer, éruption étendue, malaise après piqûre, aliment ou médicament.</p>
+      <ol>
+        <li><strong>Appeler le 144.</strong></li>
+        <li>La personne a un <strong>auto-injecteur d'adrénaline</strong> → l'utiliser sans attendre, face externe de la cuisse, à travers le vêtement si besoin.</li>
+        <li>Allonger la personne, <strong>jambes surélevées</strong>. Si elle respire mal, la laisser demi-assise.</li>
+        <li>Ne pas la faire se lever ni marcher.</li>
+        <li>Pas d'amélioration après 5 à 10 minutes → seconde dose si un second stylo est disponible.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-y" aria-hidden="true"></span><span class="sr-only">Priorité urgente : </span>Brûlure</summary>
+    <div class="body">
+      <ol>
+        <li><strong>Refroidir à l'eau tempérée</strong> (environ 20 °C) pendant <strong>20 minutes</strong>. Pas d'eau glacée, pas de glace.</li>
+        <li>Retirer bagues, montre, vêtements non collés à la peau.</li>
+        <li>Couvrir d'un linge propre et sec, sans serrer.</li>
+      </ol>
+      <p><strong>Appelez le 144</strong> si la brûlure est étendue (plus que la paume de la main de la victime), profonde, ou touche le visage, les mains, les articulations ou les parties génitales — ou s'il s'agit d'un enfant.</p>
+      <div class="warn">Ni corps gras, ni dentifrice, ni farine. Ne percez pas les cloques.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary><span class="dot d-g" aria-hidden="true"></span><span class="sr-only">Priorité normale : </span>Position latérale de sécurité</summary>
+    <div class="body">
+      <p>Pour une personne <strong>inconsciente qui respire normalement</strong>.</p>
+      <ol>
+        <li>Bras du côté où vous êtes placé à angle droit, paume vers le haut.</li>
+        <li>Autre bras replié, dos de la main contre la joue.</li>
+        <li>Genou opposé relevé, pied au sol.</li>
+        <li>Tirer sur ce genou pour faire rouler la personne vers vous.</li>
+        <li>Basculer la tête en arrière, bouche ouverte vers le sol.</li>
+        <li><strong>Surveiller la respiration en continu</strong> jusqu'à l'arrivée des secours.</li>
+      </ol>
+    </div>
+  </details>
+
+
+  <h2>Urgences hospitalières par canton</h2>
+  <div style="margin-bottom:10px">
+    <input id="q" type="search" inputmode="search" aria-label="Rechercher une urgence hospitalière par canton, ville ou établissement" placeholder="Canton, ville ou établissement…"
+      style="width:100%;padding:13px 14px;border-radius:11px;border:1px solid var(--b);
+             background:var(--s);color:var(--t);font:inherit;font-size:15px">
+  </div>
+  <div id="lst"></div>
+  <p style="font-size:12.5px;color:var(--t2);margin-top:10px">
+    83 services d'urgence, 26 cantons. Embarqués dans la page — aucune recherche n'est
+    envoyée. Source : annuaire de l'association, format des numéros contrôlé.
+    En urgence vitale, composez le 144 sans chercher.
+  </p>
+
+<script>
+(function(){
+  var D={"AG":[{"n":"Spital Muri","v":"Muri","p":"056 675 11 11"},{"n":"Spital Zofingen","v":"Zofingen","p":"062 746 11 11"},{"n":"Kantonsspital Baden","v":"Baden","p":"056 486 21 11"},{"n":"Kantonsspital Aarau","v":"Aarau","p":"062 838 41 41"}],"AI":[{"n":"Spital Appenzell","v":"Appenzell","p":"071 788 55 11"},{"n":"Spital Appenzell Innerrhoden","v":"Appenzell","p":"071 788 71 11"}],"AR":[{"n":"Spital Appenzell Ausserrhoden - Heiden","v":"Heiden","p":"071 898 41 41"},{"n":"Spitalverbund Appenzell Ausserrhoden - Herisau","v":"Herisau","p":"071 353 11 11"}],"BE":[{"n":"Spital Interlaken","v":"Unterseen","p":"033 826 26 26"},{"n":"Spital Langenthal","v":"Langenthal","p":"062 916 31 31"},{"n":"Spitalzentrum Biel","v":"Biel/Bienne","p":"032 324 24 24"},{"n":"Spital STS AG - Spital Thun","v":"Thun","p":"033 226 26 26"}],"BL":[{"n":"Kantonsspital Baselland","v":"Liestal","p":"061 925 21 21"},{"n":"Kantonsspital Baselland - Liestal","v":"Liestal","p":"061 925 21 21"},{"n":"Kantonsspital Baselland - Bruderholz","v":"Bruderholz","p":"061 436 36 36"}],"BS":[{"n":"Universitatsspital Basel","v":"Basel","p":"061 265 25 25"},{"n":"Universitäts-Kinderspital beider Basel (UKBB)","v":"Basel","p":"061 704 12 12"},{"n":"Universitäre Psychiatrische Kliniken Basel (UPK)","v":"Basel","p":"061 325 51 11"},{"n":"Permanence Basel Centralbahnplatz","v":"Basel","p":"061 261 15 15"}],"FR":[{"n":"HFR - Hopital fribourgeois","v":"Fribourg","p":"026 306 00 00"},{"n":"HFR - Hopital fribourgeois Riaz","v":"Riaz","p":"026 919 91 11"},{"n":"Medecin de garde - Canton de Fribourg","v":"Fribourg","p":"026 350 11 00"}],"GE":[{"n":"HUG - Hopital des enfants","v":"Geneve","p":"022 372 46 00"},{"n":"HUG - Belle-Idee (Psychiatrie)","v":"Chene-Bourg","p":"022 305 57 11"},{"n":"Hopitaux Universitaires de Geneve (HUG)","v":"Geneve","p":"022 372 33 11"},{"n":"Clinique des Grangettes","v":"Chene-Bougeries","p":"022 305 01 11"},{"n":"Permanence de Plainpalais","v":"Geneve","p":"022 329 50 50"},{"n":"Permanence de Chene-Bourg","v":"Chene-Bourg","p":"022 348 55 55"}],"GL":[{"n":"Kantonsspital Glarus","v":"Glarus","p":"055 646 33 33"},{"n":"Kantonsspital Glarus","v":"Glarus","p":"055 646 33 33"}],"GR":[{"n":"Spital Davos","v":"Davos","p":"081 414 88 88"},{"n":"Kantonsspital Graubunden","v":"Chur","p":"081 256 61 11"},{"n":"Kantonsspital Graubünden","v":"Chur","p":"081 256 61 11"},{"n":"Spital Oberengadin Samedan","v":"Samedan","p":"081 851 81 11"}],"JU":[{"n":"Hopital du Jura - Site de Delemont","v":"Delemont","p":"032 421 21 21"},{"n":"Hopital du Jura - Site de Porrentruy","v":"Porrentruy","p":"032 465 65 65"}],"LU":[{"n":"Kinderspital Luzern","v":"Luzern","p":"041 205 31 11"},{"n":"Kinderspital Luzern","v":"Luzern","p":"041 205 31 11"},{"n":"Luzerner Kantonsspital (LUKS)","v":"Luzern","p":"041 205 11 11"},{"n":"Luzerner Kantonsspital (LUKS)","v":"Luzern","p":"041 205 11 11"}],"NE":[{"n":"HNE - Site de Pourtalès","v":"Neuchatel","p":"032 713 30 00"},{"n":"HNE - Hopital neuchatelois","v":"Neuchatel","p":"032 713 30 00"},{"n":"HNE - Site de La Chaux-de-Fonds","v":"La Chaux-de-Fonds","p":"032 967 21 11"},{"n":"HNE - Site de La Chaux-de-Fonds","v":"La Chaux-de-Fonds","p":"032 967 21 21"}],"NW":[{"n":"Kantonsspital Nidwalden","v":"Stans","p":"041 618 18 18"},{"n":"Kantonsspital Nidwalden","v":"Stans","p":"041 618 18 18"}],"OW":[{"n":"Kantonsspital Obwalden","v":"Sarnen","p":"041 666 44 22"},{"n":"Kantonsspital Obwalden","v":"Sarnen","p":"041 666 44 22"}],"SG":[{"n":"Spital Grabs","v":"Grabs","p":"081 772 51 11"},{"n":"Spital Wattwil","v":"Wattwil","p":"071 985 11 11"},{"n":"Spital Linth Uznach","v":"Uznach","p":"055 285 41 11"},{"n":"Kantonsspital St. Gallen","v":"St. Gallen","p":"071 494 11 11"}],"SH":[{"n":"Kantonsspital Schaffhausen","v":"Schaffhausen","p":"052 634 34 34"},{"n":"Kantonsspital Schaffhausen","v":"Schaffhausen","p":"052 634 34 34"}],"SO":[{"n":"Kantonsspital Olten","v":"Olten","p":"062 311 41 11"},{"n":"Burgerspital Solothurn","v":"Solothurn","p":"032 627 31 21"},{"n":"Bürgerspital Solothurn","v":"Solothurn","p":"032 627 31 21"}],"SZ":[{"n":"Spital Schwyz","v":"Schwyz","p":"041 818 41 11"},{"n":"Spital Schwyz","v":"Schwyz","p":"041 818 41 11"},{"n":"Spital Lachen","v":"Lachen","p":"055 451 31 31"}],"TG":[{"n":"Kantonsspital Frauenfeld","v":"Frauenfeld","p":"052 723 71 11"},{"n":"Kantonsspital Munsterlingen","v":"Munsterlingen","p":"071 686 11 11"},{"n":"Kantonsspital Münsterlingen","v":"Münsterlingen","p":"071 686 11 11"}],"TI":[{"n":"Ospedale Civico di Lugano","v":"Lugano","p":"091 811 61 11"},{"n":"Ospedale Regionale di Locarno","v":"Locarno","p":"091 811 41 11"},{"n":"EOC - Ospedale Regionale di Lugano","v":"Lugano","p":"091 811 61 11"},{"n":"EOC - Ospedale Regionale di Locarno","v":"Locarno","p":"091 811 41 11"}],"UR":[{"n":"Kantonsspital Uri","v":"Altdorf","p":"041 875 51 51"},{"n":"Kantonsspital Uri","v":"Altdorf","p":"041 875 51 51"}],"VD":[{"n":"Hopital Riviera-Chablais","v":"Rennaz","p":"058 773 21 11"},{"n":"CHUV - Hopital de l'enfance","v":"Lausanne","p":"021 314 84 84"},{"n":"Hopital Riviera-Chablais (HRC)","v":"Rennaz","p":"058 773 21 11"},{"n":"Ensemble Hospitalier de la Cote - Nyon","v":"Nyon","p":"022 994 41 11"}],"VS":[{"n":"Spital Wallis - Spital Visp","v":"Visp","p":"027 604 33 33"},{"n":"Hopital du Valais - Martigny","v":"Martigny","p":"027 603 90 00"},{"n":"Hopital du Chablais - Monthey","v":"Monthey","p":"024 473 17 31"},{"n":"Spitalzentrum Oberwallis - Brig","v":"Brig","p":"027 604 33 33"}],"ZG":[{"n":"Zuger Kantonsspital","v":"Baar","p":"041 399 11 11"},{"n":"Zuger Kantonsspital","v":"Baar","p":"041 399 11 11"}],"ZH":[{"n":"Spital Uster","v":"Uster","p":"044 911 11 11"},{"n":"Spital Bülach","v":"Bülach","p":"044 863 22 11"},{"n":"See-Spital Horgen","v":"Horgen","p":"044 728 11 11"},{"n":"Stadtspital Triemli","v":"Zurich","p":"044 416 11 11"}]};
+  var CANT={GE:"Genève",VD:"Vaud",ZH:"Zurich",BE:"Berne",VS:"Valais",TI:"Tessin",BS:"Bâle-Ville",
+  BL:"Bâle-Campagne",LU:"Lucerne",NE:"Neuchâtel",FR:"Fribourg",SG:"Saint-Gall",AG:"Argovie",
+  JU:"Jura",GR:"Grisons",TG:"Thurgovie",SO:"Soleure",SZ:"Schwytz",ZG:"Zoug",SH:"Schaffhouse",
+  AR:"Appenzell Rh.-Ext.",AI:"Appenzell Rh.-Int.",GL:"Glaris",NW:"Nidwald",OW:"Obwald",UR:"Uri"};
+  var lst=document.getElementById('lst'), q=document.getElementById('q');
+  function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function rend(f){
+    f=(f||'').trim().toLowerCase();
+    var h='',n=0;
+    Object.keys(D).sort(function(a,b){return (CANT[a]||a).localeCompare(CANT[b]||b);}).forEach(function(c){
+      var nom=CANT[c]||c;
+      var items=D[c].filter(function(i){
+        return !f || nom.toLowerCase().indexOf(f)>-1 || c.toLowerCase().indexOf(f)>-1
+            || i.n.toLowerCase().indexOf(f)>-1 || i.v.toLowerCase().indexOf(f)>-1;
+      });
+      if(!items.length) return;
+      n+=items.length;
+      h+='<details'+(f?' open':'')+'><summary><span class="dot d-g"></span>'+esc(nom)+
+         ' <span style="font-weight:400;color:var(--t2);font-size:13px">('+items.length+')</span></summary><div class="body">';
+      items.forEach(function(i){
+        h+='<a href="tel:'+esc(i.p.replace(/\s/g,''))+'" style="display:block;padding:11px 0;'+
+           'border-bottom:1px solid rgba(255,255,255,.07);text-decoration:none;color:var(--t)">'+
+           '<strong style="font-size:14.5px">'+esc(i.n)+'</strong><br>'+
+           '<span style="font-size:13px;color:var(--t2)">'+esc(i.v)+' · </span>'+
+           '<span style="font-size:14px;color:var(--r2);font-weight:700">'+esc(i.p)+'</span></a>';
+      });
+      h+='</div></details>';
+    });
+    lst.innerHTML = n ? h : '<p style="color:var(--t2);font-size:14px;padding:10px 0">'+
+      'Aucun résultat. En cas d\'urgence, composez le <strong>144</strong>.</p>';
+  }
+  q.addEventListener('input',function(){rend(q.value);});
+  rend('');
+})();
+</script>
+
+  <div class="note">
+    <strong>Ce que fait cette version.</strong> Numéros d'urgence, gestes de premiers secours et urgences hospitalières par canton, en un seul fichier, sans connexion. Elle est faite pour les connexions lentes et les
+    appareils anciens.
+    <br><br>
+    <strong>Ce qu'elle ne fait pas.</strong> Pas de scores cliniques,
+    pas d'interactions médicamenteuses, pas d'analyse photo. Ces fonctions sont dans
+    l'application complète.
+    <br><br>
+    <strong id="offline-state">Hors ligne :</strong> une fois cette page ouverte, ajoutez-la à l'écran d'accueil
+    (<kbd>Partager</kbd> puis <kbd>Sur l'écran d'accueil</kbd>). Elle restera accessible sans réseau.
+    <br><br>
+    Cette page est une <strong>aide à l'orientation</strong>. Elle ne pose pas de diagnostic et
+    ne remplace ni un professionnel de santé ni les secours. En cas de doute, appelez le 144.
+    <br><br>
+    Contenus fondés sur les recommandations de premiers secours communément admises.
+    Version du 31.07.2026 — Association SwissRescue OmniMed, Genève ·
+    <a href="mailto:info@swissrescueomnimed.ch" style="color:#60A5FA">info@swissrescueomnimed.ch</a>
+  </div>
+
+  <a class="back" href="applications.html">← Applications · voir la version complète</a>
+
+</main>
+
+<script>
+/* Pre-cache du noyau vital — meme origine, aucune requete tierce.
+   Sans service worker (ouverture en file:// par exemple) la page fonctionne
+   quand meme : elle est autonome. Le service worker garantit seulement qu'elle
+   reste disponible apres fermeture du navigateur, sans reseau. */
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').then(function () {
+      var el = document.getElementById('offline-state');
+      if (el) { el.textContent = 'Disponible hors ligne — le noyau vital est enregistré sur cet appareil.'; }
+    }).catch(function () { /* silencieux : la page reste utilisable */ });
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!--
+  SwissRescue OmniMed — Page Mission
+  © 2024-2026 Association SwissRescue OmniMed, Genève, Suisse
+  Art. 60-79 CC | Demande de brevet PCT/OMPI en cours | nLPD 2023 | RGPD
+  Contact: info@swissrescueomnimed.ch
+-->
+<html lang="fr-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H206 L238 190 L272 318 L300 268 H360' fill='none' stroke='white' stroke-width='26' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#060E1F">
+<title>Notre Mission — SwissRescue OmniMed</title>
+<meta name="description" content="Mission de l'Association SwissRescue OmniMed : application médicale d'urgence souveraine suisse, triage IA, accès universel. Primum non nocere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D42C2C;--red-light:#FF4444;--red-dim:rgba(212,44,44,0.12);
+  --blue:#0F4C81;--blue-light:#1A6EBB;--blue-dim:rgba(15,76,129,0.15);
+  --bg:#060E1F;--bg-2:#0C1828;--bg-3:#112038;
+  --surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.14);
+  --text-primary:#F1F5F9;--text-secondary:#94A3B8;--text-muted:#64748B;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --radius-sm:8px;--radius:14px;--radius-lg:20px;
+  --success:#10B981;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.section{padding:80px 0}
+.section-alt{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+/* Nav */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s}
+#nav.scrolled{background:rgba(6,14,31,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo-text{font-size:15px;font-weight:800;color:var(--text-primary)}
+.nav-logo-sub{font-size:10px;color:var(--text-muted)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text-secondary);padding:8px 14px;border-radius:var(--radius-sm);transition:all .2s}
+.nav-links a:hover{color:var(--text-primary);background:var(--surface)}
+.nav-links a.active{color:var(--red-light)}
+.btn-nav{background:var(--red);color:#fff!important;padding:9px 20px!important;border-radius:var(--radius-sm)}
+.btn-nav:hover{background:var(--red-light)!important}
+.hamburger{display:none;width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--text-primary);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(6,14,31,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px 24px;z-index:999;flex-direction:column;gap:4px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:15px;font-weight:500;color:var(--text-secondary);padding:12px 16px;border-radius:var(--radius-sm)}
+.mobile-menu a:hover{color:var(--text-primary);background:var(--surface)}
+
+/* Hero */
+.page-hero{padding:140px 0 80px;text-align:center;position:relative;overflow:hidden}
+.page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(15,76,129,.18) 0%,transparent 70%),var(--bg);z-index:0}
+.page-hero-content{position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red-light);margin-bottom:16px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--red-light);animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{font-size:clamp(34px,5vw,60px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
+h1 span{background:linear-gradient(135deg,var(--red-light),#FF8080 50%,#FFB3B3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-lead{font-size:clamp(16px,1.8vw,19px);color:var(--text-secondary);max-width:580px;margin:0 auto 20px;line-height:1.75}
+.hero-latin{font-style:italic;font-size:17px;color:var(--text-muted);margin-top:8px}
+h2{font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.8px;color:var(--text-primary);margin-bottom:10px}
+h3{font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:36px}
+.heading-icon{width:40px;height:40px;background:var(--red-dim);border:1px solid rgba(212,44,44,.25);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.heading-icon svg{width:20px;height:20px;color:var(--red-light)}
+
+/* Pillars grid */
+.pillars-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.pillar-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .25s}
+.pillar-card:hover{background:var(--surface-hover);border-color:var(--border-strong);transform:translateY(-2px)}
+.pillar-icon{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--blue-dim);border:1px solid rgba(15,76,129,.25);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.pillar-icon svg{width:22px;height:22px;color:#60A5FA}
+.pillar-title{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.pillar-desc{font-size:14px;color:var(--text-secondary);line-height:1.65}
+
+/* Values */
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.value-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:var(--radius-sm) var(--radius) var(--radius) var(--radius-sm);padding:22px}
+.value-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.value-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;font-style:italic}
+
+/* Team */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.team-card{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:36px;text-align:center;transition:all .3s}
+.team-card:hover{background:var(--surface-hover);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.team-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;margin:0 auto 20px;color:#fff;letter-spacing:-1px}
+.team-name{font-size:20px;font-weight:800;color:var(--text-primary);margin-bottom:6px}
+.team-role{font-size:13px;font-weight:700;color:var(--red-light);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em}
+.team-desc{font-size:14px;color:var(--text-secondary);line-height:1.65}
+.team-badge{display:inline-block;background:var(--blue-dim);border:1px solid rgba(15,76,129,.3);border-radius:100px;padding:4px 12px;font-size:11px;font-weight:700;color:#60A5FA;margin-top:12px}
+
+/* CTA */
+.cta-block{background:linear-gradient(135deg,var(--bg-3),var(--bg-2));border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:52px;text-align:center}
+.cta-block h2{margin-bottom:16px}
+.cta-block .section-sub{margin:0 auto 32px;max-width:480px}
+.cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--radius-sm);font-size:15px;font-weight:700;transition:all .25s}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-light);transform:translateY(-1px)}
+.btn-secondary{background:var(--surface);border:1px solid var(--border-strong);color:var(--text-primary)}
+.btn-secondary:hover{background:var(--surface-hover);transform:translateY(-1px)}
+.section-divider{border:none;border-top:1px solid var(--border)}
+footer{border-top:1px solid var(--border);padding:40px 0}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}
+.footer-left{font-size:13px;color:var(--text-muted)}
+.footer-links{display:flex;flex-wrap:wrap;gap:6px}
+.footer-links a{font-size:13px;color:var(--text-muted);padding:4px 10px;border-radius:var(--radius-sm);transition:color .2s}
+.footer-links a:hover{color:var(--text-secondary)}
+.footer-motto{font-size:11px;color:var(--text-muted);text-align:center;margin-top:16px;font-style:italic}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="SwissRescue OmniMed — Accueil">
+        <div class="nav-logo-icon"><svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SwissRescue OmniMed"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="nav-logo-text">SwissRescue OmniMed</div><div class="nav-logo-sub">Association suisse art. 60-79 CC</div></div>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="mission.html" class="active">Mission</a>
+        <a href="technologie.html">Technologie</a>
+        <a href="transparence.html">Transparence</a>
+        <a href="don.html">Soutenir</a>
+        <a href="contact.html">Contact</a>
+        <a href="https://app.swissrescueomnimed.ch" class="btn-nav" target="_blank" rel="noopener">Ouvrir l'app →</a>
+      </nav>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a><a href="mission.html">Mission</a><a href="technologie.html">Technologie</a>
+  <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
+  <a href="https://app.swissrescueomnimed.ch" target="_blank" rel="noopener" style="color:#FF8080;font-weight:700">Ouvrir l'app →</a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" aria-hidden="true"></div>
+  <div class="container page-hero-content">
+    <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Association de droit suisse · Art. 60-79 CC · Genève</div>
+    <h1>Sauver des vies grâce à<br><span>la technologie souveraine</span></h1>
+    <p class="hero-lead">SwissRescue OmniMed est la première application médicale d'urgence à intelligence artificielle développée en Suisse, pour la Suisse et le monde entier. Souveraine, éthique, offline-first.</p>
+    <p class="hero-latin">« Primum non nocere » — D'abord, ne pas nuire.</p>
+  </div>
+</div>
+
+<main>
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Notre raison d'être</h2>
+      <p class="section-sub" style="max-width:720px">Chaque année en Suisse, des milliers de personnes perdent de précieuses minutes dans les situations d'urgence médicale — faute d'un outil de triage fiable, accessible et multilingue. SwissRescue OmniMed comble ce vide : notre application guide les premiers secouristes, les parents, les professionnels de santé et les passants avec la précision d'un médecin urgentiste.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="pillar-title">Triage intelligent P1–P4</div>
+        <div class="pillar-desc">Priorisation automatique selon les protocoles START et SIEVE, validés par des médecins urgentistes suisses. L'IA évalue la gravité en moins de 30 secondes.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        </div>
+        <div class="pillar-title">Offline-first — partout</div>
+        <div class="pillar-desc">Fonctionne sans réseau. En montagne, en zone sinistrée, dans le métro. 209 protocoles médicaux disponibles sans connexion. Service Worker + IndexedDB.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="pillar-title">Souveraineté suisse</div>
+        <div class="pillar-desc">Données hébergées exclusivement chez Infomaniak SA, Genève (ISO 27001). Chiffrement AES-256-GCM. Clés Shamir 3/5. Conformité nLPD 2023 et RGPD.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="pillar-title">Universellement accessible</div>
+        <div class="pillar-desc">4 langues nationales suisses (fr, de, it, rm) + anglais. WCAG AAA. Contrôle oculaire, commande vocale, OpenDyslexic. Fonctionne de Nokia à iPhone.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="pillar-title">À but non lucratif</div>
+        <div class="pillar-desc">Aucun dividende, aucun actionnaire. 100 % des revenus financent la R&D médicale, l'infrastructure et la formation. L'association vise à terme les standards de transparence du secteur.</div>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="pillar-title">Protection juridique</div>
+        <div class="pillar-desc">Demande de brevet PCT/OMPI déposée. Elle ouvre une option de dépôt dans les États signataires ; aucun titre n'est délivré à ce jour. Marques « SwissRescue » et « MedAlert » déposées via le Système de Madrid.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <h2>Nos valeurs fondatrices</h2>
+      <p class="section-sub">Sept principes qui guident chaque ligne de code et chaque décision stratégique de l'Association.</p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-title">Non nocere</div>
+        <div class="value-desc">« D'abord, ne pas nuire. » Toute fonctionnalité est validée médicalement avant chaque déploiement en production.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-title">Souveraineté</div>
+        <div class="value-desc">Aucune donnée médicale ne quitte la Suisse ou l'UE. Indépendance totale vis-à-vis des grandes plateformes numériques.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-title">Équité</div>
+        <div class="value-desc">L'accès aux soins d'urgence est un droit, non un privilège. L'application est et restera gratuite pour tous.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-title">Transparence</div>
+        <div class="value-desc">Comptabilité tenue selon les règles applicables aux associations ; aucun exercice n'est encore clos. Code open-source partiel. Gouvernance intégralement documentée et auditable.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-title">Résilience</div>
+        <div class="value-desc">Fonctionne sur Nokia 3310 comme sur iPhone 16 Pro. Dégradation gracieuse garantie sur tout appareil et toute connexion.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-title">Exactitude</div>
+        <div class="value-desc">ICD-11, scores Glasgow/SOFA/APACHE II, posologies Refdata CH. Zéro approximation médicale tolérée.</div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-title">Pérennité</div>
+        <div class="value-desc">Structure fondation inaliénable. En cas de dissolution : actifs transférés à la Croix-Rouge internationale ou à l'OMS.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h2>L'équipe fondatrice</h2>
+      <p class="section-sub">Deux co-fondateurs à parité absolue, unis par la conviction que la technologie peut sauver des vies.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">YR</div>
+        <div class="team-name">Dorel Yannick Roth</div>
+        <div class="team-role">Fondateur &amp; Président</div>
+        <div class="team-desc">Architecte de l'architecture moteur propriétaire, objet d'une demande de brevet PCT/OMPI. Porte la vision technique et stratégique de l'association. SUPERADMIN avec droit de veto permanent — garant de l'intégrité éthique de la mission.</div>
+        <span class="team-badge">SUPERADMIN · Droit de veto</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">ZC</div>
+        <div class="team-name">Zeliha Calhan</div>
+        <div class="team-role">Co-fondatrice &amp; Secrétaire Générale</div>
+        <div class="team-desc">Parité absolue au sein de la gouvernance fondatrice. Responsable des relations institutionnelles, de la conformité nLPD/RGPD et des partenariats stratégiques. CC obligatoire sur toute communication officielle.</div>
+        <span class="team-badge">Parité absolue · CC communications</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section">
+  <div class="container">
+    <div class="cta-block reveal">
+      <h2>Rejoignez la mission</h2>
+      <p class="section-sub">Chaque don, chaque partage, chaque retour utilisateur fait avancer SwissRescue OmniMed. Ensemble, sauvons des vies.</p>
+      <div class="cta-buttons">
+        <a href="don.html" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Faire un don
+        </a>
+        <a href="contact.html" class="btn btn-secondary">Nous contacter →</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">© 2024-2026 Association SwissRescue OmniMed · Genève, Suisse · Art. 60-79 CC</div>
+      <div class="footer-links">
+        <a href="index.html">Accueil</a><a href="mission.html">Mission</a><a href="technologie.html">Technologie</a>
+        <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <p class="footer-motto">info@swissrescueomnimed.ch · <em>Primum non nocere</em> · Demande de brevet PCT/OMPI en cours</p>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20), {passive:true});
+const hamburger = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => { const open = mobileMenu.classList.toggle('open'); hamburger.setAttribute('aria-expanded', open); });
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "name": "SwissRescue OmniMed",
+  "short_name": "OmniMed",
+  "description": "Plateforme médicale souveraine pour équipes de sauvetage — SwissRescue",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0F4C81",
+  "lang": "fr",
+  "categories": ["medical", "health"],
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Urgence",
+      "short_name": "SOS",
+      "description": "Démarrer une session d'urgence",
+      "url": "/(tabs)/",
+      "icons": [{ "src": "/assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Intelligence",
+      "short_name": "OSINT",
+      "description": "Module de renseignement médical",
+      "url": "/intelligence",
+      "icons": [{ "src": "/assets/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [],
+  "related_applications": [
+    {
+      "platform": "webapp"
+    }
+  ],
+  "prefer_related_applications": false
+}

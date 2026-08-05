@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!--
+  SwissRescue OmniMed — Page Technologie
+  © 2024-2026 Association SwissRescue OmniMed, Genève, Suisse
+  Art. 60-79 CC | Demande de brevet PCT/OMPI en cours | nLPD 2023 | RGPD
+  Contact: info@swissrescueomnimed.ch
+-->
+<html lang="fr-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H206 L238 190 L272 318 L300 268 H360' fill='none' stroke='white' stroke-width='26' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#060E1F">
+<title>Technologie — SwissRescue OmniMed</title>
+<meta name="description" content="Notre technologie sous demande de brevet PCT/OMPI, chiffrement Shamir 3/5, triage médical IA. moteur propriétaire, 3 modes, 11 fonctionnalités avancées.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D42C2C;--red-light:#FF4444;--red-dim:rgba(212,44,44,0.12);
+  --blue:#0F4C81;--blue-light:#1A6EBB;--blue-dim:rgba(15,76,129,0.15);
+  --bg:#060E1F;--bg-2:#0C1828;--bg-3:#112038;
+  --surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.14);
+  --text-primary:#F1F5F9;--text-secondary:#94A3B8;--text-muted:#64748B;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --radius-sm:8px;--radius:14px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.section{padding:80px 0}
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s}
+#nav.scrolled{background:rgba(6,14,31,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo-text{font-size:15px;font-weight:800;color:var(--text-primary)}
+.nav-logo-sub{font-size:10px;color:var(--text-muted)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text-secondary);padding:8px 14px;border-radius:var(--radius-sm);transition:all .2s}
+.nav-links a:hover{color:var(--text-primary);background:var(--surface)}
+.nav-links a.active{color:var(--red-light)}
+.btn-nav{background:var(--red);color:#fff!important;padding:9px 20px!important;border-radius:var(--radius-sm)}
+.btn-nav:hover{background:var(--red-light)!important}
+.hamburger{display:none;width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--text-primary);border-radius:2px}
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(6,14,31,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px 24px;z-index:999;flex-direction:column;gap:4px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:15px;font-weight:500;color:var(--text-secondary);padding:12px 16px;border-radius:var(--radius-sm)}
+.mobile-menu a:hover{color:var(--text-primary);background:var(--surface)}
+.page-hero{padding:140px 0 80px;text-align:center;position:relative;overflow:hidden}
+.page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(15,76,129,.2) 0%,transparent 70%),var(--bg);z-index:0}
+.page-hero-content{position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red-light);margin-bottom:16px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--red-light);animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{font-size:clamp(34px,5vw,60px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:20px}
+h1 span{background:linear-gradient(135deg,var(--red-light),#FF8080 50%,#FFB3B3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-lead{font-size:clamp(16px,1.8vw,19px);color:var(--text-secondary);max-width:580px;margin:0 auto;line-height:1.75}
+h2{font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.8px;color:var(--text-primary);margin-bottom:10px}
+.section-sub{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:36px}
+.heading-icon{width:40px;height:40px;background:var(--blue-dim);border:1px solid rgba(15,76,129,.25);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.heading-icon svg{width:20px;height:20px;color:#60A5FA}
+.section-divider{border:none;border-top:1px solid var(--border)}
+
+/* AI Engine table */
+.ai-table{width:100%;border-collapse:collapse;margin-top:8px;overflow:hidden;border-radius:var(--radius);border:1px solid var(--border-strong)}
+.ai-table thead{background:var(--bg-3)}
+.ai-table th{text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;padding:14px 18px;border-bottom:1px solid var(--border-strong)}
+.ai-table td{padding:18px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:top;color:var(--text-secondary)}
+.ai-table tbody tr:last-child td{border-bottom:none}
+.ai-table tbody tr:hover td{background:rgba(255,255,255,.02)}
+.ai-table .engine-name{font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.ai-table .engine-detail{font-size:12px;font-family:var(--mono);color:var(--text-muted)}
+.mode-badge{display:inline-flex;align-items:center;background:var(--red-dim);border:1px solid rgba(212,44,44,.25);border-radius:100px;padding:3px 10px;font-size:11px;font-weight:700;color:#FF8080;margin:2px;white-space:nowrap}
+.mode-badge.turbo{background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.25);color:#FCD34D}
+.mode-badge.cascade{background:var(--blue-dim);border-color:rgba(15,76,129,.35);color:#60A5FA}
+.mode-badge.expert{background:linear-gradient(135deg,var(--blue-dim),var(--red-dim));border-color:rgba(255,255,255,.15);color:var(--text-primary)}
+.modes-row{display:flex;flex-wrap:wrap;gap:4px}
+.engine-num{font-size:13px;font-weight:800;color:var(--text-muted);padding-top:2px}
+
+/* 3 Modes */
+.modes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mode-card{border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .25s}
+.mode-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.mode-card.turbo{background:linear-gradient(135deg,rgba(251,191,36,.06),transparent);border-color:rgba(251,191,36,.2)}
+.mode-card.cascade{background:var(--blue-dim);border-color:rgba(15,76,129,.3)}
+.mode-card.expert{background:linear-gradient(135deg,var(--blue-dim),var(--red-dim));border-color:rgba(255,255,255,.12)}
+.mode-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mode-icon{width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mode-icon.turbo{background:rgba(251,191,36,.12)}
+.mode-icon.cascade{background:var(--blue-dim)}
+.mode-icon.expert{background:var(--red-dim)}
+.mode-icon svg{width:18px;height:18px}
+.mode-name{font-size:17px;font-weight:800;color:var(--text-primary)}
+.mode-desc{font-size:14px;color:var(--text-secondary);line-height:1.65;margin-bottom:12px}
+.mode-meta{font-size:12px;font-family:var(--mono);color:var(--text-muted)}
+
+/* Shamir */
+.shamir-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+.shamir-fragment{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:18px 10px;text-align:center;transition:all .25s}
+.shamir-fragment.active{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.3)}
+.shamir-fragment-icon{width:36px;height:36px;margin:0 auto 10px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.shamir-fragment.active .shamir-fragment-icon{background:rgba(16,185,129,.12)}
+.shamir-fragment:not(.active) .shamir-fragment-icon{background:var(--surface)}
+.shamir-fragment-icon svg{width:18px;height:18px}
+.shamir-fragment.active .shamir-fragment-icon svg{color:#10B981}
+.shamir-fragment:not(.active) .shamir-fragment-icon svg{color:var(--text-muted)}
+.shamir-label{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:2px}
+.shamir-role{font-size:10px;color:var(--text-muted)}
+.shamir-note{font-size:13px;color:var(--text-secondary);line-height:1.7;padding:16px 0}
+
+/* 11 features */
+.features-list{display:flex;flex-direction:column;gap:10px}
+.feature-row{display:flex;align-items:flex-start;gap:18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:all .25s}
+.feature-row:hover{background:var(--surface-hover);border-color:var(--border-strong);transform:translateX(4px)}
+.feature-icon-box{width:44px;height:44px;border-radius:10px;background:var(--blue-dim);border:1px solid rgba(15,76,129,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feature-icon-box svg{width:22px;height:22px;color:#60A5FA}
+.feature-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:5px}
+.feature-desc{font-size:13px;color:var(--text-secondary);line-height:1.65}
+.feature-stack{font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-top:6px}
+
+/* CTA */
+.cta-block{background:linear-gradient(135deg,var(--bg-3),var(--bg-2));border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:52px;text-align:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--radius-sm);font-size:15px;font-weight:700;transition:all .25s}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-light);transform:translateY(-1px)}
+footer{border-top:1px solid var(--border);padding:40px 0}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}
+.footer-left{font-size:13px;color:var(--text-muted)}
+.footer-links{display:flex;flex-wrap:wrap;gap:6px}
+.footer-links a{font-size:13px;color:var(--text-muted);padding:4px 10px;border-radius:var(--radius-sm);transition:color .2s}
+.footer-links a:hover{color:var(--text-secondary)}
+.footer-motto{font-size:11px;color:var(--text-muted);text-align:center;margin-top:16px;font-style:italic}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+@media(max-width:900px){.modes-grid{grid-template-columns:1fr;max-width:460px}}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.shamir-grid{grid-template-columns:repeat(3,1fr)}.ai-table{font-size:12px}}
+@media(max-width:520px){.shamir-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="SwissRescue OmniMed — Accueil">
+        <div class="nav-logo-icon"><svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SwissRescue OmniMed"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="nav-logo-text">SwissRescue OmniMed</div><div class="nav-logo-sub">Association suisse art. 60-79 CC</div></div>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a><a href="mission.html">Mission</a>
+        <a href="technologie.html" class="active">Technologie</a>
+        <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
+        <a href="https://app.swissrescueomnimed.ch" class="btn-nav" target="_blank" rel="noopener">Ouvrir l'app →</a>
+      </nav>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a><a href="mission.html">Mission</a><a href="technologie.html">Technologie</a>
+  <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
+  <a href="https://app.swissrescueomnimed.ch" target="_blank" rel="noopener" style="color:#FF8080;font-weight:700">Ouvrir l'app →</a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" aria-hidden="true"></div>
+  <div class="container page-hero-content">
+    <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Architecture sous demande de brevet PCT/OMPI</div>
+    <h1>La technologie qui<br><span>sauve des vies</span></h1>
+    <p class="hero-lead">Moteur propriétaire d'intelligence artificielle. Un chiffrement militaire Shamir 3/5. 209 protocoles médicaux. Une architecture conçue pour ne jamais tomber en panne — même sans réseau.</p>
+  </div>
+</div>
+
+<main>
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41"/><path d="M4.93 4.93l1.41 1.41"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M20 12h2"/><path d="M2 12h2"/><path d="M19.07 19.07l-1.41-1.41"/><path d="M4.93 19.07l1.41-1.41"/></svg>
+      </div>
+      <h2>Notre technologie (cœur propriétaire)</h2>
+      <p class="section-sub">Moteur propriétaire d'IA complémentaires travaillent en parallèle. En mode Expert, ils forment un consensus médical qui dépasse les capacités de chaque moteur individuellement.</p>
+    </div>
+    <div class="reveal" style="overflow-x:auto">
+      <table class="ai-table" aria-label="Moteurs moteur propriétaire">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Moteur</th>
+            <th>Rôle médical spécialisé</th>
+            <th>Modes actifs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="engine-num">1</td>
+            <td><div class="engine-name">Analyse d'image clinique</div><div class="engine-detail">Lésions cutanées · lecture de documents · mesures sur photo</div></td>
+            <td>Vision, OCR ordonnances, dermatologie, analyse imagerie médicale</td>
+            <td><div class="modes-row"><span class="mode-badge cascade">Cascade</span><span class="mode-badge expert">Expert</span></div></td>
+          </tr>
+          <tr>
+            <td class="engine-num">2</td>
+            <td><div class="engine-name">Raisonnement différentiel</div><div class="engine-detail">Hypothèses hiérarchisées · drapeaux rouges · examen discriminant</div></td>
+            <td>Empathie, psychiatrie, raisonnement clinique complexe, tri urgences</td>
+            <td><div class="modes-row"><span class="mode-badge turbo">Turbo</span><span class="mode-badge cascade">Cascade</span><span class="mode-badge expert">Expert</span></div></td>
+          </tr>
+          <tr>
+            <td class="engine-num">3</td>
+            <td><div class="engine-name">Synthèse clinique</div><div class="engine-detail">Comptes rendus structurés · double restitution pro / patient</div></td>
+            <td>Raisonnement scientifique avancé, synthèse de littérature médicale</td>
+            <td><div class="modes-row"><span class="mode-badge cascade">Cascade</span><span class="mode-badge expert">Expert</span></div></td>
+          </tr>
+          <tr>
+            <td class="engine-num">4</td>
+            <td><div class="engine-name">Documents longs &amp; formation</div><div class="engine-detail">Lecture de dossiers volumineux · modules pédagogiques</div></td>
+            <td>Formation médicale longue, arborescences diagnostiques, éducation</td>
+            <td><div class="modes-row"><span class="mode-badge expert">Expert</span></div></td>
+          </tr>
+          <tr>
+            <td class="engine-num">5</td>
+            <td><div class="engine-name">Sourçage à jour</div><div class="engine-detail">Références vérifiables (PubMed, DOI) · pharmacologie actualisée</div></td>
+            <td>Recherche pharmacologique temps réel, interactions médicamenteuses</td>
+            <td><div class="modes-row"><span class="mode-badge cascade">Cascade</span><span class="mode-badge expert">Expert</span></div></td>
+          </tr>
+          <tr>
+            <td class="engine-num">6</td>
+            <td><div class="engine-name">Calcul médical</div><div class="engine-detail">Scores validés · posologies · pharmacocinétique</div></td>
+            <td>Calculs médicaux précis, pharmacocinétique, dosages pédiatriques</td>
+            <td><div class="modes-row"><span class="mode-badge expert">Expert</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section" style="background:var(--bg-2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h2>Trois modes adaptés à chaque situation</h2>
+      <p class="section-sub">L'IA s'adapte automatiquement à la gravité et aux ressources disponibles. Dégradation gracieuse et transparente si un mode est indisponible.</p>
+    </div>
+    <div class="modes-grid reveal">
+      <div class="mode-card turbo">
+        <div class="mode-header">
+          <div class="mode-icon turbo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <span class="mode-name">Turbo</span>
+        </div>
+        <div class="mode-desc">Réponse en moins de 3 secondes. Idéal pour les questions simples et les situations où chaque milliseconde compte.</div>
+        <div class="mode-meta">Latence cible : &lt; 3 s · 1 moteur · Disponibilité 24/7</div>
+      </div>
+      <div class="mode-card cascade">
+        <div class="mode-header">
+          <div class="mode-icon cascade">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          </div>
+          <span class="mode-name">Cascade</span>
+        </div>
+        <div class="mode-desc">Équilibre entre rapidité et précision. Recommandé pour le triage standard P1–P4.</div>
+        <div class="mode-meta">Latence cible : &lt; 8 s · 3 moteurs parallèles</div>
+      </div>
+      <div class="mode-card expert">
+        <div class="mode-header">
+          <div class="mode-icon expert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FF8080" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <span class="mode-name">Expert</span>
+        </div>
+        <div class="mode-desc">Les moteur propriétaire + consensus médical pondéré. Pour les cas complexes, le diagnostic différentiel et les décisions thérapeutiques critiques.</div>
+        <div class="mode-meta">Latence cible : &lt; 15 s · moteur propriétaire + consensus</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2>Chiffrement Shamir 3/5 — Sécurité militaire</h2>
+      <p class="section-sub">Les données médicales sont fragmentées en 5 parts chiffrées distribuées entre 5 gardiens indépendants. La reconstruction nécessite minimum 3 parts simultanées. Même Infomaniak ne peut pas accéder seul aux données.</p>
+    </div>
+    <div class="shamir-grid reveal" aria-label="Fragments de chiffrement Shamir">
+      <div class="shamir-fragment active">
+        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="shamir-label">Fragment 1</div><div class="shamir-role">Patient</div>
+      </div>
+      <div class="shamir-fragment active">
+        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="shamir-label">Fragment 2</div><div class="shamir-role">Hôpital A</div>
+      </div>
+      <div class="shamir-fragment active">
+        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="shamir-label">Fragment 3</div><div class="shamir-role">Hôpital B</div>
+      </div>
+      <div class="shamir-fragment">
+        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="shamir-label">Fragment 4</div><div class="shamir-role">Secours</div>
+      </div>
+      <div class="shamir-fragment">
+        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="shamir-label">Fragment 5</div><div class="shamir-role">Escrow</div>
+      </div>
+    </div>
+    <p class="shamir-note reveal">Fragments surlignés en vert : 3 fragments suffisent pour la reconstruction. Le schéma polynôme de Shamir garantit qu'aucun sous-ensemble de 2 fragments ne révèle d'information. AES-256-GCM protège chaque fragment individuellement.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section" style="background:var(--bg-2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="heading-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>11 fonctionnalités uniques au monde</h2>
+      <p class="section-sub">Des capacités conçues pour les situations les plus extrêmes — montagne, catastrophe, zone sans réseau, situation de violence, handicap moteur.</p>
+    </div>
+    <div class="features-list">
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div><div class="feature-title">Photogrammétrie stealth</div><div class="feature-desc">Reconstruction 3D passive d'une scène de traumatisme en 30–180 secondes, sans que la victime ne s'en aperçoive. Évalue fractures et déformations osseuses.</div><div class="feature-stack">COLMAP WASM · Three.js</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+        <div><div class="feature-title">Analyse harmonique du distress vocal</div><div class="feature-desc">Détection de l'état de choc, de la douleur et du niveau de conscience par analyse de la fréquence fondamentale (F0) et des harmoniques de la voix.</div><div class="feature-stack">Web Speech API · pitchfinder · Goertzel FFT</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div><div class="feature-title">Alerte interactions médicamenteuses CYP3A4</div><div class="feature-desc">Scan OCR de l'ordonnance → vérification des interactions critiques (ex. pamplemousse + statines) via Refdata CH double-endpoint.</div><div class="feature-stack">Tesseract.js · Refdata CH API</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.59 9.27 19.72 19.72 0 0 1 1.51 .64 2 2 0 0 1 3.48 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81A2 2 0 0 1 8.73 7l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><div class="feature-title">SOS silencieux par vibration Morse</div><div class="feature-desc">Envoie une alerte d'urgence géolocalisée par pattern de vibration Morse ···−−−··· Utilisable discrètement en situation de violence ou prise d'otage.</div><div class="feature-stack">Vibration API · patterns Morse · Background geoloc</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div><div class="feature-title">Synchronisation LZ4 sous-marine</div><div class="feature-desc">Compresse et synchronise les données médicales même avec une bande passante minimale (GPRS 2G). File d'attente persistante + checksum FNV-32.</div><div class="feature-stack">LZ77 pure JS · IndexedDB queue · AsyncStorage</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div><div class="feature-title">rPPG — fréquence cardiaque sans capteur</div><div class="feature-desc">Mesure la fréquence cardiaque et la saturation en O₂ par photopléthysmographie à distance. Méthode CHROM (Haan &amp; Jeanne 2013). Précision clinique ±2 bpm.</div><div class="feature-stack">CHROM method · Goertzel FFT · bandpass IIR 0.67–3.0 Hz</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+        <div><div class="feature-title">Fallback réseau multi-couche</div><div class="feature-desc">Scan automatique des réseaux WiFi disponibles, bascule sur Bluetooth LoRa ou SMS si pas de connexion data. Zéro interruption de service médical.</div><div class="feature-stack">navigator.connection · Web Bluetooth · SMS fallback</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div><div class="feature-title">OpenDyslexic + pictogrammes ARASAAC</div><div class="feature-desc">Toggle instantané vers la police OpenDyslexic pour les utilisateurs dyslexiques. Pictogrammes ARASAAC pour les personnes avec troubles de la communication.</div><div class="feature-stack">CSS variable · ARIA live regions · API arasaac.org</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></div>
+        <div><div class="feature-title">Export GPS complet GPX / KML</div><div class="feature-desc">Enregistrement et export de trajets d'évacuation au format GPX 1.1 et KML 2.2. Distance Haversine, waypoints urgence. Compatible tous logiciels cartographiques.</div><div class="feature-stack">GPX 1.1 · KML 2.2 · Haversine · Expo Location</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div><div class="feature-title">Prédiction comportementale ML locale</div><div class="feature-desc">Modèle TensorFlow.js local qui apprend les habitudes de l'utilisateur pour pré-remplir les champs les plus probables en situation d'urgence.</div><div class="feature-stack">TensorFlow.js · modèle local · AsyncStorage</div></div>
+      </div>
+      <div class="feature-row reveal">
+        <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5z"/></svg></div>
+        <div><div class="feature-title">Contrôle oculaire WCAG AAA</div><div class="feature-desc">Interface complètement pilotable par le regard via WebGazer.js. Pour les utilisateurs avec paralysie des membres supérieurs ou en situation de mains occupées.</div><div class="feature-stack">WebGazer.js · Switch Access · ARIA landmarks</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section">
+  <div class="container">
+    <div class="cta-block reveal">
+      <h2>Documentée, déposée, prête</h2>
+      <p class="section-sub" style="margin:0 auto 32px;max-width:480px">L'architecture moteur propriétaire fait l'objet d'une demande internationale déposée auprès de l'OMPI ; aucun brevet n'est délivré à ce jour. Chaque composant est production-ready et conforme aux standards médicaux internationaux.</p>
+      <a href="don.html" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Soutenir la recherche
+      </a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">© 2024-2026 Association SwissRescue OmniMed · Genève, Suisse · Art. 60-79 CC</div>
+      <div class="footer-links">
+        <a href="index.html">Accueil</a><a href="mission.html">Mission</a><a href="technologie.html">Technologie</a>
+        <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <p class="footer-motto">info@swissrescueomnimed.ch · <em>Primum non nocere</em> · Demande de brevet PCT/OMPI en cours</p>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20), {passive:true});
+const hamburger = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => { const open = mobileMenu.classList.toggle('open'); hamburger.setAttribute('aria-expanded', open); });
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, {threshold:.08});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
