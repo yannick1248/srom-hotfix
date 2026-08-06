@@ -47,8 +47,8 @@
   <div class="barre" id="barre"><i></i></div>
 
   <div class="choix" id="choix">
-    <a class="btn p" href="app-complete.html">Application complète</a>
-    <a class="btn s" href="app.html">Version légère (hors ligne)</a>
+    <a class="btn p" href="app.html">Application complète</a>
+    <a class="btn s" href="app-light.html">Version légère (hors ligne)</a>
     <p class="note">Choisissez vous-même si la détection tarde. La version légère
       fonctionne sans aucune connexion.</p>
   </div>
@@ -99,13 +99,13 @@
 
   /* Cas tranché d'avance : sans aucune interface réseau, inutile de sonder. */
   if (navigator.onLine === false) {
-    aller("app.html", "Hors réseau — ouverture de la version légère.");
+    aller("app-light.html", "Hors réseau — ouverture de la version légère.");
     return;
   }
 
   serveurJoignable().then(function (ok) {
-    if (ok) aller("app-complete.html", "Réseau détecté — ouverture de l'application complète.");
-    else aller("app.html", "Serveur injoignable — ouverture de la version légère, qui fonctionne hors ligne.");
+    if (ok) aller("app.html", "Réseau détecté — ouverture de l'application complète.");
+    else aller("app-light.html", "Serveur injoignable — ouverture de la version légère, qui fonctionne hors ligne.");
   }).catch(proposerLeChoix);
 
   /* Filet : si rien n'a abouti (navigateur exotique, script bloqué), l'utilisateur
