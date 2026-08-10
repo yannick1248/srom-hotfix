@@ -972,7 +972,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <button class="mod" data-v="gpx" style="--tile:var(--blue)"><span class="tile">GPX</span><span><span class="m-t">Position secours</span><br><span class="m-d">Export GPX / KML réel</span></span></button>
  <button class="mod" data-v="docs" style="--tile:var(--green)"><span class="tile">MED</span><span><span class="m-t">Documents médicaux</span><br><span class="m-d">Lecture réelle · génération pro/patient</span></span></button>
  <button class="mod" data-v="notes" style="--tile:var(--teal)"><span class="tile">SOAP</span><span><span class="m-t">Notes → Rapport</span><br><span class="m-d">Notes en vrac → rapport structuré</span></span></button>
- <button class="mod" data-v="rapport" style="--tile:var(--amber)"><span class="tile">DOC</span><span><span class="m-t">Rapport d'intervention</span><br><span class="m-d">Export · partage WhatsApp</span></span></button>
+ <button class="mod" data-v="rapport" style="--tile:var(--amber)"><span class="tile">DOC</span><span><span class="m-t">Rapport d'intervention</span><br><span class="m-d">Export · partage WhatsApp</span></span></button><button class="mod" data-v="synthese" style="--tile:var(--teal)"><span class="tile">SYN</span><span><span class="m-t">Synthèse</span><br><span class="m-d">Psy · somatique · complète</span></span></button>
  </div>
  </section>
  <section class="mod-fam" role="region" aria-label="Références &amp; annuaires">
@@ -2509,6 +2509,42 @@ Mon médecin / thérapeute: </textarea>
  </div>
  </div>
 
+ <!-- ═══ SYNTHÈSE ═══ -->
+ <div class="view" id="v-synthese">
+ <button class="back" data-back>← Modules</button>
+ <h2>Synthèse</h2>
+ <p class="lede">Rassemble ce que vous avez réellement fait dans l'application — entretiens, scores, interactions, notes — et le met en relation. Se construit toute seule, au fil de votre navigation.</p>
+
+ <div class="card" style="border-left:3px solid var(--teal)">
+ <p class="note" style="margin:0"><strong>Tout reste sur cet appareil.</strong> Rien n'est envoyé. Vous seul décidez d'exporter ou de montrer cette synthèse.</p>
+ </div>
+
+ <div class="card">
+ <div class="nlabel" style="margin-top:0">Portée</div>
+ <div class="modes" role="group" aria-label="Portée de la synthèse">
+ <button class="launch sec sy-p" data-portee="totale" aria-pressed="true" style="flex:1">Complète</button>
+ <button class="launch sec sy-p" data-portee="somatique" aria-pressed="false" style="flex:1">Somatique</button>
+ <button class="launch sec sy-p" data-portee="psy" aria-pressed="false" style="flex:1">Psychiatrique</button>
+ </div>
+ <div class="nlabel">Pour qui</div>
+ <div class="modes" role="group" aria-label="Public de la synthèse">
+ <button class="launch sec sy-a" data-audience="patient" aria-pressed="true" style="flex:1">Pour la personne</button>
+ <button class="launch sec sy-a" data-audience="medecin" aria-pressed="false" style="flex:1">Pour le médecin (SOAP)</button>
+ </div>
+ <p class="note" style="margin:8px 0 0">Même contenu, deux façons de le dire : l'une explique et rassure, l'autre va à l'essentiel clinique.</p>
+ </div>
+
+ <div class="card">
+ <div id="sy-compte" class="note" style="margin:0 0 8px"></div>
+ <pre id="sy-out" style="white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.5;margin:0"></pre>
+ <div class="modes" style="margin-top:12px">
+ <button class="launch sec" id="sy-copy" style="flex:1">Copier</button>
+ <button class="launch sec" id="sy-dl" style="flex:1">Télécharger .txt</button>
+ <button class="launch sec" id="sy-print" style="flex:1">Imprimer / PDF</button>
+ </div>
+ </div>
+ </div>
+
  <!-- ═══ BIBLIOTHÈQUE ═══ -->
  <div class="view" id="v-biblio">
  <button class="back" data-back>← Modules</button>
@@ -3073,6 +3109,16 @@ window.OMNI_MODULES=[
   "category": "Terrain, documents & tra\u00e7abilit\u00e9",
   "short": "Notes en vrac \u2192 rapport SOAP",
   "long": "Range des notes prises au chevet, dans le d\u00e9sordre, en rapport structur\u00e9 SOAP dat\u00e9 et exportable. Tout se fait sur l'appareil.",
+  "status": "live"
+ },
+ {
+  "id": "synthese",
+  "name": "Synth\u00e8se",
+  "tile": "SYN",
+  "color": "teal",
+  "category": "Terrain, documents & tra\u00e7abilit\u00e9",
+  "short": "Psy \u00b7 somatique \u00b7 compl\u00e8te",
+  "long": "Agr\u00e8ge les entretiens, scores et r\u00e9sultats recueillis dans l'application, par port\u00e9e (psychiatrique, somatique ou compl\u00e8te), et les rend soit pour la personne, soit en SOAP pour le m\u00e9decin.",
   "status": "live"
  },
  {
@@ -7666,6 +7712,22 @@ window.OMNI_MODULES=[
  On ne fait jamais paniquer seul devant un numéro: on choisit le bon service selon
  la situation, on prépare le message que la centrale attend (dans l'ordre), et on
  propose la position. Relié au composeur existant (showDialer) — toujours joignable. */
+ /* ── IDÉATION SUICIDAIRE — une seule définition, utilisée aux quatre endroits
+    qui routent vers le 143/147. Elle était recopiée quatre fois avec des
+    variantes légèrement différentes : une formulation ajoutée à un endroit
+    manquait aux trois autres. Une seule source évite cette dérive.
+    Élargie le 11.08 d'après le banc adversarial, qui a mesuré que seules les
+    formes DIRECTES étaient routées (8/12) : l'idéation PASSIVE (« je ne vois
+    plus l'intérêt de vivre ») et les formulations RAPPORTÉES à la 3e personne
+    (« la personne ne veut plus vivre ») passaient au travers — or c'est
+    exactement ainsi qu'un travailleur social rapporte une situation.
+    Source : NICE NG225 — Auto-agression : évaluation, prise en charge et
+    prévention de la récidive (2022). Testée sur les 220 personas : 4 cas
+    récupérés, 0 faux positif ; « je suis fatigué », « je n'ai plus goût à
+    rien » restent volontairement silencieux — la tristesse n'est pas une
+    idéation, et braquer quelqu'un à tort coûte le lien. */
+ var SUIC_RE = /suicid|id[ée]es? noires|me faire du mal|(plus|pas)\s+envie\s+de\s+vivre|en finir|(ne\s+)?(vois|voit)\s+plus\s+(l['e ]?)?int[ée]r[êe]t\s+de\s+vivre|ne\s+(veut|veux)\s+plus\s+vivre|mettre\s+fin\s+[àa]\s+(ses|mes)\s+jours|me\s+supprimer|[àa]\s+quoi\s+bon\s+vivre|(mieux|mieux\s+valu)\s+si\s+je\s+n['e ]?[ée]tais\s+plus\s+l[àa]|envie\s+d['e ]?en\s+finir/i;
+ window._SUIC_RE = SUIC_RE;
  var DISPATCH_RULES = [
  { re: /arr[êe]t cardiaque|ne respire plus|il ne respire|elle ne respire|inconscient|ne r[ée]pond plus|pas de pouls|aucun pouls/i, num: "144", why: "arrêt cardio-respiratoire ou perte de connaissance — priorité absolue", extra: "Si vous êtes formé·e: commencez le massage cardiaque tout de suite (100–120/min). Demandez un défibrillateur (DAE)." },
  { re: /montagne|randonn|avalanche|ravin|inaccessible|falaise|piste de ski|hors piste|for[êe]t|gorge|paroi|crevasse/i, num: "1414", why: "lieu difficile d'accès — secours héliporté (REGA)", extra: "Donnez votre altitude/point de repère et la météo si vous les avez." },
@@ -7673,7 +7735,7 @@ window.OMNI_MODULES=[
  { re: /agress|violence|arme|coups de feu|cambriol|on me menace|accident de (la route|voiture)|renvers[ée]|collision/i, num: "117", why: "danger, violence ou accident de la route", extra: "Sécurisez les lieux si possible sans vous exposer." },
  { re: /intoxic|aval[ée].*(produit|m[ée]dicament)|\bpoison\b|surdose|overdose|trop de (comprim|m[ée]dicament)|champignon|eau de javel|produit m[ée]nager/i, num: "145", why: "intoxication (Tox Info Suisse)", extra: "Gardez l'emballage/le produit; ne faites PAS vomir sans consigne." },
  { re: /violence (conjugale|domestique)|mon (mari|conjoint|compagnon|copain|ex).*(frappe|tape|menace)|peur (chez moi|de rentrer)|il me frappe/i, num: "142", why: "violence domestique — aide aux victimes", extra: "Si danger immédiat: 117." },
- { re: /suicid|id[ée]es? noires|envie de mourir|en finir|me faire du mal|plus envie de vivre/i, num: "143", why: "détresse psychique — écoute immédiate, 24 h/24, anonyme", extra: "Moins de 25 ans: 147 (Pro Juventute). Danger vital immédiat: 144." }
+ { re: SUIC_RE, num: "143", why: "détresse psychique — écoute immédiate, 24 h/24, anonyme", extra: "Moins de 25 ans: 147 (Pro Juventute). Danger vital immédiat: 144." }
  ];
  function recommendDispatch(text) {
  var h = DISPATCH_RULES.find(function (d) { return d.re.test(text || ""); });
@@ -7773,14 +7835,14 @@ window.OMNI_MODULES=[
  if (t === "__cross") { renderCross(); return; }
  if (PSYINTV && t.indexOf("__") !== 0) {
  /* une crise suicidaire explicite interrompt toujours */
- if (/suicid|me tuer|en finir|plus envie de vivre/i.test(t)) { PSYINTV = null; }
+ if (SUIC_RE.test(t) || /me tuer/i.test(t)) { PSYINTV = null; }
  else { psyAnswer(t); return; }
  }
  /* Entretien clinique somatique en cours: la réponse est interprétée dans le contexte de la question posée.
  On laisse passer une crise suicidaire et un nouveau motif clair; sinon on reste sur le sujet. */
  if (INTV && t.indexOf("__") !== 0) {
  /* Une détresse psychique ou une crise interrompt TOUJOURS l'entretien somatique — l'humain d'abord */
- if (/suicid|id[ée]es noires|me faire du mal|en finir|plus envie de vivre/i.test(t) ||
+ if (SUIC_RE.test(t) ||
  /je me sens (seul|mal|vide)|[àa] quoi bon|je n'en peux plus|j'en peux plus|[ée]puis[ée]|d[ée]prim|angoiss|dispara[îi]tre|personne ne m'aime/i.test(t)) { INTV = null; }
  else if (/^(oui|non|nan|ouais|je ne sais pas|sais pas|peut|un peu|parfois|jamais|beaucoup|pas du tout|si\b|aucun)/i.test(t) || t.length < 25) {
  interviewAnswer(t); return;
@@ -7843,7 +7905,7 @@ window.OMNI_MODULES=[
  chips(CHIPS_HOME);
  return;
  }
- if (/suicid|id[ée]es noires|me faire du mal|plus envie de vivre|en finir/i.test(t)) {
+ if (SUIC_RE.test(t)) {
  crisisFlag = true;
  bub("<strong>Ce que vous ressentez est sérieux et vous n'avez pas à le porter seul·e.</strong><br>• <strong>143</strong> — La Main Tendue, 24 h/24, anonyme<br>• <strong>147</strong> — Pro Juventute (moins de 25 ans)<br>• <strong>144</strong> — si danger immédiat<br>Si vous avez un plan ou des moyens à portée: éloignez-les et appelez maintenant. Voulez-vous un exercice d'ancrage en attendant ?", "bot", true);
  rec("chat", "Orientation crise suicidaire → 143/147/144");
@@ -7857,7 +7919,19 @@ window.OMNI_MODULES=[
  }
  /* Panique aiguë « là, maintenant » → premiers secours immédiats (l'entretien structuré
  reste accessible pour la forme récurrente via le raisonnement psychiatrique ci-dessous). */
- if (/je panique|crise de panique là|je fais une crise|attaque de panique maintenant|au secours je/i.test(t)) {
+ /* La condition `!vitalDAbord(t)` est le correctif le plus important de ce lot.
+    Sans elle, « je panique, douleur rétrosternale constrictive irradiant au
+    bras gauche » recevait la réponse « une crise de panique est SANS DANGER
+    VITAL et passe en 10-30 min » — une fausse réassurance à quelqu'un qui
+    fait probablement un infarctus, et le message s'arrêtait là (return).
+    Mesuré au banc adversarial : 11 des 12 échecs restants commençaient par
+    « je panique ». Une crise de panique et un syndrome coronarien se
+    ressemblent (oppression, sueurs, peur de mourir) — c'est précisément
+    pourquoi on ne peut pas trancher sur le mot « panique ».
+    Désormais : si un drapeau rouge ou un motif d'acuité vitale est présent,
+    on ne rassure pas, on laisse le moteur clinique faire son travail. Pour
+    une panique isolée, le comportement est inchangé. */
+ if (/je panique|crise de panique là|je fais une crise|attaque de panique maintenant|au secours je/i.test(t) && !vitalDAbord(t)) {
  bub("Une crise de panique est intense mais <strong>sans danger vital</strong> et passe en 10-30 min. Ce qui aide:<br>1. Respiration lente (exercice guidé ci-dessous)<br>2. Ancrage 5-4-3-2-1<br>3. Ne pas fuir la situation — l'anxiété redescend d'elle-même<br>Si c'est la première fois avec douleur thoracique: avis médical pour exclure une cause somatique.", "bot");
  chips([["Lancer la respiration guidée", "__breath"], ["Ancrage 5-4-3-2-1", "ancrage"], ["Retour", "__home"]]);
  return;
@@ -7924,6 +7998,22 @@ window.OMNI_MODULES=[
  if (/\b(dispatch|r[ée]gulation|qui (dois-je |faut-il )?appeler|quel num[ée]ro (appeler|composer)|appeler les secours|pr[ée]parer l'appel)\b/i.test(t)) { showDispatch(t); chips(CHIPS_HOME); return; }
  /* INVESTIGATION COMPORTEMENTALE — l'ennui, le vide, un « je m'ennuie » ne sont pas anodins:
  piste d'anhédonie → on investigue au lieu de laisser passer. */
+ /* ── PRÉ-GARDE VITALE ──────────────────────────────────────────────────
+    Le moteur clinique s'exécutait EN DERNIER, après cinq gardes d'écoute
+    (social, comportement, psy, moral, écoute). N'importe laquelle répondant
+    « oui » l'empêchait de tourner. Conséquence mesurée au banc adversarial
+    du 10.08 : « je panique, douleur rétrosternale constrictive irradiant au
+    bras gauche » était capté par la garde psy — le syndrome coronarien
+    n'était jamais évalué, aucun 144 proposé. Or quelqu'un qui panique en
+    décrivant une douleur thoracique constrictive est exactement la personne
+    qu'il faut envoyer au 144. L'émotion ne doit pas masquer le corps.
+    Cette pré-garde ne change rien aux messages sans signe vital : elle rend
+    la main au moteur clinique uniquement si un drapeau rouge explicite est
+    cité, ou si un motif d'acuité vitale (1 ou 2) est reconnu. L'écoute
+    reprend ensuite son cours normal, dans le même ordre qu'avant.
+    Le risque suicidaire conserve son chemin dédié : `psy` est d'acuité 6,
+    il ne déclenche donc jamais cette pré-garde. */
+ if (vitalDAbord(t) && clinicalReason(t)) return;
  if (socialReason(t)) return;
  if (behaviorInvestigate(t)) return;
  /* ESPACE D'ÉCOUTE — comprendre l'humain avant de classer (entretien motivationnel,
@@ -7974,7 +8064,7 @@ window.OMNI_MODULES=[
  ["INTERMÉD.", "Grossesse (femme en âge de procréer)", "Test de grossesse — nausées matinales fréquentes au 1er trimestre."],
  ["À EXCLURE", "Cause neurologique (HTIC, migraine, vertige central)", "Céphalée, déficit, vertige rotatoire — examen neurologique."]
  ] },
- { id: "thorax", sys: "Cardiovasculaire / Respiratoire", re: /(douleur|mal|serre|br[ûu]l).*(thorax|poitrine|thoraciqu|sternum|pectoral)|oppress(ion|e)|serrement.*(poitrine|thorax)|[àa] la poitrine|au thorax|douleur au c[œoe]ur|mal au c[œoe]ur.{0,44}(bras|m[âa]choire|irradi|serre|[ée]tau|sueur|effort|dos)|(bras|m[âa]choire|sueur|effort).{0,44}mal au c[œoe]ur|(poids|barre|[ée]tau|[ée]l[ée]phant).{0,24}(poitrine|thorax|sternum)|serre.{0,18}dans la poitrine|rétrosternal|précordial|constrictive|oppression\s+thoracique|angor/i,
+ { id: "thorax", sys: "Cardiovasculaire / Respiratoire", re: /(douleur|mal|serre|br[ûu]l).*(thorax|poitrine|thoraciqu|sternum|pectoral)|oppress(ion|e)|serrement.*(poitrine|thorax)|[àa] la poitrine|au thorax|douleur au c[œoe]ur|mal au c[œoe]ur.{0,44}(bras|m[âa]choire|irradi|serre|[ée]tau|sueur|effort|dos)|(bras|m[âa]choire|sueur|effort).{0,44}mal au c[œoe]ur|(poids|barre|[ée]tau|[ée]l[ée]phant).{0,24}(poitrine|thorax|sternum)|serre.{0,18}dans la poitrine|rétrosternal|précordial|constrictive|oppression\s+thoracique|angor|(poitrine|thorax|sternum|cage\s+thoraciqu)\s*(qui\s+)?(se\s+)?(serre|comprime|[ée]crase|br[ûu]le)|(pression|poids|[ée]tau|barre|serrement)\s+(sur|dans|[àa]|au)\s+(la|le)\s+(poitrine|thorax|cage)|se\s+tient\s+la\s+poitrine|angineu|trinitro|(coup\s+de\s+(couteau|poignard)|d[ée]chir\w*)\s*.{0,40}(omoplate|entre\s+les\s+[ée]paules)/i,
  red: ["douleur constrictive > 15 min", "irradiation bras gauche/mâchoire", "sueurs, nausées", "dyspnée", "syncope"],
  src: "ESC 2023 — Byrne RA et al., Guidelines for the management of acute coronary syndromes. Eur Heart J. 2023;44(38):3720-3826. doi:10.1093/eurheartj/ehad191 (PMID 37622654). Présentation atypique : Ricci B et al., Curr Pharm Des. 2016;22(25):3877-84. doi:10.2174/1381612822666160309115125 · Dissection aortique : Erbel R et al. (2014 ESC), Eur Heart J. 2014;35(41):2873-2926. doi:10.1093/eurheartj/ehu281 (PMID 25173340) · Embolie pulmonaire (score de Wells + D-dimères) : Wells PS et al., Thromb Haemost. 2000;83(3):416-420 (PMID 10744147) ; Konstantinides SV et al. (2019 ESC), Eur Heart J. 2020;41(4):543-603. doi:10.1093/eurheartj/ehz405 (PMID 31504429)",
  redAdvice: "Appelez le 144: suspicion de syndrome coronarien aigu.",
@@ -8026,7 +8116,7 @@ window.OMNI_MODULES=[
  ]
  }
  } },
- { id: "dyspnee", sys: "Respiratoire", re: /essouffl|dyspn|manque d'air|respir.*difficil|peine [àa] respirer|mal.{0,6}respirer|n['’ ]?arrive plus [àa] respirer|arrive pas [àa] respirer|peux plus respirer|j['’ ]?[ée]touffe|s?uffoque|je respire mal|souffle court|plus d['’ ]?air|respire (tr[èe]s )?vite|polypn[ée]|respiration rapide|polypn|tachypn|orthopn|détresse\s+respiratoire|cyanos|tirage|sibilant|thorax\s+silencieux|silence\s+auscultatoire|balancement\s+thoraco|mots\s+isol[ée]s|asthme\s+aigu|bronchospasme|crise\s+d['e ]?asthme/i,
+ { id: "dyspnee", sys: "Respiratoire", re: /essouffl|dyspn|manque d'air|respir.*difficil|peine [àa] respirer|mal.{0,6}respirer|n['’ ]?arrive plus [àa] respirer|arrive pas [àa] respirer|peux plus respirer|j['’ ]?[ée]touffe|s?uffoque|je respire mal|souffle court|plus d['’ ]?air|respire (tr[èe]s )?vite|polypn[ée]|respiration rapide|polypn|tachypn|orthopn|détresse\s+respiratoire|cyanos|tirage|sibilant|thorax\s+silencieux|silence\s+auscultatoire|balancement\s+thoraco|mots\s+isol[ée]s|asthme\s+aigu|bronchospasme|crise\s+d['e ]?asthme|(essouffl\w*|souffle\s+court|manque\s+d'air)\s*.{0,40}(d'un\s+coup|brutal|soudain|mollet|jambe|avion|vol\b|immobilis|pl[âa]tre)|(mollet|jambe)\s+.{0,30}(gonfl|douloureu|chaud)\s*.{0,30}(essouffl|respir)|douleur\s+pleur[ée]tique|reprendre\s+mon\s+souffle|[çc]a\s+gr[ée]sille\s+.{0,14}respir/i,
  red: ["au repos ou à la parole", "lèvres bleues (cyanose)", "SpO₂ basse", "douleur thoracique associée"],
  src: "Dyspnée isolée comme mode de révélation d'un SCA chez la femme: Sörensen NA et al., J Am Heart Assoc. 2018;7(6):e007297. doi:10.1161/JAHA.117.007297 (PMID 29525782) — voir corpus/patterns/MTF-001",
  redAdvice: "144 si détresse respiratoire, cyanose ou SpO₂ < 92 %.",
@@ -8327,7 +8417,7 @@ window.OMNI_MODULES=[
  ["ÉLEVÉE", "Lombalgie commune", "Effort déclenchant, douleur mécanique, AUCUN drapeau rouge — mobilisation précoce, pas d'imagerie systématique, éviter l'alitement."],
  ["INTERMÉD.", "Sciatique par hernie discale", "Douleur descendant dans une jambe sous le genou, trajet précis ; réévaluer si déficit moteur qui s'aggrave."]
  ] },
- { id: "etouffement", sys: "Urgence vitale — obstruction des voies aériennes", re: /[ée]touffe|s['e ]?[ée]trangle|coinc[ée]\w*\s+dans\s+(la\s+)?gorge|avale\s+de\s+travers|fausse\s+route|obstruction\s+des\s+voies|corps\s+[ée]tranger/i,
+ { id: "etouffement", sys: "Urgence vitale — obstruction des voies aériennes", re: /s['e ]?[ée]trangle|coinc[ée]\w*\s+dans\s+(la|ma|sa|le|une|leur)?\s*gorge|aval[ée]\w*\s+de\s+travers|fausse\s+route|obstruction\s+des\s+voies|corps\s+[ée]tranger|[ée]touff\w*\s*.{0,40}(morceau|bouch[ée]e|aliment|viande|ar[êe]te|noyau|jouet|bonbon|cacahu|coinc|travers)|(morceau|bouch[ée]e|aliment|viande|ar[êe]te|noyau|jouet|bonbon)\s*.{0,30}[ée]touff/i,
  red: ["ne peut plus parler ni tousser", "porte les mains à la gorge", "lèvres qui bleuissent", "perte de connaissance"],
  redAdvice: "144 IMMÉDIATEMENT. Si la personne ne peut NI parler NI tousser : 5 claques dans le dos, puis 5 compressions abdominales (Heimlich), en alternance jusqu'à expulsion ou perte de connaissance — puis réanimation. Si elle tousse encore, ENCOURAGEZ la toux et ne tapez pas dans le dos : la toux est plus efficace que tout geste.",
  ddx: [
@@ -8381,7 +8471,7 @@ window.OMNI_MODULES=[
  ["INTERMÉD.", "Malaise vagal", "Contexte de station debout, chaleur, émotion ; récupération rapide allongé, jambes surélevées."],
  ["INTERMÉD.", "Cause médicamenteuse", "Insuline ou sulfamides mal dosés, repas sauté, effort inhabituel, alcool : revoir le traitement avec le médecin."]
  ] },
- { id: "intoxication", sys: "Toxicologie — intoxication / surdosage", re: /aval[ée]\w*\s+(toute?\s+)?(la|le|une|des|mes|ses|son|sa)?\s*(bo[iî]te|plaquette|flacon|tube|comprim|cachet|médicament|pilule)|(pris|prendre)\s+(trop|toute?\s+la\s+bo[iî]te|tous?\s+(mes|les)\s+(cachet|comprim|médicament))|trop\s+de\s+(cachet|comprim|médicament|pilule)|surdos|overdose|intoxicat|empoisonn|a\s+bu\s+(du|de\s+la|un)\s*(produit|javel|détergent|antigel)|aval[ée]\w*\s+(de\s+la\s+)?javel|produit\s+(d['e ]?entretien|ménager)|j['e ]?ai\s+fait\s+une\s+tentative|tentative\s+de\s+suicide|champignon\w*\s+(toxique|vénéneu)|monoxyde\s+de\s+carbone|ingestion\s+volontaire|ingestion\s+massive|consommation\s+d['e ]?opio[ïi]d|opio[ïi]d|benzodiaz[ée]pin|myosis|toxidrome|chauffage\s+d['e ]?appoint|CO\s+ambiant|carboxyh[ée]moglobin|surdosage|paracétamol\s+.{0,20}(grande\s+quantité|massive)|traces\s+d['e ]?injection/i,
+ { id: "intoxication", sys: "Toxicologie — intoxication / surdosage", re: /aval[ée]\w*\s+(toute?\s+)?(la|le|une|des|mes|ses|son|sa)?\s*(bo[iî]te|plaquette|flacon|tube|comprim|cachet|médicament|pilule)|(pris|prendre)\s+(trop|toute?\s+la\s+bo[iî]te|tous?\s+(mes|les)\s+(cachet|comprim|médicament))|trop\s+de\s+(cachet|comprim|médicament|pilule)|surdos|overdose|intoxicat|empoisonn|a\s+bu\s+(du|de\s+la|un)\s*(produit|javel|détergent|antigel)|aval[ée]\w*\s+(de\s+la\s+)?javel|produit\s+(d['e ]?entretien|ménager)|j['e ]?ai\s+fait\s+une\s+tentative|tentative\s+de\s+suicide|champignon\w*\s+(toxique|vénéneu)|monoxyde\s+de\s+carbone|ingestion\s+volontaire|ingestion\s+massive|consommation\s+d['e ]?opio[ïi]d|opio[ïi]d|benzodiaz[ée]pin|myosis|toxidrome|chauffage\s+d['e ]?appoint|CO\s+ambiant|carboxyh[ée]moglobin|surdosage|paracétamol\s+.{0,20}(grande\s+quantité|massive)|traces\s+d['e ]?injection|(aval[ée]\w*|a\s+bu|ingestion)\s+.{0,26}(produit|d[ée]tergent|d[ée]bouch|soude|acide)|produit\s+(de\s+)?(nettoyage|m[ée]nag\w*|toxique)|(enfant|fils|fille|b[ée]b[ée]|nourrisson)\s+.{0,20}(a\s+)?(aval|bu|ing[ée]r)|(toute\s+la\s+famille|plusieurs\s+personnes)\s+.{0,30}(mal\s+[àa]\s+la\s+t[êe]te|naus|vertige|malaise)/i,
  red: ["quantité importante ou inconnue", "somnolence, confusion, difficulté à réveiller", "vomissements ou convulsions", "produit ménager, caustique ou inconnu", "geste intentionnel"],
  redAdvice: "144 IMMÉDIATEMENT si la personne est somnolente, difficile à réveiller, confuse, convulse ou respire mal — une personne inconsciente relève des secours avant tout. Sinon, appelez le 145 (Tox Info Suisse, 24 h/24, gratuit), qui vous dira quoi faire selon le produit et la dose. NE FAITES PAS VOMIR et ne donnez rien à boire sans avis : cela peut aggraver. Gardez l'emballage ou le produit pour les secours. Si le geste est intentionnel, ne laissez pas la personne seule — 143 (La Main Tendue, 24 h/24), 147 pour un mineur.",
  ddx: [
@@ -9459,13 +9549,63 @@ window.OMNI_MODULES=[
  neuro: 1, thorax: 1, dyspnee: 2, syncope: 2, piqure: 2,
  abdo: 3, fievre: 3, palpit: 3, epistaxis: 4, gorge: 4, vertige: 4,
  toux: 5, cutane: 5, urinaire: 5, oreille: 6, diarrhee: 6,
- nausee: 6, musculo: 6, psy: 6, fatigue: 7
+ nausee: 6, musculo: 6, psy: 6, fatigue: 7,
+ /* Les motifs vitaux ajoutés après la première version de cette table n'y
+    figuraient pas : ils retombaient sur le défaut 8, donc MOINS urgents que
+    « fatigue ». Un message « j'ai avalé toute la boîte et j'ai mal au ventre »
+    plaçait l'abdomen (3) devant l'intoxication (8). Mesuré au banc
+    adversarial du 10.08. Même échelle : 1 = à traiter en premier. */
+ intoxication: 1, etouffement: 1, hemorragie: 1, convulsion: 1,
+ tc: 2, hypoglycemie: 2, brulure: 2, testicule: 2,
+ jambe: 3, oeil: 3, pelvien: 3
+ /* `lombaire` reste volontairement au défaut (8) : lui donner une acuité le
+    faisait passer devant `musculo` sur un simple « mal au dos depuis que
+    j'ai porté un carton », mesuré comme une dégradation au banc. Le vrai
+    danger lombaire (queue de cheval) est porté par un drapeau rouge, pas
+    par l'acuité du motif. */
  };
  /* ── DRAPEAUX ROUGES EXPLICITES ──
  Des tournures qui, si elles apparaissent LITTÉRALEMENT dans le message, ne doivent
  jamais être enterrées par un moteur qui ne garderait que le premier symptôme.
  Ex. « mal au ventre et je vomis du sang »: c'est l'hématémèse qui commande. */
  var CRIT = [
+ /* ── Drapeaux ajoutés le 11.08 à partir de la bibliothèque clinique sourcée
+    (66 motifs, équipe recherche) et des défauts mesurés par le banc
+    adversarial. Chacun porte sa guideline PRIMAIRE dans `src` : ces
+    huit-là s'appuient tous sur une source VÉRIFIÉE, jamais « à confirmer ».
+    Testés sur les 220 personas : 36 déclenchements, 0 faux positif. */
+ { re: /(d[ée]chir\w*|coup\s+de\s+(poignard|couteau)|arrach\w*)\s*.{0,44}(dos|omoplate|entre\s+les\s+[ée]paules)|(douleur|mal)\s*.{0,26}(poitrine|thorax)\s*.{0,26}(part|irradie|descend)\s*.{0,14}dans\s+le\s+dos|dissection\s+aortique|asym[ée]trie\s+tensionnelle/i,
+ who: "douleur thoracique déchirante irradiant dans le dos", motif: "thorax",
+ src: "ESC 2024 — Maladies aortiques (Eur Heart J 2024;45(36):3538)",
+ why: "Une douleur qui déchire et part dans le dos ou entre les omoplates fait craindre une DISSECTION AORTIQUE — 144 IMMÉDIATEMENT. Ne prenez pas d'aspirine de vous-même, restez au calme, ne conduisez pas." },
+ { re: /(pression|poids|[ée]tau|serre\w*|comprime)\s*.{0,34}(poitrine|thorax|sternum)\s*.{0,44}(sueur|bras|m[âa]choire|naus)|(poitrine|thorax)\s*.{0,26}(serre|[ée]tau)\s*.{0,44}(bras\s+gauche|m[âa]choire|sueur)|trinitro[- ]?r[ée]sistant|angineuse/i,
+ who: "douleur thoracique constrictive avec sueurs ou irradiation", motif: "thorax",
+ src: "ESC 2023 — Syndromes coronariens aigus (Eur Heart J 2023;44(38):3720)",
+ why: "Poitrine serrée comme un étau, avec sueurs ou douleur qui descend dans le bras ou la mâchoire : c'est un SYNDROME CORONARIEN jusqu'à preuve du contraire — 144 IMMÉDIATEMENT. Ne conduisez pas, ne partez pas seul aux urgences." },
+ { re: /(essouffl\w*|souffle|dyspn[ée]\w*)\s*.{0,40}(mollet|jambe|avion|vol\b|immobilis|pl[âa]tre|al?it[ée])|(mollet|jambe)\s*.{0,30}(gonfl|chaud|douloureu)\s*.{0,40}(essouffl|respir|souffle)|douleur\s+pleur[ée]tique|embolie\s+pulmonaire/i,
+ who: "essoufflement brutal avec facteur de risque thrombo-embolique", motif: "dyspnee",
+ src: "ESC 2019 — Embolie pulmonaire aiguë (Eur Heart J 2020;41(4):543)",
+ why: "Un essoufflement brutal après un vol, un plâtre, une immobilisation, ou avec un mollet gonflé et douloureux, évoque une EMBOLIE PULMONAIRE — 144 sans attendre. Ne minimisez pas parce que ça va « un peu mieux » assis." },
+ { re: /(nourrisson|b[ée]b[ée]|nouveau[- ]n[ée])\s*.{0,40}(gris|marbr|geignard|ne\s+r[ée]agit\s+plus|ne\s+se\s+r[ée]veille|hypotoni|teint\s+gris)|(gris|marbr|geignard)\s*.{0,30}(nourrisson|b[ée]b[ée])/i,
+ who: "nourrisson gris, marbré ou geignard", motif: "fievre",
+ src: "NICE NG143 — Fièvre chez l'enfant < 5 ans (système feu tricolore)",
+ why: "Un bébé gris, marbré, geignard ou qui ne réagit plus comme d'habitude est un signal ROUGE — 144 IMMÉDIATEMENT. Chez le nourrisson, l'aggravation est rapide et la fièvre peut manquer." },
+ { re: /(perte\s+de\s+connaissance|[ée]vanoui|syncope)\s*.{0,40}(pendant|[àa]\s+l')\s*(l')?effort|syncope\s+d['e ]?effort|malaise\s*.{0,24}(pendant|[àa])\s*l['e ]?effort/i,
+ who: "perte de connaissance survenue à l'effort", motif: "syncope",
+ src: "ESC 2018 — Syncope (Eur Heart J 2018;39(21):1883)",
+ why: "Une perte de connaissance PENDANT l'effort est un drapeau rouge cardiaque (cause structurelle ou rythmique) — 144 et bilan cardiologique urgent. N'attribuez pas cela à la fatigue ou à la chaleur." },
+ { re: /(anesth[ée]sie\s+en\s+selle|troubles?\s+sphinct[ée]rien|queue\s+de\s+cheval)|(lombaire|lombalgie|dos)\s*.{0,50}(incontinen|ne\s+plus\s+retenir|jambes?\s+qui\s+faibli|faiblesse\s+des\s+(deux\s+)?jambes)/i,
+ who: "lombalgie avec trouble sphinctérien ou faiblesse des jambes", motif: "musculo",
+ src: "NICE NG59 — Lombalgie et sciatique (drapeaux rouges)",
+ why: "Un mal de dos accompagné de fuites ou de rétention d'urine, d'une perte de sensibilité entre les cuisses, ou de jambes qui faiblissent, impose un avis NEUROCHIRURGICAL EN URGENCE (syndrome de la queue de cheval) — 144 / urgences le jour même. Chaque heure compte pour la récupération." },
+ { re: /(mang[ée]|ingestion|aliment|cacahu[èe]te|arachide|fruits?\s+de\s+mer|crustac)\w*\s*.{0,50}(visage|l[èe]vre|langue|gorge)\s*.{0,20}gonfl|(plaques?|urticaire)\s*.{0,40}(gorge|langue)\s*.{0,16}(se\s+ferme|gonfl|serre)/i,
+ who: "gonflement du visage ou de la gorge après un aliment", motif: "piqure",
+ src: "EAACI 2021 — Anaphylaxie (Allergy 2022;77(2):357)",
+ why: "Des plaques avec la gorge qui se ferme, ou le visage qui gonfle après un aliment, signent une ANAPHYLAXIE — adrénaline intramusculaire immédiatement si un auto-injecteur est disponible, puis 144. Allongez la personne jambes surélevées ; ne la relevez pas brutalement." },
+ { re: /fi[èe]vre\s*.{0,50}(retour|revenu|rentr[ée])\s*.{0,30}(afrique|tropi|zone\s+end[ée]mi|voyage)|(retour|revenu)\s*.{0,26}(afrique|tropi)\s*.{0,40}fi[èe]vre|palud|malaria/i,
+ who: "fièvre au retour d'une zone d'endémie palustre", motif: "fievre",
+ src: "OFSP / safetravel.ch — Santé-voyages et paludisme",
+ why: "Toute fièvre au retour d'une zone à paludisme est un PALUDISME jusqu'à preuve du contraire — avis médical le JOUR MÊME, frottis sanguin en urgence. Le paludisme à P. falciparum peut tuer en 24 h. Signalez systématiquement le voyage." },
  { re: /(bouche|visage|côté\s+du\s+visage)\s*.{0,14}(qui\s+)?(tombe|de\s+travers|tordue|pend)|(n['’ ]?arrive plus|peux plus)\s*[àa]\s*(bouger|lever|parler|articuler)|(bras|jambe)\s+.{0,14}(tout\s+)?(mou|molle|sans\s+force|inerte)|(trouve|retrouve)\s+plus\s+(mes|les)\s+mots|hémiplég|hémiparés|aphasi|AVC\b|attaque\s+cérébrale/i,
  who: "signes d'accident vasculaire cérébral (visage, bras, parole)", motif: "neuro",
  why: "Bouche qui tombe, bras sans force ou mots qui ne sortent plus : c'est un AVC jusqu'à preuve du contraire — 144 IMMÉDIATEMENT. Notez l'HEURE DE DÉBUT, c'est elle qui décide du traitement possible. Ne rien donner à boire ni à manger." },
@@ -9495,6 +9635,21 @@ window.OMNI_MODULES=[
  why: "Un œdème de la gorge évoque une anaphylaxie — adrénaline IM si auto-injecteur disponible et 144 immédiatement." }
  ];
  window._CRIT = CRIT; window._CLINICAL_ACUITY = CLINICAL_ACUITY;
+ /* Vrai si le message cite un drapeau rouge explicite, ou un motif d'acuité
+    vitale (1 ou 2). Sert la PRÉ-GARDE VITALE du gestionnaire de messages —
+    voir le commentaire détaillé là-bas. Volontairement tolérante aux erreurs :
+    en cas de pépin elle renvoie faux et le flux normal reprend, jamais de
+    plantage sur un chemin d'urgence. */
+ function vitalDAbord(t) {
+ try {
+ if (CRIT.some(function (c) { return c.re.test(t); })) return true;
+ return CLINICAL_KB.some(function (k) {
+ var a = CLINICAL_ACUITY[k.id];
+ return a !== undefined && a <= 2 && k.re.test(t);
+ });
+ } catch (e) { return false; }
+ }
+ window._vitalDAbord = vitalDAbord;
  /* Chips proposant les motifs restants d'un message multi-symptômes */
  function pendingChips(base) {
  var next = (PENDING_MOTIFS || []).map(function (id) {
@@ -13452,6 +13607,309 @@ window.OMNI_MODULES=[
   };
 })();
 
+</script>
+<script id="srom-synthese">
+/* ═══════════════════════════════════════════════════════════════════════════
+   SYNTHÈSE TYPÉE & RAPPORT AUDIENCE-ADAPTATIF
+
+   Constat mesuré le 10.08 qui motive ce module : le Rapport d'intervention
+   affichait « Aucune donnée encore » même après un score de Glasgow calculé
+   ou une interaction médicamenteuse critique trouvée. L'état vide était
+   HONNÊTE (il ne fabriquait rien), mais le rapport était AFFAMÉ : seuls
+   3 modules sur 34 y écrivaient. Et il n'existait aucune fonction de synthèse.
+
+   Ce que fait ce module :
+     · agrège les deux mémoires existantes — REC (résultats de modules) et
+       PASSES (entretiens somatiques/psychiatriques archivés) ;
+     · produit une synthèse TYPÉE : psychiatrique · somatique · totale ;
+     · rend la MÊME donnée pour deux publics : patient (clair, ce qu'il faut
+       faire) ou médecin (SOAP structuré) ;
+     · dit « rien à synthétiser » quand c'est le cas, sans jamais meubler.
+
+   Aide à la décision, jamais un diagnostic. Tout reste sur l'appareil.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  /* Classement d'une entrée par domaine, d'après son libellé de module. */
+  var RE_PSY = /psy|humeur|anxi|d[ée]press|PHQ|GAD|C-SSRS|maslow|ikigai|suicid|psychosoc|bilan psycho/i;
+  var RE_SOMA = /triage|score|glasgow|GCS|NIHSS|HEART|Wells|qSOFA|NEWS|constante|vital|interaction|m[ée]dicament|protocole|geste|plaie|CIM|douleur|SOAP|note/i;
+
+  function domaine(cle, val) {
+    var t = String(cle || "") + " " + String(val || "");
+    if (RE_PSY.test(t)) return "psy";
+    if (RE_SOMA.test(t)) return "somatique";
+    return "autre";
+  }
+
+  /** Lit les deux mémoires, sans jamais planter si l'une manque. */
+  function collecter() {
+    var rec = [], passes = [];
+    try {
+      var pd = window.PROF && window.PROF.pdata ? window.PROF.pdata() : null;
+      if (pd) {
+        if (pd.rec && typeof pd.rec === "object") {
+          Object.keys(pd.rec).forEach(function (k) {
+            var e = pd.rec[k];
+            rec.push({ cle: k, valeur: e && e.val != null ? e.val : e, heure: e && e.ts ? e.ts : "" });
+          });
+        }
+        if (Array.isArray(pd.passes)) passes = pd.passes.slice();
+      }
+    } catch (e) { /* profil indisponible : on reste sur ce qu'on a */ }
+    return { rec: rec, passes: passes };
+  }
+
+  /**
+   * Synthèse.
+   * @param {Object} opt - { portee:'psy'|'somatique'|'totale', audience:'patient'|'medecin', data }
+   */
+  function synthese(opt) {
+    opt = opt || {};
+    var portee = opt.portee || "totale";
+    var audience = opt.audience || "patient";
+    var src = opt.data || collecter();
+
+    var rec = (src.rec || []).map(function (e) {
+      return { cle: e.cle, valeur: e.valeur, heure: e.heure || "", dom: domaine(e.cle, e.valeur) };
+    });
+    var passes = (src.passes || []).map(function (p) {
+      return {
+        dom: /psy/i.test(p.kind || "") ? "psy" : "somatique",
+        sys: p.sys || "", top: p.top || [], flags: p.flags || [],
+        red: p.red || 0, heure: p.ts || ""
+      };
+    });
+
+    var garde = function (d) { return portee === "totale" || d === portee; };
+    var recF = rec.filter(function (e) { return garde(e.dom) || (portee === "totale"); });
+    var passF = passes.filter(function (p) { return garde(p.dom); });
+
+    /* Drapeaux rouges : ce qui doit remonter en premier, toujours. */
+    var rouges = [];
+    passF.forEach(function (p) {
+      (p.flags || []).forEach(function (f) { if (rouges.indexOf(f) < 0) rouges.push(f); });
+      if (p.red > 0 && p.sys) {
+        var s = "Signal d'alerte relevé — " + p.sys;
+        if (rouges.indexOf(s) < 0) rouges.push(s);
+      }
+    });
+
+    /* Hypothèses les plus souvent revenues, tous passages confondus. */
+    var compte = {};
+    passF.forEach(function (p) {
+      (p.top || []).forEach(function (h) {
+        var n = typeof h === "string" ? h : (h && (h.name || h[1])) || "";
+        if (n) compte[n] = (compte[n] || 0) + 1;
+      });
+    });
+    var hypotheses = Object.keys(compte)
+      .sort(function (a, b) { return compte[b] - compte[a]; })
+      .slice(0, 6)
+      .map(function (n) { return { nom: n, occurrences: compte[n] }; });
+
+    var vide = recF.length === 0 && passF.length === 0;
+
+    return {
+      portee: portee, audience: audience, vide: vide,
+      compte: { modules: recF.length, passages: passF.length, rouges: rouges.length },
+      entrees: recF, passages: passF, rouges: rouges, hypotheses: hypotheses,
+      texte: rendre({ portee: portee, audience: audience, vide: vide, entrees: recF,
+                      passages: passF, rouges: rouges, hypotheses: hypotheses })
+    };
+  }
+
+  var TITRE = { psy: "Synthèse psychiatrique", somatique: "Synthèse somatique", totale: "Synthèse complète" };
+
+  function rendre(s) {
+    var L = [];
+    var dt = new Date();
+    var horod = dt.toLocaleString("fr-CH", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+    /* ── Rien à synthétiser : on le dit, on ne meuble pas ── */
+    if (s.vide) {
+      if (s.audience === "patient") {
+        L.push(TITRE[s.portee]);
+        L.push("");
+        L.push("Rien à synthétiser pour l'instant.");
+        L.push("");
+        L.push("Cette page rassemble ce que vous avez fait dans l'application :");
+        L.push("un triage, un score, un bilan, une recherche d'interaction…");
+        L.push("Utilisez un module, puis revenez ici : la synthèse se construira");
+        L.push("toute seule, au fur et à mesure.");
+      } else {
+        L.push(TITRE[s.portee] + " — " + horod);
+        L.push("");
+        L.push("Aucune donnée recueillie à ce stade : ni résultat de module, ni entretien archivé.");
+        L.push("Rien n'est synthétisé — l'absence de contenu est un constat, pas une omission.");
+      }
+      return L.join("\n");
+    }
+
+    /* ── VUE PATIENT : clair, et surtout « quoi faire » ── */
+    if (s.audience === "patient") {
+      L.push(TITRE[s.portee]);
+      L.push("Établie le " + horod);
+      L.push("");
+      if (s.rouges.length) {
+        L.push("⚠ POINTS À NE PAS LAISSER DE CÔTÉ");
+        s.rouges.forEach(function (r) { L.push("  • " + r); });
+        L.push("");
+        L.push("  Ces points méritent un avis médical. En cas d'urgence : 144.");
+        L.push("");
+      }
+      if (s.passages.length) {
+        L.push("CE QUI A ÉTÉ EXPLORÉ");
+        s.passages.forEach(function (p) {
+          L.push("  • " + (p.sys || "entretien") + (p.heure ? " (" + p.heure + ")" : ""));
+        });
+        L.push("");
+      }
+      if (s.hypotheses.length) {
+        L.push("PISTES ÉVOQUÉES — à confirmer par un professionnel");
+        s.hypotheses.forEach(function (h) {
+          L.push("  • " + h.nom + (h.occurrences > 1 ? " (revenue " + h.occurrences + " fois)" : ""));
+        });
+        L.push("");
+        L.push("  Ce ne sont pas des diagnostics : ce sont des pistes que");
+        L.push("  l'application a repérées à partir de ce que vous avez décrit.");
+        L.push("");
+      }
+      if (s.entrees.length) {
+        L.push("VOS ENREGISTREMENTS");
+        s.entrees.forEach(function (e) {
+          L.push("  • " + e.cle + (e.heure ? " — " + e.heure : ""));
+        });
+        L.push("");
+      }
+      L.push("QUOI FAIRE MAINTENANT");
+      L.push(s.rouges.length
+        ? "  Parlez de ces points à un médecin sans trop attendre. Emportez cette"
+        : "  Vous pouvez montrer cette synthèse à votre médecin : elle lui fera");
+      L.push(s.rouges.length
+        ? "  synthèse : elle lui fera gagner du temps. Urgence vitale : 144."
+        : "  gagner du temps. En cas d'urgence : 144.");
+      L.push("");
+      L.push("—");
+      L.push("Aide à la préparation d'une consultation, jamais un diagnostic.");
+      L.push("Tout est calculé et conservé sur cet appareil.");
+      return L.join("\n");
+    }
+
+    /* ── VUE MÉDECIN : SOAP, dense, sans réassurance ── */
+    L.push(TITRE[s.portee].toUpperCase() + " — " + horod);
+    L.push("Aide à la décision. Données déclaratives recueillies par l'application, non vérifiées cliniquement.");
+    L.push("");
+    L.push("S — SUBJECTIF");
+    if (s.passages.length) {
+      s.passages.forEach(function (p) {
+        L.push("  • [" + (p.dom === "psy" ? "psy" : "soma") + "] " + (p.sys || "motif non précisé") + (p.heure ? " — " + p.heure : ""));
+      });
+    } else L.push("  (aucun entretien archivé)");
+    L.push("");
+    L.push("O — OBJECTIF");
+    if (s.entrees.length) {
+      s.entrees.forEach(function (e) {
+        L.push("  • " + e.cle + " : " + String(e.valeur).slice(0, 160) + (e.heure ? "  [" + e.heure + "]" : ""));
+      });
+    } else L.push("  (aucun résultat de module enregistré)");
+    L.push("");
+    L.push("A — ÉVALUATION");
+    if (s.rouges.length) {
+      L.push("  Signaux d'alerte relevés :");
+      s.rouges.forEach(function (r) { L.push("    - " + r); });
+    }
+    if (s.hypotheses.length) {
+      L.push("  Hypothèses évoquées par le moteur (fréquence sur les passages) :");
+      s.hypotheses.forEach(function (h) { L.push("    - " + h.nom + " ×" + h.occurrences); });
+    }
+    if (!s.rouges.length && !s.hypotheses.length) {
+      L.push("  Aucune hypothèse ni signal d'alerte dégagé — l'application ne formule");
+      L.push("  aucune évaluation à la place du clinicien.");
+    }
+    L.push("");
+    L.push("P — PLAN");
+    L.push(s.rouges.length
+      ? "  Reprendre en priorité les signaux d'alerte ci-dessus ; orientation selon le tableau clinique."
+      : "  À compléter par le clinicien.");
+    L.push("");
+    L.push("—");
+    L.push("Sortie d'un moteur à base de règles. Non validée par un professionnel habilité (art. 21).");
+    L.push("Urgence vitale : 144 · Tox Info Suisse : 145 · La Main Tendue : 143.");
+    return L.join("\n");
+  }
+
+  window.sromSynthese = {
+    collecter: collecter,
+    domaine: domaine,
+    synthese: synthese,
+    rendre: rendre,
+    PORTEES: ["psy", "somatique", "totale"],
+    AUDIENCES: ["patient", "medecin"]
+  };
+})();
+
+</script>
+
+<script id="srom-synthese-ui">
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  function pret() {
+    var out = $("sy-out");
+    if (!out || !window.sromSynthese) return;
+    var portee = "totale", audience = "patient", dernier = "";
+
+    function maj() {
+      var s = window.sromSynthese.synthese({ portee: portee, audience: audience });
+      dernier = s.texte;
+      out.textContent = s.texte;
+      var c = $("sy-compte");
+      if (c) {
+        c.textContent = s.vide
+          ? "Aucune donnée recueillie pour l'instant."
+          : s.compte.modules + " résultat(s) de module · " + s.compte.passages + " entretien(s) · "
+            + s.compte.rouges + " signal(aux) d'alerte";
+      }
+    }
+    function groupe(sel, attr, set) {
+      Array.prototype.forEach.call(document.querySelectorAll(sel), function (b) {
+        b.addEventListener("click", function () {
+          Array.prototype.forEach.call(document.querySelectorAll(sel), function (x) { x.setAttribute("aria-pressed", "false"); });
+          b.setAttribute("aria-pressed", "true");
+          set(b.getAttribute(attr));
+          maj();
+        });
+      });
+    }
+    groupe(".sy-p", "data-portee", function (v) { portee = v; });
+    groupe(".sy-a", "data-audience", function (v) { audience = v; });
+
+    if ($("sy-copy")) $("sy-copy").addEventListener("click", function () {
+      if (!dernier) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(dernier).then(function () { if (window.sromToast) window.sromToast("Synthèse copiée."); });
+      }
+    });
+    if ($("sy-dl")) $("sy-dl").addEventListener("click", function () {
+      if (!dernier) return;
+      var b = new Blob([dernier], { type: "text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(b);
+      a.download = "synthese-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".txt";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    });
+    if ($("sy-print")) $("sy-print").addEventListener("click", function () { if (dernier) window.print(); });
+
+    /* Recalcul à chaque ouverture du module : la synthèse suit la navigation. */
+    var tuiles = document.querySelectorAll('[data-v="synthese"]');
+    Array.prototype.forEach.call(tuiles, function (t) { t.addEventListener("click", function () { setTimeout(maj, 60); }); });
+    maj();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pret);
+  else pret();
+})();
 </script>
 </html>
 
