@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <!--
-  SwissRescue OmniMed — Site de l'Association
+  SwissRescue OmniMed — Site officiel de l'Association (v2)
   © 2024-2026 Association SwissRescue OmniMed, Genève, Suisse
-  Art. 60-79 CC | Demande de brevet PCT/OMPI en cours | nLPD 2023 | RGPD
-  Contact: info@swissrescueomnimed.ch
+  Association de droit suisse (art. 60-79 CC), en cours de constitution
+  Contact : info@swissrescueomnimed.ch
+  v2 : design « Site Association v2 » implémenté et câblé au serveur souverain
+  (/api/health, /api/module-registry, session sr_session partagée avec les apps).
+  Version précédente archivée : docs/archives/index-v1-2026-08-03.html
 -->
 <html lang="fr-CH">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H206 L238 190 L272 318 L300 268 H360' fill='none' stroke='white' stroke-width='26' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<meta name="theme-color" content="#060E1F">
-<title>SwissRescue OmniMed — assistant médical d'urgence gratuit (Suisse)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05080F">
+<title>SwissRescue OmniMed — Les bons secours, au bon moment</title>
 <!-- Référencement : « noindex » VOLONTAIREMENT absent, et « nosnippet »/« noarchive »
      retirés — ils empêchaient Google d'afficher un résumé et faisaient croire à un site
      inactif. On reste trouvable et clairement identifié ; on ne bloque que l'entraînement
      de modèles d'IA (noai/noimageai + robots.txt). -->
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1, noai, noimageai">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="description" content="SwissRescue OmniMed : assistant médical d'urgence GRATUIT, suisse et souverain. Premiers secours, triage clinique, scores validés et anatomie 3D — utilisable même sans connexion. Association à but non lucratif (art. 60-79 CC), Genève.">
+<meta name="description" content="Deux applications médicales d'urgence, gratuites et souveraines, qui orientent chaque personne en Suisse vers le bon service — même sans réseau. Association à but non lucratif (art. 60-79 CC), Genève. Ne remplace pas le 144.">
 <meta name="keywords" content="SwissRescue OmniMed, assistant médical urgence, premiers secours Suisse, application médicale gratuite, triage, secourisme, 144">
 <meta property="og:site_name" content="SwissRescue OmniMed">
-<meta property="og:title" content="SwissRescue OmniMed — assistant médical d'urgence gratuit">
-<meta property="og:description" content="Assistant médical d'urgence gratuit et souverain, utilisable même sans connexion. Association suisse à but non lucratif. Ne remplace pas le 144.">
+<meta property="og:title" content="SwissRescue OmniMed — Les bons secours, au bon moment">
+<meta property="og:description" content="Applications médicales d'urgence gratuites et souveraines, utilisables même sans connexion. Association suisse à but non lucratif. Ne remplace pas le 144.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_CH">
 <meta property="og:url" content="https://www.swissrescueomnimed.ch">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SwissRescue OmniMed — assistant médical d'urgence gratuit (Suisse)">
-<meta name="twitter:description" content="Assistant médical d'urgence gratuit et souverain, même sans connexion. Association suisse à but non lucratif.">
+<meta name="twitter:title" content="SwissRescue OmniMed — Les bons secours, au bon moment">
+<meta name="twitter:description" content="Applications médicales d'urgence gratuites et souveraines, même sans connexion. Association suisse à but non lucratif.">
 <link rel="canonical" href="https://www.swissrescueomnimed.ch">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%23D42C2C'/%3E%3Cpath%20d='M5%2016h4l2.5-6%204%2012%203-7.5%201.5%202.5H27'%20fill='none'%20stroke='%23fff'%20stroke-width='2.6'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -45,1220 +48,476 @@
   "address": { "@type": "PostalAddress", "streetAddress": "Route des Acacias 30", "postalCode": "1227", "addressLocality": "Genève", "addressCountry": "CH" },
   "sameAs": ["https://www.swissrescueomnimed.ch"],
   "knowsAbout": ["premiers secours", "médecine d'urgence", "triage clinique", "secourisme"],
-  "slogan": "L'urgence médicale, accessible à tous et partout — gratuitement."
+  "slogan": "Les bons secours, au bon moment."
 }
 </script>
 <style>
-/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+/* Polices auto-hébergées (aucune requête vers Google Fonts) — Inter & JetBrains Mono variables */
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url("fonts/inter-latin.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url("fonts/inter-latin-ext.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url("fonts/jbmono-latin.woff2") format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url("fonts/jbmono-latin-ext.woff2") format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --red:#D42C2C;--red-light:#FF4444;--red-dim:rgba(212,44,44,0.12);
-  --blue:#0F4C81;--blue-light:#1A6EBB;--blue-dim:rgba(15,76,129,0.15);
-  --bg:#060E1F;--bg-2:#0C1828;--bg-3:#112038;
-  --surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.07);
-  --border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.14);
-  /* WCAG AAA compliant text colors on dark backgrounds */
-  --text-primary:#F1F5F9;       /* contrast 14:1 on bg */
-  --text-secondary:#94A3B8;     /* contrast 5.8:1 on bg */
-  --text-muted:#64748B;         /* contrast 4.6:1 on bg — WCAG AA large text */
-  --font:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
-  --radius-sm:8px;--radius:14px;--radius-lg:20px;--radius-xl:28px;
-  --shadow-sm:0 1px 3px rgba(0,0,0,0.4);
-  --shadow:0 4px 24px rgba(0,0,0,0.5);
-  --shadow-lg:0 12px 48px rgba(0,0,0,0.6);
-  --transition:cubic-bezier(0.16,1,0.3,1);
-}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-body{font-family:var(--font);background:var(--bg);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;height:auto}
-button{font-family:var(--font);cursor:pointer;border:none;outline:none}
-input,textarea,select{font-family:var(--font)}
-
-/* ── Layout ────────────────────────────────────────────────────────────────── */
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
-.container-sm{max-width:720px;margin:0 auto;padding:0 24px}
-.section{padding:96px 0}
-.section-sm{padding:64px 0}
-
-/* ── Typography ────────────────────────────────────────────────────────────── */
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red-light);margin-bottom:16px}
-.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--red-light);animation:pulse-dot 2s ease-in-out infinite}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-h1{font-size:clamp(38px,5.5vw,72px);font-weight:900;letter-spacing:-2px;line-height:1.05;color:var(--text-primary)}
-h2{font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-1px;line-height:1.15;color:var(--text-primary)}
-h3{font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
-.lead{font-size:clamp(16px,1.8vw,20px);color:var(--text-secondary);line-height:1.75;max-width:600px}
-.body-text{font-size:15px;color:var(--text-secondary);line-height:1.7}
-.mono{font-family:var(--mono);font-size:13px;color:var(--text-secondary)}
-
-/* ── Buttons ────────────────────────────────────────────────────────────────── */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--radius-sm);font-size:15px;font-weight:700;transition:all .25s var(--transition);white-space:nowrap}
-.btn-primary{background:var(--red);color:#fff;box-shadow:0 0 0 0 rgba(212,44,44,.5)}
-.btn-primary:hover{background:var(--red-light);box-shadow:0 0 0 4px rgba(212,44,44,.2);transform:translateY(-1px)}
-.btn-secondary{background:var(--surface);border:1px solid var(--border-strong);color:var(--text-primary)}
-.btn-secondary:hover{background:var(--surface-hover);border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
-.btn-outline{border:1.5px solid var(--border-strong);color:var(--text-primary);padding:13px 25px}
-.btn-outline:hover{border-color:var(--red);color:var(--red-light);background:var(--red-dim)}
-.btn-lg{padding:17px 34px;font-size:16px;border-radius:var(--radius)}
-.btn svg{width:18px;height:18px;flex-shrink:0}
-
-/* ── Navigation ─────────────────────────────────────────────────────────────── */
-#nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s var(--transition)}
-#nav.scrolled{background:rgba(6,14,31,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
-.nav-logo{display:flex;align-items:center;gap:12px}
-.nav-logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--text-primary)}
-.nav-logo-sub{font-size:10px;font-weight:500;color:var(--text-muted);letter-spacing:.02em}
-.nav-links{display:flex;align-items:center;gap:4px}
-.nav-links a{font-size:14px;font-weight:500;color:var(--text-secondary);padding:8px 14px;border-radius:var(--radius-sm);transition:all .2s}
-.nav-links a:hover{color:var(--text-primary);background:var(--surface)}
-.nav-links .btn{padding:9px 20px;font-size:14px}
-.hamburger{display:none;width:40px;height:40px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer}
-.hamburger span{display:block;width:18px;height:1.5px;background:var(--text-primary);border-radius:2px;transition:all .3s}
-.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(6,14,31,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px 24px;z-index:999}
-.mobile-menu.open{display:flex;flex-direction:column;gap:4px}
-.mobile-menu a{font-size:15px;font-weight:500;color:var(--text-secondary);padding:12px 16px;border-radius:var(--radius-sm)}
-.mobile-menu a:hover{color:var(--text-primary);background:var(--surface)}
-
-/* ── Hero ───────────────────────────────────────────────────────────────────── */
-#hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:120px 0 80px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-gradient{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(15,76,129,.5) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(212,44,44,.15) 0%,transparent 60%),var(--bg)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 40%,transparent 100%)}
-.hero-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
-.hero-orb-1{width:500px;height:500px;top:-150px;left:-100px;background:radial-gradient(circle,rgba(15,76,129,.35) 0%,transparent 70%);animation:orb-float 12s ease-in-out infinite}
-.hero-orb-2{width:400px;height:400px;bottom:-100px;right:-80px;background:radial-gradient(circle,rgba(212,44,44,.2) 0%,transparent 70%);animation:orb-float 15s ease-in-out infinite reverse}
-@keyframes orb-float{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-20px)}66%{transform:translate(-20px,15px)}}
-.hero-content{position:relative;z-index:1;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,44,44,.1);border:1px solid rgba(212,44,44,.25);border-radius:100px;padding:8px 18px;margin-bottom:32px}
-.hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--red-light);box-shadow:0 0 0 3px rgba(255,68,68,.2);animation:pulse-ring 2s ease-in-out infinite}
-@keyframes pulse-ring{0%,100%{box-shadow:0 0 0 3px rgba(255,68,68,.2)}50%{box-shadow:0 0 0 6px rgba(255,68,68,0)}}
-.hero-badge-text{font-size:12px;font-weight:700;color:#FF8080;letter-spacing:.08em}
-.hero-title{margin-bottom:24px}
-.hero-title span{background:linear-gradient(135deg,var(--red-light),#FF8080 50%,#FFB3B3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-lead{color:var(--text-secondary);margin:0 auto 40px;font-size:clamp(16px,2vw,19px);line-height:1.7;max-width:580px}
-.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
-.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;max-width:700px;margin:0 auto}
-.stat-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;text-align:center;transition:all .3s var(--transition)}
-.stat-card:hover{background:rgba(255,255,255,.07);border-color:var(--border-strong);transform:translateY(-2px)}
-.stat-number{font-size:32px;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,var(--text-primary),var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
-.stat-label{font-size:12px;font-weight:600;color:var(--text-muted);margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
-.stat-card.highlight .stat-number{background:linear-gradient(135deg,var(--red-light),#FF8080);-webkit-background-clip:text;background-clip:text}
-
-/* ── Trust Bar ──────────────────────────────────────────────────────────────── */
-.trust-bar{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 0}
-.trust-inner{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:32px}
-.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-secondary)}
-.trust-item svg{width:16px;height:16px;color:var(--red-light);flex-shrink:0}
-
-/* ── Section Headers ─────────────────────────────────────────────────────────── */
-.section-header{margin-bottom:56px}
-.section-header.centered{text-align:center}
-.section-header.centered .lead{margin:12px auto 0}
-.section-header.centered .eyebrow{justify-content:center}
-.section-header .lead{margin-top:12px}
-
-/* ── Feature Grid ───────────────────────────────────────────────────────────── */
-.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--border);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border)}
-.feature-card{background:var(--bg);padding:32px;transition:all .3s var(--transition)}
-.feature-card:hover{background:var(--bg-2)}
-.feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;flex-shrink:0}
-.feature-icon svg{width:24px;height:24px}
-.feature-icon.red{background:rgba(212,44,44,.12);color:var(--red-light)}
-.feature-icon.blue{background:rgba(15,76,129,.2);color:#5BA3F5}
-.feature-icon.green{background:rgba(16,185,129,.1);color:#34D399}
-.feature-icon.purple{background:rgba(139,92,246,.1);color:#A78BFA}
-.feature-icon.orange{background:rgba(245,158,11,.1);color:#FCD34D}
-.feature-icon.teal{background:rgba(6,182,212,.1);color:#22D3EE}
-.feature-icon.violet{background:rgba(168,85,247,.12);color:#C084FC}
-.feature-icon.amber{background:rgba(251,191,36,.12);color:#FBBF24}
-.feature-card h3{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:10px}
-.feature-card p{font-size:14px;color:var(--text-secondary);line-height:1.65}
-
-/* ── AI Architecture ─────────────────────────────────────────────────────────── */
-.ai-section{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.ai-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
-.ai-mode{border:1px solid var(--border);border-radius:var(--radius);padding:24px;background:var(--bg);transition:all .3s var(--transition)}
-.ai-mode:hover{border-color:var(--border-strong);transform:translateY(-3px);box-shadow:var(--shadow)}
-.ai-mode-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-bottom:14px}
-.badge-turbo{background:rgba(245,158,11,.12);color:#FCD34D;border:1px solid rgba(245,158,11,.25)}
-.badge-cascade{background:rgba(15,76,129,.2);color:#5BA3F5;border:1px solid rgba(15,76,129,.35)}
-.badge-expert{background:rgba(212,44,44,.12);color:#FF8080;border:1px solid rgba(212,44,44,.25)}
-.ai-mode-title{font-size:18px;font-weight:800;color:var(--text-primary);margin-bottom:6px}
-.ai-mode-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
-.ai-mode-time{font-family:var(--mono);font-size:12px;color:var(--text-muted)}
-.ai-engines{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
-.ai-engine{display:flex;align-items:center;gap:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 18px;transition:all .25s}
-.ai-engine:hover{border-color:var(--border-strong);background:var(--bg-2)}
-.ai-engine-num{width:28px;height:28px;border-radius:8px;background:var(--blue-dim);border:1px solid rgba(15,76,129,.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#5BA3F5;flex-shrink:0}
-.ai-engine-info{flex:1}
-.ai-engine-name{font-size:14px;font-weight:700;color:var(--text-primary)}
-.ai-engine-role{font-size:12px;color:var(--text-muted);margin-top:2px}
-.ai-engine-modes{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
-.mode-pip{font-size:10px;font-weight:600;padding:2px 7px;border-radius:100px;letter-spacing:.05em}
-.pip-t{background:rgba(245,158,11,.12);color:#FCD34D}
-.pip-c{background:rgba(15,76,129,.2);color:#5BA3F5}
-.pip-e{background:rgba(212,44,44,.12);color:#FF8080}
-
-/* ── Sovereignty Section ──────────────────────────────────────────────────────── */
-.sovereignty-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
-.sovereignty-pillars{display:flex;flex-direction:column;gap:16px}
-.pillar{display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);transition:all .25s}
-.pillar:hover{background:var(--surface-hover);border-color:var(--border-strong)}
-.pillar-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.pillar-icon svg{width:20px;height:20px}
-.pillar h4{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
-.pillar p{font-size:13px;color:var(--text-secondary);line-height:1.55}
-.cert-card{background:linear-gradient(135deg,var(--bg-2),var(--bg-3));border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:32px}
-.cert-list{display:flex;flex-direction:column;gap:12px;margin-top:20px}
-.cert-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border)}
-.cert-check{width:24px;height:24px;border-radius:6px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cert-check svg{width:12px;height:12px;color:#34D399}
-.cert-item-text{font-size:13px;font-weight:600;color:var(--text-primary)}
-.cert-item-sub{font-size:11px;color:var(--text-muted)}
-
-/* ── Donations ───────────────────────────────────────────────────────────────── */
-.don-section{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.don-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.don-premium{grid-column:1/-1}
-.don-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:24px 18px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--bg);transition:all .3s var(--transition);cursor:pointer}
-.don-card:hover{border-color:var(--red);background:var(--red-dim);transform:translateY(-3px);box-shadow:0 8px 32px rgba(212,44,44,.15)}
-.don-card.premium{flex-direction:row;gap:20px;text-align:left;background:linear-gradient(135deg,rgba(15,76,129,.12),rgba(212,44,44,.07));border-color:rgba(15,76,129,.3);padding:22px 28px}
-.don-card.premium:hover{border-color:var(--blue-light);background:linear-gradient(135deg,rgba(15,76,129,.2),rgba(212,44,44,.12))}
-.don-amount{font-size:28px;font-weight:900;color:var(--text-primary);letter-spacing:-1px}
-.don-period{font-size:13px;font-weight:600;color:var(--red-light);margin-left:2px}
-.don-label{font-size:12px;font-weight:600;color:var(--text-muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
-.don-premium-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--red),var(--blue));display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.don-premium-icon svg{width:26px;height:26px;color:#fff}
-.don-note{font-size:12px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.7}
-.don-note a{color:var(--text-secondary);text-decoration:underline;text-underline-offset:3px}
-.iban-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.iban-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:4px}
-.iban-value{font-family:var(--mono);font-size:15px;color:var(--text-primary);font-weight:600}
-.iban-copy{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:8px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);transition:all .2s}
-.iban-copy:hover{color:var(--text-primary);border-color:var(--border-strong);background:var(--surface-hover)}
-.iban-copy svg{width:14px;height:14px}
-
-/* ── Emergency Numbers ──────────────────────────────────────────────────────── */
-.em-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
-.em-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);transition:all .25s var(--transition)}
-.em-card:hover{background:var(--red-dim);border-color:rgba(212,44,44,.3);transform:translateY(-2px)}
-.em-card.critical{border-color:rgba(212,44,44,.2)}
-.em-number{font-size:22px;font-weight:900;color:var(--text-primary);letter-spacing:-1px;line-height:1}
-.em-label{font-size:11px;font-weight:600;color:var(--text-muted);text-align:center;letter-spacing:.04em}
-.em-card.critical .em-number{color:var(--red-light)}
-
-/* ── Contact ─────────────────────────────────────────────────────────────────── */
-.contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:start}
-.contact-info{display:flex;flex-direction:column;gap:20px}
-.contact-item{display:flex;align-items:flex-start;gap:14px}
-.contact-item-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.contact-item-icon svg{width:18px;height:18px}
-.contact-item h4{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
-.contact-item p,.contact-item a{font-size:14px;color:var(--text-secondary);line-height:1.5}
-.contact-item a:hover{color:var(--text-primary)}
-.form{display:flex;flex-direction:column;gap:14px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em}
-.field input,.field textarea,.field select{background:rgba(255,255,255,.05);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;color:var(--text-primary);font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--red);background:rgba(255,255,255,.07)}
-.field input::placeholder,.field textarea::placeholder{color:var(--text-muted)}
-.field textarea{resize:vertical;min-height:120px}
-.field select option{background:var(--bg-3);color:var(--text-primary)}
-.form-check{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
-.form-check input[type=checkbox]{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border);background:rgba(255,255,255,.05);accent-color:var(--red);flex-shrink:0;margin-top:2px}
-.form-check-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
-.form-check-text a{color:var(--text-primary);text-decoration:underline;text-underline-offset:3px}
-.form-msg{font-size:13px;text-align:center;padding:12px 16px;border-radius:var(--radius-sm);display:none}
-.form-msg.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:#6EE7B7}
-.form-msg.err{background:rgba(212,44,44,.1);border:1px solid rgba(212,44,44,.2);color:#FCA5A5}
-
-/* ── Footer ─────────────────────────────────────────────────────────────────── */
-footer{background:var(--bg-2);border-top:1px solid var(--border);padding:48px 0 32px}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
-.footer-brand p{font-size:13px;color:var(--text-muted);margin-top:10px;line-height:1.7;max-width:260px}
-.footer-col h5{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-secondary);margin-bottom:16px}
-.footer-col a{display:block;font-size:13px;color:var(--text-muted);margin-bottom:8px;transition:color .2s}
-.footer-col a:hover{color:var(--text-primary)}
-.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px}
-.footer-bottom p{font-size:12px;color:var(--text-muted)}
-.footer-legal{display:flex;gap:16px;flex-wrap:wrap}
-.footer-legal a{font-size:12px;color:var(--text-muted);transition:color .2s}
-.footer-legal a:hover{color:var(--text-secondary)}
-
-/* ── Scroll Reveal ──────────────────────────────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s var(--transition),transform .65s var(--transition)}
-.reveal.visible{opacity:1;transform:none}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
-.reveal-delay-4{transition-delay:.4s}
-
-/* ── Responsive ─────────────────────────────────────────────────────────────── */
-@media(max-width:1024px){
-  .ai-modes{grid-template-columns:1fr 1fr}
-  .sovereignty-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:768px){
-  .section{padding:64px 0}
-  .nav-links{display:none}
-  .hamburger{display:flex}
-  .ai-modes{grid-template-columns:1fr}
-  .don-grid{grid-template-columns:1fr 1fr}
-  .contact-grid{grid-template-columns:1fr}
-  .contact-info{display:none}
-  .form-row{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .footer-bottom{flex-direction:column;text-align:center}
-}
-@media(max-width:520px){
-  h1{letter-spacing:-1.5px}
-  .hero-cta{flex-direction:column;align-items:center}
-  .hero-stats{grid-template-columns:1fr 1fr}
-  .don-grid{grid-template-columns:1fr 1fr}
-  .don-premium{grid-column:auto}
-  .em-grid{grid-template-columns:repeat(3,1fr)}
-  .footer-grid{grid-template-columns:1fr}
-}
-
-/* ── Swiss Cross SVG reuse ──────────────────────────────────────────────────── */
-.cross-icon{display:inline-block}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:#05080F;color:#E7EBF2;-webkit-font-smoothing:antialiased;font-feature-settings:'ss01','cv11'}
+a{color:#E7EBF2;text-decoration:none;transition:color .2s,border-color .2s,background .2s,opacity .2s}a:hover{color:#fff}
+button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
+:focus-visible{outline:2px solid #8FB6E8;outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:#fff;color:#05080F;padding:10px 18px;border-radius:0 0 10px 0;font-weight:650;font-size:14px}
+.skip-link:focus{left:0}
+@keyframes shine{0%{background-position:150% center}100%{background-position:-50% center}}
+@keyframes flowdash{to{stroke-dashoffset:-14}}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
+.shiny-text{background-image:linear-gradient(120deg,#77839A 0%,#77839A 38%,#E7EBF2 50%,#77839A 62%,#77839A 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 5s linear infinite}
+.card-spotlight{position:relative}
+.card-spotlight::before{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .5s;background:radial-gradient(420px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(255,255,255,.06),transparent 70%)}
+.card-spotlight:hover::before{opacity:1}
+.flow-dash{stroke-dasharray:3 4;animation:flowdash 1.4s linear infinite}
+.hair{border:1px solid rgba(255,255,255,.07)}
+.hover-card{transition:border-color .3s,background .3s,transform .3s}
+.hover-card:hover{border-color:rgba(255,255,255,.16)}
+.btn-w:hover{opacity:.88}
+.btn-g:hover{border-color:rgba(255,255,255,.3)!important;color:#fff}
+.navl{font-size:13px;font-weight:500;color:#8A94A6;letter-spacing:.01em}
+.navl:hover{color:#fff}
+@media (prefers-reduced-motion:reduce){.shiny-text,.flow-dash{animation:none}}
+@media (max-width:1024px){.agents{grid-template-columns:1fr 1fr!important}.agents>svg{display:none}}
+@media (max-width:1080px){.nav-links a.navl{display:none}}
+@media (max-width:860px){.g2,.g2t,.g3{grid-template-columns:1fr!important}.stats{grid-template-columns:1fr 1fr!important}.pass{grid-template-columns:1fr!important}.pass>svg{transform:rotate(90deg);justify-self:center}.agents{grid-template-columns:1fr!important}#don{grid-template-columns:1fr!important}}
+@media (max-width:560px){.stats{grid-template-columns:1fr!important}}
 </style>
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#main">Aller au contenu</a>
+<div style="background:#05080F;min-height:100vh;overflow-x:hidden">
 
-<!-- ══ NAVIGATION ══════════════════════════════════════════════════════════════ -->
-<nav id="nav">
-  <div class="container nav-inner">
-    <a href="#" class="nav-logo" aria-label="SwissRescue OmniMed — Accueil">
-      <div class="nav-logo-icon" aria-hidden="true"><svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SwissRescue OmniMed"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div>
-        <div class="nav-logo-text">SwissRescue OmniMed</div>
-        <div class="nav-logo-sub">Association suisse · art. 60-79 CC</div>
-      </div>
-    </a>
-    <div class="nav-links" role="navigation" aria-label="Navigation principale">
-      <a href="#mission">Mission</a>
-      <a href="#technologie">Technologie</a>
-      <a href="#souverainete">Souveraineté</a>
-      <a href="#dons">Soutenir</a>
-      <a href="#contact">Contact</a>
-      <a href="app.html" class="btn btn-primary" target="_blank" rel="noopener" aria-label="Ouvrir l'application SwissRescue OmniMed">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-        L'application
+  <!-- NAV -->
+  <nav aria-label="Navigation principale" style="position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(5,8,15,.72);border-bottom:1px solid rgba(255,255,255,.06)">
+    <div style="max-width:1120px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between">
+      <a href="#top" style="display:flex;align-items:center;gap:11px" aria-label="SwissRescue OmniMed — haut de page">
+        <!-- Logo = tracé de pouls (règle emblèmes §6bis : jamais de croix — Conventions de Genève / LPAP) -->
+        <span style="width:30px;height:30px;border-radius:8px;background:#D42C2C;display:flex;align-items:center;justify-content:center;flex-shrink:0" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5-7 4 15 3-9 1.5 3H22"/></svg></span>
+        <span style="font-size:14.5px;font-weight:650;letter-spacing:-.01em">SwissRescue OmniMed</span>
+        <span style="font-size:10px;font-weight:600;color:#77839A;border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:2px 7px;letter-spacing:.06em">ASSOCIATION</span>
       </a>
+      <div class="nav-links" style="display:flex;align-items:center;gap:26px">
+        <a class="navl" href="#apps">Applications</a>
+        <a class="navl" href="#mission">Mission</a>
+        <a class="navl" href="#tech">Technologie</a>
+        <a class="navl" href="#agents">Agents</a>
+        <a class="navl" href="#transparence">Transparence</a>
+        <a class="btn-g" id="nav-console" href="app-router.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#C9D2DF;border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:8px 15px;white-space:nowrap"><span id="nav-dot" hidden style="width:6px;height:6px;border-radius:50%;background:#3DD68C;animation:pulseDot 2s infinite"></span><span id="nav-console-label">Console</span></a>
+        <a class="btn-w" href="#don" style="font-size:13px;font-weight:650;color:#05080F;background:#fff;border-radius:9px;padding:8px 16px">Soutenir</a>
+      </div>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-<div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Menu mobile">
-  <a href="#mission" onclick="closeMobileMenu()">Mission</a>
-  <a href="#technologie" onclick="closeMobileMenu()">Technologie</a>
-  <a href="#souverainete" onclick="closeMobileMenu()">Souveraineté</a>
-  <a href="#dons" onclick="closeMobileMenu()">Soutenir</a>
-  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
-  <a href="app.html" class="btn btn-primary" style="margin-top:8px;justify-content:center" target="_blank" rel="noopener">Ouvrir l'application →</a>
-</div>
+  </nav>
 
-<!-- ══ HERO ══════════════════════════════════════════════════════════════════════ -->
-<section id="hero" aria-label="Présentation">
-  <div class="hero-bg">
-    <div class="hero-gradient"></div>
-    <div class="hero-grid" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
-  </div>
-  <div class="container hero-content">
-    <div class="hero-badge" role="status">
-      <div class="hero-badge-dot" aria-hidden="true"></div>
-      <span class="hero-badge-text">Association suisse à but non lucratif · 100 % gratuit</span>
-    </div>
-    <h1 class="hero-title">
-      Votre assistant médical<br>d'urgence, <span>gratuit et sans connexion</span>
-    </h1>
-    <p class="hero-lead">
-      SwissRescue OmniMed vous guide en cas d'urgence : premiers secours, triage,
-      scores cliniques et anatomie 3D — sur votre téléphone, même hors réseau.
-      Un outil d'aide gratuit, jamais un remplacement du 144.
-    </p>
-    <div class="hero-cta">
-      <a href="app.html" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Accéder à l'application
-      </a>
-      <a href="#dons" class="btn btn-secondary btn-lg">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        Soutenir l'Association
-      </a>
-    </div>
-    <div class="hero-stats" role="list" aria-label="Chiffres clés">
-      <div class="stat-card highlight reveal" role="listitem">
-        <span class="stat-number" data-count="6">6</span>
-        <span class="stat-label">Capacités cliniques</span>
-      </div>
-      <div class="stat-card reveal reveal-delay-1" role="listitem">
-        <span class="stat-number">100%</span>
-        <span class="stat-label">Offline-first</span>
-      </div>
-      <div class="stat-card reveal reveal-delay-2" role="listitem">
-        <span class="stat-number">AAA</span>
-        <span class="stat-label">WCAG 2.1</span>
-      </div>
-      <div class="stat-card reveal reveal-delay-3" role="listitem">
-        <span class="stat-number">nLPD</span>
-        <span class="stat-label">Conforme 2023</span>
-      </div>
-    </div>
-  </div>
-</section>
+  <main id="main">
+  <div id="top" style="max-width:1120px;margin:0 auto;padding:0 32px">
 
-<!-- ══ TRUST BAR ═══════════════════════════════════════════════════════════════ -->
-<div class="trust-bar" aria-label="Certifications et conformités">
-  <div class="container trust-inner">
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Demande de brevet PCT/OMPI
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-      nLPD 2023 conforme
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      AES-256-GCM · Shamir 3/5
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      Infomaniak SA, Genève
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      Validé cliniciens suisses
-    </div>
-  </div>
-</div>
+    <!-- HERO -->
+    <section style="padding:168px 0 96px;position:relative">
+      <div style="position:absolute;inset:-80px -400px 0;background:radial-gradient(680px 340px at 50% 12%,rgba(15,76,129,.22),transparent 65%),radial-gradient(520px 300px at 68% 5%,rgba(212,44,44,.1),transparent 60%);pointer-events:none" aria-hidden="true"></div>
+      <div style="position:relative;text-align:center">
+        <div style="display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:7px 15px;background:rgba(255,255,255,.03)">
+          <span style="width:6px;height:6px;border-radius:50%;background:#3DD68C;animation:pulseDot 2s infinite" aria-hidden="true"></span>
+          <span class="shiny-text" style="font-size:12px;font-weight:550;letter-spacing:.02em">Association à but non lucratif · art. 60-79 CC · Genève</span>
+        </div>
+        <h1 aria-label="Les bons secours, au bon moment." style="font-size:clamp(44px,7.5vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1.02;margin-top:34px;color:#fff"><span aria-hidden="true"><span data-split="1" style="display:inline-block">Les bons secours,</span><br><span data-rise="1" style="display:inline-block;background:linear-gradient(105deg,#F0776F 5%,#8FB6E8 90%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em">au bon moment.</span></span></h1>
+        <p style="font-size:17.5px;line-height:1.65;color:#8A94A6;margin:26px auto 0;max-width:560px;text-wrap:pretty;font-weight:450">Deux applications médicales d'urgence, gratuites et souveraines, qui orientent chaque personne en Suisse vers le bon service — même sans réseau.</p>
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap">
+          <a class="btn-w" href="app-router.html" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#05080F;font-size:14.5px;font-weight:650;padding:13px 24px;border-radius:11px">Ouvrir l'application<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn-g" href="#apps" style="display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(255,255,255,.14);color:#C9D2DF;font-size:14.5px;font-weight:550;padding:13px 24px;border-radius:11px;background:rgba(255,255,255,.02)">Découvrir les deux apps</a>
+        </div>
+      </div>
+      <div class="stats" style="position:relative;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;margin-top:88px;border-top:1px solid rgba(255,255,255,.07)" role="list" aria-label="Chiffres clés">
+        <div role="listitem" style="padding:26px 24px 0;border-left:1px solid rgba(255,255,255,.07)"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#fff;letter-spacing:-.02em"><span data-count="100">100</span>%</div><div style="font-size:12.5px;color:#77839A;margin-top:6px;font-weight:500">gratuit, sans publicité</div></div>
+        <div role="listitem" style="padding:26px 24px 0;border-left:1px solid rgba(255,255,255,.07)"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#fff;letter-spacing:-.02em"><span data-count="2">2</span> apps</div><div style="font-size:12.5px;color:#77839A;margin-top:6px;font-weight:500">un seul cerveau clinique</div></div>
+        <div role="listitem" style="padding:26px 24px 0;border-left:1px solid rgba(255,255,255,.07)"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#fff;letter-spacing:-.02em">0 donnée</div><div style="font-size:12.5px;color:#77839A;margin-top:6px;font-weight:500">ne quitte la Suisse</div></div>
+        <div role="listitem" style="padding:26px 24px 0;border-left:1px solid rgba(255,255,255,.07);border-right:1px solid rgba(255,255,255,.07)"><div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:500;color:#fff;letter-spacing:-.02em">24/7</div><div style="font-size:12.5px;color:#77839A;margin-top:6px;font-weight:500">hors-ligne compris</div></div>
+      </div>
+    </section>
 
-<!-- ══ MISSION ═══════════════════════════════════════════════════════════════════ -->
-<section id="mission" class="section">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Notre mission</div>
-      <h2>Primum non nocere.<br>Chaque ligne de code suppose<br>qu'une vie en dépend.</h2>
-      <p class="lead">Rendre l'expertise médicale d'urgence accessible à tous — professionnels de santé, premiers répondants, citoyens — en toutes circonstances, même sans connexion internet.</p>
-    </div>
-    <div class="feature-grid" role="list">
-      <div class="feature-card reveal" role="listitem">
-        <div class="feature-icon red" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
-        </div>
-        <h3>Triage clinique intelligent</h3>
-        <p>Moteur propriétaire IA coordonnés via architecture moteur propriétaire faisant l'objet d'une demande de brevet PCT/OMPI. Score de triage en temps réel, consensus médical multi-modèles, dégradation gracieuse Expert → Cascade → Turbo.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-1" role="listitem">
-        <div class="feature-icon blue" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10a16 16 0 0 0 6 6l.75-.75a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.14z"/></svg>
-        </div>
-        <h3>Résilience totale — offline-first</h3>
-        <p>Architecture sous-marin : protocoles BLS/ACLS/PALS intégraux disponibles hors-ligne. Synchronisation LZ77 différentielle. Fonctionne sur Nokia comme sur iPhone.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-2" role="listitem">
-        <div class="feature-icon green" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3>Sécurité médicale souveraine</h3>
-        <p>AES-256-GCM, secret partagé Shamir 3-sur-5, conformité nLPD 2023, RGPD et HIPAA 2025. Données hébergées exclusivement chez Infomaniak SA, Genève (ISO 27001).</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-3" role="listitem">
-        <div class="feature-icon purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-        </div>
-        <h3>Accessibilité universelle AAA</h3>
-        <p>Quatre modes adaptatifs : visuel standard, malvoyant, malentendant, dyslexie (OpenDyslexic). Pictogrammes ARASAAC pour la communication alternative. WCAG 2.1 AAA.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-1" role="listitem">
-        <div class="feature-icon orange" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-        </div>
-        <h3>Cartographie de crise</h3>
-        <p>Swisstopo, NASA FIRMS, SLF avalanches, GDACS catastrophes mondiales. Vision situationnelle complète en temps réel. Export GPX/KML pour équipes de terrain.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-2" role="listitem">
-        <div class="feature-icon teal" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-        </div>
-        <h3>Sécurité médicamenteuse</h3>
-        <p>DDInter, RxNorm, Compendium suisse — détection systématique des interactions. Zéro interaction médicamenteuse non signalée. Adapté aux urgences polytraumatiques.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-3" role="listitem">
-        <div class="feature-icon violet" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/></svg>
-        </div>
-        <h3>Assistance visuelle temps réel</h3>
-        <p>Personnes malvoyantes ou en détresse : appel vidéo instantané vers un réseau de bénévoles voyants (WebRTC E2E). Lecture de notice médicamenteuse, identification de danger, guidage des gestes. Inspiré du modèle Be My Eyes (Hans J. Wiberg) — adapté aux urgences médicales.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-1" role="listitem">
-        <div class="feature-icon amber" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
-        </div>
-        <h3>Analyse prédictive comportementale</h3>
-        <p>IA d'anticipation médicale : détection précoce de chute (accéléromètre), signaux pré-crise (variabilité cardiaque, F0 vocal de détresse, patterns respiratoires), risque de violence domestique. <strong>100% éthique : consentement explicite, données locales chiffrées, jamais de surveillance passive.</strong> Chaque alerte accompagnée d'une intervention humaine.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ TECHNOLOGIE — TECHNOLOGIE ══════════════════════════════════════════════════ -->
-<section id="technologie" class="section ai-section">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Notre technologie</div>
-      <h2>Un raisonnement clinique<br>qui ne s'arrête jamais.</h2>
-      <p class="lead">Moteur de raisonnement propriétaire, objet d'une demande de brevet PCT/OMPI en cours. Il fonctionne <strong>hors-ligne sur l'appareil</strong> et, quand le réseau est disponible, approfondit son analyse. Si une ressource externe manque, le service continue — jamais d'écran d'erreur en situation d'urgence.</p>
-    </div>
-    <div class="ai-modes reveal" role="list" aria-label="Modes de l'IA">
-      <div class="ai-mode" role="listitem">
-        <div class="ai-mode-badge badge-turbo">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          Turbo
-        </div>
-        <div class="ai-mode-title">Mode Turbo</div>
-        <p class="ai-mode-desc">Réponse immédiate pour une situation critique : l'essentiel actionnable, tout de suite.</p>
-        <div class="ai-mode-time">⟨ 3 secondes</div>
-      </div>
-      <div class="ai-mode" role="listitem">
-        <div class="ai-mode-badge badge-cascade">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><path d="M4 6h16v2H4zm2 5h12v2H6zm4 5h4v2h-4z"/></svg>
-          Cascade
-        </div>
-        <div class="ai-mode-title">Mode Cascade</div>
-        <p class="ai-mode-desc">Équilibre précision / rapidité pour les situations complexes hors urgence vitale.</p>
-        <div class="ai-mode-time">⟨ 8 secondes</div>
-      </div>
-      <div class="ai-mode" role="listitem">
-        <div class="ai-mode-badge badge-expert">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Expert
-        </div>
-        <div class="ai-mode-title">Mode Expert</div>
-        <p class="ai-mode-desc">Analyse approfondie : polytraumatisme, santé mentale, pharmacologie, interactions.</p>
-        <div class="ai-mode-time">⟨ 15 secondes</div>
-      </div>
-    </div>
-        <div class="ai-engines reveal" role="list" aria-label="Capacités cliniques">
-      <div class="ai-engine" role="listitem">
-        <div class="ai-engine-num">1</div>
-        <div class="ai-engine-info">
-          <div class="ai-engine-name">Triage &amp; différentiel</div>
-          <div class="ai-engine-role">Hiérarchise les hypothèses, priorise les drapeaux rouges, explique ce qui tranche.</div>
-        </div>
-      </div>
-      <div class="ai-engine" role="listitem">
-        <div class="ai-engine-num">2</div>
-        <div class="ai-engine-info">
-          <div class="ai-engine-name">Santé mentale &amp; écoute</div>
-          <div class="ai-engine-role">Dépistages validés, détection de la détresse, orientation sans jugement.</div>
-        </div>
-      </div>
-      <div class="ai-engine" role="listitem">
-        <div class="ai-engine-num">3</div>
-        <div class="ai-engine-info">
-          <div class="ai-engine-name">Analyse d'image clinique</div>
-          <div class="ai-engine-role">Lésions cutanées, mesures sur photo — critères mesurés, limites annoncées.</div>
-        </div>
-      </div>
-      <div class="ai-engine" role="listitem">
-        <div class="ai-engine-num">4</div>
-        <div class="ai-engine-info">
-          <div class="ai-engine-name">Sécurité médicamenteuse</div>
-          <div class="ai-engine-role">Interactions, terrains à risque, jamais d'arrêt brutal recommandé.</div>
-        </div>
-      </div>
-      <div class="ai-engine" role="listitem">
-        <div class="ai-engine-num">5</div>
-        <div class="ai-engine-info">
-          <div class="ai-engine-name">Scores cliniques validés</div>
-          <div class="ai-engine-role">Glasgow, NEWS2, qSOFA, Wells, HEART… calculés et interprétés.</div>
-        </div>
-      </div>
-      <div class="ai-engine" role="listitem">
-        <div class="ai-engine-num">6</div>
-        <div class="ai-engine-info">
-          <div class="ai-engine-name">Documents &amp; rapports</div>
-          <div class="ai-engine-role">Lecture de comptes rendus, synthèse structurée, sortie professionnelle et patient.</div>
-        </div>
-      </div>
-    </div>
-    <p class="don-note" style="margin-top:20px;text-align:left;max-width:760px">Les composants internes, leur orchestration et leurs pondérations relèvent du <strong>secret industriel</strong> et font l'objet d'une demande de brevet PCT/OMPI en cours. Aide au raisonnement — jamais un diagnostic ni une prescription.</p>
-  </div>
-</section>
-
-<!-- ══ SOUVERAINETÉ ══════════════════════════════════════════════════════════════ -->
-<section id="souverainete" class="section">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Souveraineté &amp; Conformité</div>
-      <h2>Construit pour la confiance.<br>Garanti par la loi suisse.</h2>
-    </div>
-    <div class="sovereignty-grid">
-      <div class="sovereignty-pillars reveal" role="list">
-        <div class="pillar" role="listitem">
-          <div class="pillar-icon" style="background:rgba(16,185,129,.1)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <div>
-            <h4>Données en Suisse uniquement</h4>
-            <p>Hébergement exclusif Infomaniak SA, Genève. ISO 27001 certifié. Zéro transfert hors territoire suisse pour les données médicales.</p>
-          </div>
-        </div>
-        <div class="pillar" role="listitem">
-          <div class="pillar-icon" style="background:rgba(15,76,129,.15)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#5BA3F5" stroke-width="2.5" stroke-linecap="round" width="20" height="20"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <div>
-            <h4>Chiffrement de bout en bout</h4>
-            <p>AES-256-GCM pour le stockage. Secret partagé Shamir 3-sur-5 pour les clés critiques. Zéro accès possible sans les 3 fragments autorisés.</p>
-          </div>
-        </div>
-        <div class="pillar" role="listitem">
-          <div class="pillar-icon" style="background:rgba(245,158,11,.1)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div>
-            <h4>Association à but non lucratif</h4>
-            <p>Art. 60-79 du Code Civil suisse. Gouvernance transparente. Comptes destinés à être publiés annuellement dès le premier exercice clos. Aucun intérêt commercial sur les données de santé.</p>
-          </div>
-        </div>
-        <div class="pillar" role="listitem">
-          <div class="pillar-icon" style="background:rgba(212,44,44,.1)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#FF8080" stroke-width="2.5" stroke-linecap="round" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <div>
-            <h4>Brevet PCT OMPI en cours</h4>
-            <p>Demande internationale déposée au titre du Traité de coopération en matière de brevets. Elle ouvre une option de dépôt dans les États signataires ; aucun brevet n'est délivré à ce jour. Innovation suisse documentée.</p>
-          </div>
-        </div>
-      </div>
-      <div class="cert-card reveal reveal-delay-2">
-        <div class="eyebrow" style="margin-bottom:10px">
-          <span class="eyebrow-dot" aria-hidden="true"></span>Conformités &amp; certifications
-        </div>
-        <h3>Cadre légal complet</h3>
-        <div class="cert-list" role="list">
-          <div class="cert-item" role="listitem">
-            <div class="cert-check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div>
-              <div class="cert-item-text">nLPD 2023 — Loi suisse sur la protection des données</div>
-              <div class="cert-item-sub">Nouvelle loi fédérale en vigueur depuis sept. 2023</div>
-            </div>
-          </div>
-          <div class="cert-item" role="listitem">
-            <div class="cert-check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div>
-              <div class="cert-item-text">RGPD — Règlement Général sur la Protection des Données</div>
-              <div class="cert-item-sub">Conformité Union Européenne</div>
-            </div>
-          </div>
-          <div class="cert-item" role="listitem">
-            <div class="cert-check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div>
-              <div class="cert-item-text">HIPAA 2025 — Health Insurance Portability</div>
-              <div class="cert-item-sub">Conformité santé internationale</div>
-            </div>
-          </div>
-          <div class="cert-item" role="listitem">
-            <div class="cert-check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div>
-              <div class="cert-item-text">WCAG 2.1 AAA — Accessibilité universelle</div>
-              <div class="cert-item-sub">Niveau le plus élevé de conformité d'accessibilité</div>
-            </div>
-          </div>
-          <div class="cert-item" role="listitem">
-            <div class="cert-check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div>
-              <div class="cert-item-text">ISO 27001 — Infomaniak SA, Genève</div>
-              <div class="cert-item-sub">Sécurité de l'information, hébergeur certifié</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ DONS ══════════════════════════════════════════════════════════════════════ -->
-<section id="dons" class="section don-section">
-  <div class="container">
-    <div class="section-header centered reveal">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Soutenir l'Association</div>
-      <h2>Votre don finance une vie sauvée.</h2>
-      <p class="lead">Association à but non lucratif (art. 60-79 CC). 100% de votre contribution est alloué au développement, à l'hébergement et à la recherche médicale.</p>
-    </div>
-    <div class="don-grid reveal" role="list" aria-label="Montants de dons">
-      <a href="https://buy.stripe.com/28E14p9gd6mY7lo50J1ck02" class="don-card" target="_blank" rel="noopener" role="listitem" aria-label="Don de 5 CHF">
-        <div class="don-amount">5 <span style="font-size:16px;color:var(--text-secondary)">CHF</span></div>
-        <div class="don-label">Soutien symbolique</div>
-      </a>
-      <a href="https://buy.stripe.com/6oU6oJfEB12EfRUgJr1ck03" class="don-card" target="_blank" rel="noopener" role="listitem" aria-label="Don de 10 CHF">
-        <div class="don-amount">10 <span style="font-size:16px;color:var(--text-secondary)">CHF</span></div>
-        <div class="don-label">Contributeur</div>
-      </a>
-      <a href="https://buy.stripe.com/8x24gBeAxbHicFI78R1ck04" class="don-card" target="_blank" rel="noopener" role="listitem" aria-label="Don de 25 CHF">
-        <div class="don-amount">25 <span style="font-size:16px;color:var(--text-secondary)">CHF</span></div>
-        <div class="don-label">Bienfaiteur</div>
-      </a>
-      <a href="https://buy.stripe.com/eVq4gB2RPdPqeNQgJr1ck05" class="don-card" target="_blank" rel="noopener" role="listitem" aria-label="Don de 50 CHF">
-        <div class="don-amount">50 <span style="font-size:16px;color:var(--text-secondary)">CHF</span></div>
-        <div class="don-label">Mécène</div>
-      </a>
-      <a href="https://buy.stripe.com/fZubJ3785dPq9tw50J1ck06" class="don-card" target="_blank" rel="noopener" role="listitem" aria-label="Don de 100 CHF">
-        <div class="don-amount">100 <span style="font-size:16px;color:var(--text-secondary)">CHF</span></div>
-        <div class="don-label">Grand bienfaiteur</div>
-      </a>
-      <a href="https://buy.stripe.com/9B68wRcsp6mYfRU2SB1ck07" class="don-card premium don-premium" target="_blank" rel="noopener" role="listitem" aria-label="Abonnement Premium 4.90 CHF par mois">
-        <div class="don-premium-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
+    <!-- APPS -->
+    <section id="apps" style="padding:72px 0 8px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:44px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#D42C2C;font-weight:600" aria-hidden="true">01</span>
         <div>
-          <div class="don-amount">4.90<span class="don-period">/mois</span> <span style="font-size:16px;color:var(--text-secondary)">CHF</span></div>
-          <div class="don-label" style="margin-top:6px">Premium — fonctionnalités avancées · IA étendue · support prioritaire</div>
+          <h2 style="font-size:clamp(30px,4.5vw,40px);font-weight:700;letter-spacing:-.035em;color:#fff;line-height:1.08">Deux applications, un cerveau</h2>
+          <p style="font-size:15.5px;color:#8A94A6;margin-top:12px;max-width:560px;line-height:1.6;font-weight:450">Le même raisonnement clinique alimente les deux. Commencez léger et hors-ligne, approfondissez en ligne — sans changer d'outil.</p>
         </div>
-      </a>
-    </div>
-    <div class="iban-box reveal">
-      <div>
-        <div class="iban-label">Faire un don — nous écrire</div>
-        <div class="iban-value"><a href="mailto:info@swissrescueomnimed.ch">info@swissrescueomnimed.ch</a></div>
-        <div class="mono" style="margin-top:4px">Association en cours de constitution · aucune coordonnée bancaire publiée</div>
       </div>
-    </div>
-    <p class="don-note reveal">Paiement sécurisé via Stripe · Association suisse à but non lucratif en cours de constitution · Les dons ne sont pas déductibles fiscalement et aucune attestation de versement ne peut être délivrée · <a href="mailto:info@swissrescueomnimed.ch">info@swissrescueomnimed.ch</a></p>
+
+      <div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card-spotlight hover-card hair" style="background:rgba(255,255,255,.02);border-radius:18px;padding:34px;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+            <span style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(111,168,222,.3);background:rgba(15,76,129,.16);display:flex;align-items:center;justify-content:center" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#8FB6E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;color:#3DD68C;border:1px solid rgba(61,214,140,.3);border-radius:6px;padding:4px 9px">HORS-LIGNE</span>
+          </div>
+          <h3 style="font-size:21px;font-weight:650;color:#fff;letter-spacing:-.02em">SwissRescue Autonome</h3>
+          <p style="font-size:14px;color:#8A94A6;margin-top:9px;line-height:1.6;font-weight:450">L'essentiel dans un fichier ultra-léger. Une loupe unique, tous les modules à portée, urgence toujours en haut. Idéale en montagne ou sans réseau.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 26px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:#B9C2D0;font-weight:450"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DD68C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Fonctionne à 100 % sans réseau</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:#B9C2D0;font-weight:450"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DD68C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Triage &amp; orientation vers le bon numéro</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:#B9C2D0;font-weight:450"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DD68C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Rien à installer, rien à créer</div>
+          </div>
+          <a class="btn-g" href="app.html" style="margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,255,255,.14);border-radius:11px;padding:12px;font-size:14px;font-weight:600;color:#C9D2DF;background:rgba(255,255,255,.02)">Ouvrir l'app autonome<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+
+        <div class="card-spotlight hover-card" style="background:linear-gradient(165deg,rgba(212,44,44,.07),rgba(255,255,255,.015) 55%);border:1px solid rgba(212,44,44,.28);border-radius:18px;padding:34px;display:flex;flex-direction:column;position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:24px;right:24px;height:1px;background:linear-gradient(90deg,transparent,rgba(240,119,111,.5),transparent)" aria-hidden="true"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+            <span style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(240,119,111,.35);background:rgba(212,44,44,.14);display:flex;align-items:center;justify-content:center" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;color:#F0776F;border:1px solid rgba(240,119,111,.35);border-radius:6px;padding:4px 9px">COMPLÈTE</span>
+          </div>
+          <h3 style="font-size:21px;font-weight:650;color:#fff;letter-spacing:-.02em">SwissRescue OmniMed</h3>
+          <p style="font-size:14px;color:#8A94A6;margin-top:9px;line-height:1.6;font-weight:450">L'application complète : assistant clinique qui raisonne, interactions médicamenteuses, documentation, cours, et votre compte qui vous suit sur chaque appareil.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;margin:22px 0 14px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:#B9C2D0;font-weight:450"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Assistant clinique &amp; signes d'alerte</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:#B9C2D0;font-weight:450"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Profils Pro · Étudiant · Grand public</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;color:#B9C2D0;font-weight:450"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Même compte au poste, au téléphone, au web</div>
+          </div>
+          <div id="module-count" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#77839A;margin-bottom:22px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)">84 modules au registre (v2.1.0)</div>
+          <div style="margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <a class="btn-w" href="app-router.html" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#D42C2C;border-radius:11px;padding:12px;font-size:14px;font-weight:650;color:#fff"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Sur téléphone</a>
+            <a class="btn-g" href="app-router.html" style="display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,255,255,.14);border-radius:11px;padding:12px;font-size:14px;font-weight:600;color:#C9D2DF;background:rgba(255,255,255,.02)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Poste &amp; web</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hair" style="background:rgba(255,255,255,.02);border-radius:18px;padding:26px 30px;margin-top:14px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8FB6E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span style="font-size:14.5px;font-weight:650;color:#fff;letter-spacing:-.01em">La passerelle souveraine</span>
+          <span style="font-size:12px;color:#77839A;font-weight:450">une seule clé, aucune donnée en clair</span>
+        </div>
+        <div class="pass" style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:12px">
+          <div class="hair" style="background:rgba(15,76,129,.1);border-radius:12px;padding:16px 18px"><div style="font-size:13.5px;font-weight:600;color:#fff">Votre appareil</div><div style="font-size:11.5px;color:#77839A;margin-top:3px;font-weight:450">chiffrement local</div></div>
+          <svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><path class="flow-dash" d="M2 10h24" stroke="#3A4658" stroke-width="1.6" fill="none"/><path d="M24 5l8 5-8 5" fill="none" stroke="#3A4658" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div style="background:rgba(212,44,44,.08);border:1px solid rgba(212,44,44,.25);border-radius:12px;padding:16px 18px"><div style="display:flex;align-items:center;gap:7px"><span id="pass-dot" style="width:6px;height:6px;border-radius:50%;background:#77839A;flex-shrink:0"></span><div style="font-size:13.5px;font-weight:600;color:#fff">Serveur de l'association</div></div><div id="pass-status" style="font-size:11.5px;color:#9A8585;margin-top:3px;font-weight:450">Genève · souverain</div></div>
+          <svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><path class="flow-dash" d="M2 10h24" stroke="#3A4658" stroke-width="1.6" fill="none"/><path d="M24 5l8 5-8 5" fill="none" stroke="#3A4658" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="hair" style="background:rgba(15,76,129,.1);border-radius:12px;padding:16px 18px"><div style="font-size:13.5px;font-weight:600;color:#fff">Vos autres appareils</div><div style="font-size:11.5px;color:#77839A;margin-top:3px;font-weight:450">mêmes données, partout</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION -->
+    <section id="mission" style="padding:88px 0 8px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:44px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#D42C2C;font-weight:600" aria-hidden="true">02</span>
+        <div>
+          <h2 style="font-size:clamp(30px,4.5vw,40px);font-weight:700;letter-spacing:-.035em;color:#fff;line-height:1.08">Notre mission</h2>
+          <p style="font-size:15.5px;color:#8A94A6;margin-top:12px;max-width:560px;line-height:1.6;font-weight:450">Réduire le temps entre le premier symptôme et le bon geste — pour chaque personne en Suisse, quel que soit son niveau médical.</p>
+        </div>
+      </div>
+      <div class="g3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <div class="hover-card hair" style="background:rgba(255,255,255,.02);border-radius:16px;padding:28px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <div style="font-size:16px;font-weight:650;color:#fff;margin-top:16px;letter-spacing:-.01em">Orienter sans délai</div>
+          <p style="font-size:13.5px;color:#8A94A6;margin-top:8px;line-height:1.6;font-weight:450">144, 1414, 145, 143… La Synthèse choisit le bon service, prépare quoi dire, et compose l'appel en un geste.</p>
+        </div>
+        <div class="hover-card hair" style="background:rgba(255,255,255,.02);border-radius:16px;padding:28px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FB6E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V5z"/></svg>
+          <div style="font-size:16px;font-weight:650;color:#fff;margin-top:16px;letter-spacing:-.01em">Protéger les données</div>
+          <p style="font-size:13.5px;color:#8A94A6;margin-top:8px;line-height:1.6;font-weight:450">Hébergement suisse, chiffrement de bout en bout, aucun tracker. Vos données de santé ne sont pas un produit.</p>
+        </div>
+        <div class="hover-card hair" style="background:rgba(255,255,255,.02);border-radius:16px;padding:28px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3DD68C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <div style="font-size:16px;font-weight:650;color:#fff;margin-top:16px;letter-spacing:-.01em">Former, du citoyen au pro</div>
+          <p style="font-size:13.5px;color:#8A94A6;margin-top:8px;line-height:1.6;font-weight:450">Trois profils — grand public, étudiant, professionnel — la même app qui grandit avec vos compétences.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECH -->
+    <section id="tech" style="padding:88px 0 8px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:44px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#D42C2C;font-weight:600" aria-hidden="true">03</span>
+        <div>
+          <h2 style="font-size:clamp(30px,4.5vw,40px);font-weight:700;letter-spacing:-.035em;color:#fff;line-height:1.08">Une technologie sobre et sûre</h2>
+          <p style="font-size:15.5px;color:#8A94A6;margin-top:12px;max-width:560px;line-height:1.6;font-weight:450">Pas de gadget : chaque brique sert la fiabilité en situation d'urgence.</p>
+        </div>
+      </div>
+      <div class="g2t" style="display:grid;grid-template-columns:1.25fr 1fr;gap:14px">
+        <div class="card-spotlight hover-card hair" style="background:rgba(255,255,255,.02);border-radius:18px;padding:32px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;color:#8FB6E8;border:1px solid rgba(111,168,222,.3);border-radius:6px;padding:4px 9px">HEXA-AI</span><span style="font-size:14.5px;font-weight:650;color:#fff">Le cerveau clinique partagé</span></div>
+          <p style="font-size:13.5px;color:#8A94A6;margin-top:12px;line-height:1.65;font-weight:450">Un seul moteur de raisonnement — triage, signes d'alerte, scores validés (NEWS2, Glasgow, SAMPLER) — compilé dans les deux apps et la console. Une correction médicale se propage partout, d'un coup.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:22px">
+            <div class="hair" style="border-radius:10px;padding:13px 14px;background:rgba(255,255,255,.02)"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8FB6E8;font-weight:500">triage/</div><div style="font-size:11px;color:#77839A;margin-top:3px;font-weight:450">arbres de décision</div></div>
+            <div class="hair" style="border-radius:10px;padding:13px 14px;background:rgba(255,255,255,.02)"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8FB6E8;font-weight:500">scores/</div><div style="font-size:11px;color:#77839A;margin-top:3px;font-weight:450">échelles validées</div></div>
+            <div class="hair" style="border-radius:10px;padding:13px 14px;background:rgba(255,255,255,.02)"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8FB6E8;font-weight:500">meds/</div><div style="font-size:11px;color:#77839A;margin-top:3px;font-weight:450">interactions</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="hover-card hair" style="flex:1;background:rgba(255,255,255,.02);border-radius:18px;padding:26px 28px">
+            <div style="display:flex;align-items:center;gap:10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3DD68C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span style="font-size:14.5px;font-weight:650;color:#fff">Auditable</span></div>
+            <p style="font-size:13px;color:#8A94A6;margin-top:8px;line-height:1.6;font-weight:450">Chaque règle clinique est documentée et traçable — revue ouverte aux médecins et développeurs sur demande.</p>
+          </div>
+          <div class="hover-card hair" style="flex:1;background:rgba(255,255,255,.02);border-radius:18px;padding:26px 28px">
+            <div style="display:flex;align-items:center;gap:10px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E8B15C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg><span style="font-size:14.5px;font-weight:650;color:#fff">Hors-ligne d'abord</span></div>
+            <p style="font-size:13px;color:#8A94A6;margin-top:8px;line-height:1.6;font-weight:450">Tout l'essentiel embarqué. Le réseau améliore, il n'est jamais requis pour sauver.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENTS -->
+    <section id="agents" style="padding:88px 0 8px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:44px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#D42C2C;font-weight:600" aria-hidden="true">04</span>
+        <div>
+          <h2 style="font-size:clamp(30px,4.5vw,40px);font-weight:700;letter-spacing:-.035em;color:#fff;line-height:1.08">Quatre agents, un seul fil</h2>
+          <p style="font-size:15.5px;color:#8A94A6;margin-top:12px;max-width:560px;line-height:1.6;font-weight:450">De l'idée au terrain, chaque agent transmet son contexte au suivant. Rien ne se perd, tout s'améliore.</p>
+        </div>
+      </div>
+      <div class="agents" style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:10px">
+        <div class="card-spotlight hover-card hair" style="min-width:0;background:rgba(255,255,255,.02);border-radius:16px;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8FB6E8;font-weight:600" aria-hidden="true">01</div>
+          <div style="font-size:15px;font-weight:650;color:#fff;margin-top:10px;letter-spacing:-.01em">Design Labs</div>
+          <div style="font-size:12.5px;color:#8A94A6;margin-top:5px;line-height:1.55;font-weight:450">Conçoit l'ergonomie d'urgence en maquettes vivantes.</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#8FB6E8;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)">→ intentions + écrans</div>
+        </div>
+        <svg width="26" height="22" viewBox="0 0 26 22" style="align-self:center" aria-hidden="true"><path class="flow-dash" d="M2 11h16" stroke="#3A4658" stroke-width="1.6" fill="none"/><path d="M16 6l8 5-8 5" fill="none" stroke="#3A4658" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="card-spotlight hover-card hair" style="min-width:0;background:rgba(255,255,255,.02);border-radius:16px;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#F0776F;font-weight:600" aria-hidden="true">02</div>
+          <div style="font-size:15px;font-weight:650;color:#fff;margin-top:10px;letter-spacing:-.01em">Code</div>
+          <div style="font-size:12.5px;color:#8A94A6;margin-top:5px;line-height:1.55;font-weight:450">Implémente en parité App 1 ⇄ App 2, un seul cerveau clinique.</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#F0776F;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)">→ composants testés</div>
+        </div>
+        <svg width="26" height="22" viewBox="0 0 26 22" style="align-self:center" aria-hidden="true"><path class="flow-dash" d="M2 11h16" stroke="#3A4658" stroke-width="1.6" fill="none"/><path d="M16 6l8 5-8 5" fill="none" stroke="#3A4658" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="card-spotlight hover-card hair" style="min-width:0;background:rgba(255,255,255,.02);border-radius:16px;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#E8B15C;font-weight:600" aria-hidden="true">03</div>
+          <div style="font-size:15px;font-weight:650;color:#fff;margin-top:10px;letter-spacing:-.01em">Synthèse</div>
+          <div style="font-size:12.5px;color:#8A94A6;margin-top:5px;line-height:1.55;font-weight:450">Consolide, arbitre et oriente — comme le module Synthèse des apps.</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#E8B15C;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)">→ décisions consolidées</div>
+        </div>
+        <svg width="26" height="22" viewBox="0 0 26 22" style="align-self:center" aria-hidden="true"><path class="flow-dash" d="M2 11h16" stroke="#3A4658" stroke-width="1.6" fill="none"/><path d="M16 6l8 5-8 5" fill="none" stroke="#3A4658" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="card-spotlight hover-card hair" style="min-width:0;background:rgba(255,255,255,.02);border-radius:16px;padding:24px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3DD68C;font-weight:600" aria-hidden="true">04</div>
+          <div style="font-size:15px;font-weight:650;color:#fff;margin-top:10px;letter-spacing:-.01em">Projet</div>
+          <div style="font-size:12.5px;color:#8A94A6;margin-top:5px;line-height:1.55;font-weight:450">Documente, planifie, garde la mémoire — la passation est le contrat.</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#3DD68C;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)">↺ retours → Design</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSPARENCE + DON -->
+    <section id="transparence" style="padding:88px 0 8px">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:44px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#D42C2C;font-weight:600" aria-hidden="true">05</span>
+        <div>
+          <h2 style="font-size:clamp(30px,4.5vw,40px);font-weight:700;letter-spacing:-.035em;color:#fff;line-height:1.08">Transparence totale</h2>
+          <p style="font-size:15.5px;color:#8A94A6;margin-top:12px;max-width:560px;line-height:1.6;font-weight:450">Chaque franc est traçable. Comptes publiés, budget voté en assemblée.</p>
+        </div>
+      </div>
+
+      <div id="don" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card-spotlight hover-card hair" style="background:rgba(255,255,255,.02);border-radius:18px;padding:32px">
+          <div style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg><span style="font-size:15px;font-weight:650;color:#fff">Faire un don</span></div>
+          <p style="font-size:13.5px;color:#8A94A6;margin-top:10px;line-height:1.6;font-weight:450">Chaque franc finance le développement, l'hébergement souverain et la gratuité pour tous.</p>
+          <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+            <a href="https://buy.stripe.com/8x24gBeAxbHicFI78R1ck04" target="_blank" rel="noopener" class="hair" style="border-radius:9px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#C9D2DF;background:rgba(255,255,255,.03)" aria-label="Don de 25 francs par Stripe">25.–</a>
+            <a href="https://buy.stripe.com/eVq4gB2RPdPqeNQgJr1ck05" target="_blank" rel="noopener" style="border:1px solid rgba(240,119,111,.4);border-radius:9px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#fff;background:rgba(212,44,44,.12)" aria-label="Don de 50 francs par Stripe">50.–</a>
+            <a href="https://buy.stripe.com/fZubJ3785dPq9tw50J1ck06" target="_blank" rel="noopener" class="hair" style="border-radius:9px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#C9D2DF;background:rgba(255,255,255,.03)" aria-label="Don de 100 francs par Stripe">100.–</a>
+            <a href="don.html" class="hair" style="border-radius:9px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#C9D2DF;background:rgba(255,255,255,.03)" aria-label="Autres montants de don">Autre…</a>
+          </div>
+          <div class="hair" style="border-radius:12px;padding:15px 17px;margin-top:16px;background:rgba(255,255,255,.02)"><div style="font-size:10.5px;font-weight:600;color:#77839A;letter-spacing:.08em">FAIRE UN DON — NOUS ÉCRIRE</div><div style="font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#E7EBF2;margin-top:6px;letter-spacing:.02em"><a href="mailto:info@swissrescueomnimed.ch" style="color:#E7EBF2">info@swissrescueomnimed.ch</a></div><div style="font-size:11.5px;color:#77839A;margin-top:5px;font-weight:450">Association en cours de constitution · aucune coordonnée bancaire publiée</div></div>
+        </div>
+        <div class="hover-card hair" style="background:rgba(255,255,255,.02);border-radius:18px;padding:32px">
+          <div style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FB6E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v-4M12 15V7M17 15v-6"/></svg><span style="font-size:15px;font-weight:650;color:#fff">Où va l'argent — répartition visée</span></div>
+          <div style="margin-top:22px;display:flex;flex-direction:column;gap:16px">
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:7px"><span style="color:#C9D2DF;font-weight:550">Développement &amp; clinique</span><span style="font-family:'JetBrains Mono',monospace;color:#77839A">68%</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden"><div data-bar="1" style="width:68%;height:100%;border-radius:999px;background:linear-gradient(90deg,#D42C2C,#F0776F)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:7px"><span style="color:#C9D2DF;font-weight:550">Hébergement souverain</span><span style="font-family:'JetBrains Mono',monospace;color:#77839A">22%</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden"><div data-bar="1" style="width:22%;height:100%;border-radius:999px;background:linear-gradient(90deg,#0F4C81,#8FB6E8)"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:7px"><span style="color:#C9D2DF;font-weight:550">Administration</span><span style="font-family:'JetBrains Mono',monospace;color:#77839A">10%</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden"><div data-bar="1" style="width:10%;height:100%;border-radius:999px;background:linear-gradient(90deg,#0E9F6E,#3DD68C)"></div></div></div>
+          </div>
+          <div style="font-size:11.5px;color:#77839A;margin-top:20px;font-weight:450;line-height:1.55">Répartition budgétaire visée, votée en assemblée générale. Comptes publiés chaque année dès le premier exercice — statuts et PV disponibles sur demande.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="padding:88px 0 40px">
+      <div class="hair" style="border-radius:20px;padding:44px 40px;background:radial-gradient(560px 260px at 20% 0%,rgba(15,76,129,.16),transparent 65%),rgba(255,255,255,.02);display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap">
+        <div style="max-width:480px">
+          <h2 style="font-size:clamp(26px,3.8vw,34px);font-weight:700;letter-spacing:-.03em;color:#fff;line-height:1.12">Une question, un partenariat, une compétence à offrir ?</h2>
+          <p style="font-size:14.5px;color:#8A94A6;margin-top:12px;line-height:1.6;font-weight:450">L'association répond sous 48 h. Médecins, développeurs, traducteurs : votre temps vaut autant qu'un don.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;min-width:260px">
+          <a class="btn-w" href="mailto:info@swissrescueomnimed.ch" style="display:flex;align-items:center;justify-content:center;gap:9px;background:#fff;color:#05080F;font-size:14px;font-weight:650;padding:13px 22px;border-radius:11px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>info@swissrescueomnimed.ch</a>
+          <div class="hair" style="display:flex;align-items:center;justify-content:center;gap:9px;border-radius:11px;padding:12px;font-size:13px;color:#8A94A6;font-weight:500;background:rgba(255,255,255,.02)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#77839A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Genève, Suisse</div>
+          <a id="server-link" href="app-router.html" style="display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:11px 13px;font-size:11.5px;color:#8A94A6;font-weight:500;background:rgba(255,255,255,.02);line-height:1.4"><span id="server-dot" style="width:6px;height:6px;border-radius:50%;background:#77839A;flex-shrink:0"></span><span id="server-line" role="status">État du serveur souverain : vérification…</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="border-top:1px solid rgba(255,255,255,.06);padding:28px 0 36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:6px;background:#D42C2C;display:flex;align-items:center;justify-content:center" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5-7 4 15 3-9 1.5 3H22"/></svg></span><span style="font-size:12.5px;color:#77839A;font-weight:450">© 2026 SwissRescue OmniMed — association à but non lucratif en cours de constitution, art. 60-79 CC</span></div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <a href="app.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">App autonome</a>
+        <a href="app-router.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">App complète</a>
+        <a href="don.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">Dons</a>
+        <a href="contact.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">Contact</a>
+        <a href="transparence.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">Transparence</a>
+      </div>
+    </footer>
+
   </div>
-</section>
-
-<!-- ══ URGENCES ══════════════════════════════════════════════════════════════════ -->
-<section class="section-sm">
-  <div class="container">
-    <div class="section-header centered reveal">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Numéros d'urgence suisses</div>
-      <h2>En cas d'urgence, appelez immédiatement</h2>
-    </div>
-    <div class="em-grid reveal" role="list" aria-label="Numéros d'urgence suisses">
-      <a href="tel:144" class="em-card critical" role="listitem" aria-label="Ambulance, numéro 144">
-        <div class="em-number">144</div><div class="em-label">Ambulance</div>
-      </a>
-      <a href="tel:117" class="em-card" role="listitem" aria-label="Police, numéro 117">
-        <div class="em-number">117</div><div class="em-label">Police</div>
-      </a>
-      <a href="tel:118" class="em-card" role="listitem" aria-label="Pompiers, numéro 118">
-        <div class="em-number">118</div><div class="em-label">Pompiers</div>
-      </a>
-      <a href="tel:1414" class="em-card critical" role="listitem" aria-label="REGA sauvetage aérien, numéro 1414">
-        <div class="em-number">1414</div><div class="em-label">REGA</div>
-      </a>
-      <a href="tel:145" class="em-card" role="listitem" aria-label="Toxicologie, numéro 145">
-        <div class="em-number">145</div><div class="em-label">Toxicologie</div>
-      </a>
-      <a href="tel:143" class="em-card" role="listitem" aria-label="La Main Tendue, numéro 143">
-        <div class="em-number">143</div><div class="em-label">Main Tendue</div>
-      </a>
-      <a href="tel:147" class="em-card" role="listitem" aria-label="Pro Juventute, numéro 147">
-        <div class="em-number">147</div><div class="em-label">Pro Juventute</div>
-      </a>
-      <a href="tel:142" class="em-card critical" role="listitem" aria-label="Violence domestique, numéro 142">
-        <div class="em-number">142</div><div class="em-label">Violence dom.</div>
-      </a>
-      <a href="tel:112" class="em-card" role="listitem" aria-label="Urgences Europe, numéro 112">
-        <div class="em-number">112</div><div class="em-label">Europe</div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ══ CONTACT ════════════════════════════════════════════════════════════════════ -->
-<section id="contact" class="section" style="background:var(--bg-2);border-top:1px solid var(--border)">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Contact</div>
-      <h2>Parlons de votre projet.</h2>
-      <p class="lead">Partenariat institutionnel, financement, presse, questions médicales ou techniques — nous répondons sous 48h.</p>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-info reveal" aria-label="Informations de contact">
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:var(--red-dim)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red-light)" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-          <div>
-            <h4>Email</h4>
-            <a href="mailto:info@swissrescueomnimed.ch">info@swissrescueomnimed.ch</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:var(--blue-dim)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#5BA3F5" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <div>
-            <h4>Site web</h4>
-            <a href="https://www.swissrescueomnimed.ch">www.swissrescueomnimed.ch</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:rgba(16,185,129,.1)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div>
-            <h4>Siège social</h4>
-            <p>Genève, Suisse<br>Association art. 60-79 CC</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon" style="background:rgba(245,158,11,.1)" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div>
-            <h4>Équipe fondatrice</h4>
-            <p>Dorel Yannick Roth, Fondateur<br>Zeliha Calhan, Secrétaire Générale</p>
-          </div>
-        </div>
-      </div>
-      <form class="form reveal reveal-delay-2" id="contact-form" novalidate aria-label="Formulaire de contact">
-        <div class="form-row">
-          <div class="field">
-            <label for="contact-nom">Nom complet <span aria-hidden="true" style="color:var(--red-light)">*</span></label>
-            <input type="text" id="contact-nom" name="name" placeholder="Prénom Nom" required autocomplete="name">
-          </div>
-          <div class="field">
-            <label for="contact-email">Email <span aria-hidden="true" style="color:var(--red-light)">*</span></label>
-            <input type="email" id="contact-email" name="email" placeholder="votre@email.com" required autocomplete="email">
-          </div>
-        </div>
-        <div class="field">
-          <label for="contact-sujet">Sujet</label>
-          <select id="contact-sujet" name="subject">
-            <option value="">Sélectionnez un sujet…</option>
-            <option value="partenariat">Partenariat institutionnel</option>
-            <option value="financement">Financement / Mécénat</option>
-            <option value="presse">Presse &amp; médias</option>
-            <option value="medical">Question médicale</option>
-            <option value="technique">Question technique</option>
-            <option value="autre">Autre</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="contact-message">Message <span aria-hidden="true" style="color:var(--red-light)">*</span></label>
-          <textarea id="contact-message" name="message" placeholder="Votre message…" required></textarea>
-        </div>
-        <label class="form-check">
-          <input type="checkbox" id="contact-consent" required>
-          <span class="form-check-text">J'accepte que mes données soient traitées conformément à la <a href="transparence.html" target="_blank">politique nLPD</a> de l'Association SwissRescue OmniMed. Aucune donnée n'est transmise à des tiers.</span>
-        </label>
-        <div class="form-msg" id="form-msg" role="alert" aria-live="polite"></div>
-        <button type="submit" class="btn btn-primary" id="form-submit" style="width:100%;justify-content:center">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="18" height="18" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          Envoyer le message
-        </button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FOOTER ═════════════════════════════════════════════════════════════════════ -->
-<footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="#" class="nav-logo" style="display:inline-flex" aria-label="SwissRescue OmniMed">
-          <div class="nav-logo-icon" aria-hidden="true"><svg viewBox="0 0 64 64" width="22" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SwissRescue OmniMed"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div>
-            <div class="nav-logo-text" style="font-size:14px">SwissRescue OmniMed</div>
-            <div class="nav-logo-sub">Association suisse · art. 60-79 CC</div>
-          </div>
-        </a>
-        <p>Application médicale d'urgence souveraine suisse. Demande de brevet PCT/OMPI en cours — aucun titre délivré à ce jour.</p>
-      </div>
-      <div class="footer-col">
-        <h5>Association</h5>
-        <a href="#mission">Notre mission</a>
-        <a href="#souverainete">Souveraineté</a>
-        <a href="transparence.html">Transparence</a>
-        <a href="#dons">Soutenir</a>
-      </div>
-      <div class="footer-col">
-        <h5>Application</h5>
-        <a href="app.html" target="_blank" rel="noopener">Accéder à l'application complète</a>
-        <a href="app-light.html" target="_blank" rel="noopener">Version légère (hors ligne)</a>
-        <a href="#technologie">Technologie IA</a>
-        <a href="mission.html">Mission complète</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h5>Légal</h5>
-        <a href="transparence.html">Politique nLPD</a>
-        <a href="transparence.html">Gouvernance</a>
-        <a href="mailto:info@swissrescueomnimed.ch">info@swissrescueomnimed.ch</a>
-        <a href="tel:144">Urgence: 144</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2024–2026 Association SwissRescue OmniMed · Genève, Suisse · SwissRescue Humanitarian License v1.0</p>
-      <div class="footer-legal" role="list">
-        <a href="transparence.html" role="listitem">Politique de confidentialité</a>
-        <a href="transparence.html" role="listitem">Mentions légales</a>
-        <a href="transparence.html" role="listitem">Accessibilité</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script>
-(function(){
-"use strict";
-
-/* ── Navigation sticky ──────────────────────────────────────────────────── */
-const nav = document.getElementById('nav');
-let lastScroll = 0;
-window.addEventListener('scroll', function(){
-  const y = window.scrollY;
-  if(y > 60) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-  lastScroll = y;
-}, {passive:true});
-
-/* ── Mobile menu ─────────────────────────────────────────────────────────── */
-const btn = document.getElementById('hamburger');
-const menu = document.getElementById('mobile-menu');
-btn.addEventListener('click', function(){
-  const open = menu.classList.toggle('open');
-  btn.setAttribute('aria-expanded', open);
-});
-window.closeMobileMenu = function(){
-  menu.classList.remove('open');
-  btn.setAttribute('aria-expanded','false');
-};
-
-/* ── Scroll reveal ───────────────────────────────────────────────────────── */
-const revealEls = document.querySelectorAll('.reveal');
-const revealObs = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){
-      e.target.classList.add('visible');
-      revealObs.unobserve(e.target);
-    }
-  });
-},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-revealEls.forEach(function(el){ revealObs.observe(el); });
-
-/* ── Animated counters ───────────────────────────────────────────────────── */
-function animateCounter(el, target, duration){
-  const start = performance.now();
-  function step(now){
-    const progress = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(ease * target);
-    if(progress < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(step);
-}
-const counterObs = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){
-      const target = parseInt(e.target.dataset.count);
-      if(!isNaN(target)) animateCounter(e.target, target, 1200);
-      counterObs.unobserve(e.target);
-    }
-  });
-},{threshold:.5});
-document.querySelectorAll('[data-count]').forEach(function(el){
-  counterObs.observe(el);
-});
-
-
-/* ── Contact form ─────────────────────────────────────────────────────────── */
-document.getElementById('contact-form').addEventListener('submit', async function(e){
-  e.preventDefault();
-  const submit = document.getElementById('form-submit');
-  const msg = document.getElementById('form-msg');
-  const name = document.getElementById('contact-nom').value.trim();
-  const email = document.getElementById('contact-email').value.trim();
-  const subject = document.getElementById('contact-sujet').value;
-  const message = document.getElementById('contact-message').value.trim();
-  const consent = document.getElementById('contact-consent').checked;
-
-  msg.style.display = 'none';
-  msg.className = 'form-msg';
-
-  if(!name || !email || !message){
-    msg.textContent = 'Veuillez remplir tous les champs obligatoires.';
-    msg.classList.add('err');
-    msg.style.display = 'block';
-    return;
-  }
-  if(!consent){
-    msg.textContent = 'Veuillez accepter la politique de confidentialité pour continuer.';
-    msg.classList.add('err');
-    msg.style.display = 'block';
-    return;
-  }
-
-  submit.disabled = true;
-  submit.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="16" height="16" aria-hidden="true"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Envoi en cours…';
-
-  try {
-    const res = await fetch('https://formspree.io/f/xvgkobez', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-      body: JSON.stringify({name, email, subject, message, _replyto: email})
-    });
-    if(res.ok){
-      msg.textContent = '✓ Message envoyé. Nous vous répondrons sous 48h à l\'adresse indiquée.';
-      msg.classList.add('ok');
-      this.reset();
-    } else {
-      throw new Error('Erreur serveur');
-    }
-  } catch(err){
-    /* Repli gracieux : ouvrir le courrielleur vers l'adresse officielle — un message ne se perd jamais. */
-    const sub = encodeURIComponent('[SwissRescue] ' + (subject || 'Contact'));
-    const bod = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
-    msg.innerHTML = 'Envoi direct indisponible. <a href="mailto:info@swissrescueomnimed.ch?subject=' + sub + '&body=' + bod + '" style="color:inherit;text-decoration:underline">Cliquez ici pour envoyer par courriel</a> à info@swissrescueomnimed.ch';
-    msg.classList.add('err');
-  } finally {
-    submit.disabled = false;
-    submit.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="18" height="18" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Envoyer le message';
-    msg.style.display = 'block';
-    msg.scrollIntoView({behavior:'smooth',block:'nearest'});
-  }
-});
-
-/* ── Smooth active nav link ──────────────────────────────────────────────── */
-const sections = document.querySelectorAll('section[id], div[id]');
-const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-const activeObs = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){
-      navLinks.forEach(function(a){
-        a.style.color = a.getAttribute('href') === '#' + e.target.id
-          ? 'var(--text-primary)'
-          : '';
-      });
-    }
-  });
-},{threshold:.4});
-sections.forEach(function(s){ activeObs.observe(s); });
-
-/* ── Défilement fluide interne — synthèse Lenis, sans dépendance ──────────────
-   Technique reprise de Lenis (darkroom.engineering, MIT) : boucle
-   requestAnimationFrame + interpolation linéaire (lerp) vers la cible, avec
-   l'easing caractéristique 1 − 2^(−10t) plutôt qu'un easing CSS générique.
-   Réimplémentée ici en ~25 lignes vanilla, SANS charger la bibliothèque —
-   cohérent avec la souveraineté d'usage (zéro dépendance externe subie,
-   voir .claude/skills/motion-synthesis/SKILL.md). Ne s'active que pour la
-   navigation par ancre du menu ; respecte prefers-reduced-motion. */
-(function () {
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) return;   /* la navigation native (scroll-behavior:smooth) suffit */
-  function ease(t) { return 1 - Math.pow(2, -10 * t); }
-  function smoothTo(targetY, duration) {
-    var startY = window.scrollY, startT = null;
-    function step(ts) {
-      if (!startT) startT = ts;
-      var p = Math.min(1, (ts - startT) / duration);
-      window.scrollTo(0, startY + (targetY - startY) * ease(p));
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      var id = a.getAttribute('href').slice(1);
-      var target = id && document.getElementById(id);
-      if (!target) return;
-      e.preventDefault();
-      var y = target.getBoundingClientRect().top + window.scrollY - 76; /* hauteur nav */
-      smoothTo(Math.max(0, y), 700);
-      history.pushState(null, '', '#' + id);
-    });
-  });
-})();
-
-})();
-</script>
-
-<script>
-/* ══ APPELS & LIENS OPÉRATIONNELS EN TOUTES CIRCONSTANCES ══════════════════════
-   Règle du projet : le site apprend ce que l'application apprend. Dans un cadre
-   intégré (aperçu, intégration tierce), les liens tel: ne composent pas et les
-   liens externes peuvent être interceptés. On ne laisse JAMAIS un bouton mort :
-   composeur de secours avec le numéro en grand + copie, et ouverture forcée
-   des liens externes dans un nouvel onglet. */
-(function () {
-  var IN_FRAME = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
-  var SVC = { "144": "Ambulance · urgence vitale", "1414": "REGA · secours héliporté", "117": "Police",
-    "118": "Pompiers", "145": "Tox Info (intoxications)", "143": "La Main Tendue (24 h/24)",
-    "147": "Pro Juventute (jeunes)", "142": "Aide aux victimes", "112": "Urgence (Europe)" };
-  function dialer(num) {
-    var ov = document.getElementById("srom-dialer");
-    if (!ov) {
-      ov = document.createElement("div");
-      ov.id = "srom-dialer";
-      ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
-      ov.setAttribute("aria-label", "Appeler un numéro d'urgence");
-      ov.style.cssText = "position:fixed;inset:0;z-index:9999;background:rgba(6,14,31,.94);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px";
-      document.body.appendChild(ov);
-    }
-    ov.innerHTML =
-      "<div style='max-width:360px;width:100%;background:#0C1828;border:1px solid #D42C2C;border-radius:18px;padding:24px;text-align:center;font-family:inherit'>" +
-      "<div style='font-size:12px;letter-spacing:.12em;color:#94A3B8;text-transform:uppercase'>Appeler</div>" +
-      "<div style='font-size:60px;font-weight:900;color:#fff;line-height:1.05;margin:6px 0'>" + num + "</div>" +
-      "<div style='font-size:13px;color:#94A3B8;margin-bottom:16px'>" + (SVC[num] || "") + "</div>" +
-      "<a href='tel:" + num + "' id='srom-call' style='display:block;background:#D42C2C;color:#fff;font-weight:700;font-size:18px;text-decoration:none;padding:15px;border-radius:12px'>☎ Appeler maintenant</a>" +
-      "<button id='srom-copy' style='margin-top:10px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#F1F5F9;font:inherit;font-size:14px;padding:12px;border-radius:10px;cursor:pointer'>Copier le numéro</button>" +
-      "<p style='font-size:11.5px;color:#94A3B8;margin:14px 0 0;line-height:1.5'>Si l'appel ne se lance pas (aperçu intégré), ouvrez la page en plein écran ou composez le <strong style='color:#fff'>" + num + "</strong> sur votre téléphone.</p>" +
-      "<button id='srom-close' style='background:none;border:none;color:#94A3B8;margin-top:12px;cursor:pointer;font:inherit;text-decoration:underline'>Fermer</button>" +
-      "</div>";
-    ov.style.display = "flex";
-    ov.querySelector("#srom-copy").addEventListener("click", function () {
-      var self = this;
-      var done = function () { self.textContent = "✓ Copié — " + num; };
-      try { navigator.clipboard.writeText(num).then(done, done); } catch (e) { done(); }
-    });
-    ov.querySelector("#srom-close").addEventListener("click", function () { ov.style.display = "none"; });
-    ov.querySelector("#srom-call").focus();
-  }
-  /* Numéros d'urgence : jamais un bouton mort */
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest("a[href^='tel:']");
-    if (!a) return;
-    var num = a.getAttribute("href").slice(4).replace(/[^\d+]/g, "");
-    if (!num) return;
-    if (IN_FRAME) { e.preventDefault(); dialer(num); }
-  }, true);
-  /* Liens externes (application, dons) : ouverture en nouvel onglet même intégré */
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest("a[href^='http']");
-    if (!a || !IN_FRAME) return;
-    try {
-      if (new URL(a.href).origin === location.origin) return;   /* lien interne : normal */
-    } catch (err) { return; }
-    e.preventDefault();
-    var w = window.open(a.href, "_blank", "noopener");
-    if (!w) {                                    /* popup bloquée : proposer le lien en clair */
-      var box = document.createElement("div");
-      box.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0C1828;border-top:1px solid #D42C2C;padding:14px 16px;color:#F1F5F9;font-size:13.5px;text-align:center";
-      box.innerHTML = "Ouvrez ce lien dans un nouvel onglet : <a href='" + a.href + "' target='_blank' rel='noopener' style='color:#FF8080;text-decoration:underline'>" + a.href + "</a>";
-      document.body.appendChild(box);
-      setTimeout(function () { box.remove(); }, 9000);
-    }
-  }, true);
-  /* Liens vers les applications : en aperçu intégré (ex. artefact claude.ai), un
-     chemin relatif ne désigne aucun fichier voisin réel et mène à une page morte.
-     En production réelle (même domaine, fichiers voisins déployés), les chemins
-     relatifs restent intrinsèques — cette bascule ne s'active qu'en aperçu intégré.
-     Principe fondateur : en ligne, l'entrée est l'application COMPLÈTE ; en aperçu,
-     l'artefact disponible reste la référence pour ne jamais servir de page morte. */
-  var APP_ARTIFACT_URL = "https://claude.ai/code/artifact/1ad390be-8407-49b9-b98d-fc67d77ae4eb";
-  /* Résolveur d'entrée « application » — à l'épreuve de TOUTE surface, sans 404 possible.
-     Le lien HTML reste "app.html" (fichier voisin réel, l'application COMPLÈTE) pour que
-     le double-clic hors ligne (zip, fichier local) et l'hébergement statique fonctionnent
-     tels quels. Seul le cas de l'aperçu intégré (artefact) a besoin d'une bascule : un
-     chemin relatif n'y désigne aucun fichier voisin réel et mènerait à une page morte. */
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest('a[href="app.html"]');
-    if (!a) return;
-    if (IN_FRAME) {
-      e.preventDefault();
-      var w = window.open(APP_ARTIFACT_URL, "_blank", "noopener");
-      if (!w) {
-        var box = document.createElement("div");
-        box.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0C1828;border-top:1px solid #D42C2C;padding:14px 16px;color:#F1F5F9;font-size:13.5px;text-align:center";
-        box.innerHTML = "Ouvrez l'application dans un nouvel onglet : <a href='" + APP_ARTIFACT_URL + "' target='_blank' rel='noopener' style='color:#FF8080;text-decoration:underline'>" + APP_ARTIFACT_URL + "</a>";
-        document.body.appendChild(box);
-        setTimeout(function () { box.remove(); }, 9000);
-      }
-      return;
-    }
-    /* sinon : lien relatif app.html — fichier voisin réel, aucune interception nécessaire */
-  }, true);
-  /* Les numéros d'urgence de la section « Urgences » doivent TOUS être appelables */
-  document.querySelectorAll(".em-card").forEach(function (card) {
-    if (card.tagName === "A") return;
-    var n = (card.querySelector(".em-number") || {}).textContent;
-    if (!n) return;
-    card.style.cursor = "pointer";
-    card.setAttribute("role", "link");
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", "Appeler le " + n.trim());
-    var go = function () { IN_FRAME ? dialer(n.trim()) : (location.href = "tel:" + n.trim()); };
-    card.addEventListener("click", go);
-    card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
-  });
-  window._sromDialer = dialer;
-})();
-</script>
-<!-- ══ Garde de sortie : prévenir avant de quitter vers un site tiers ══
-     Reprise d'une bonne idée déposée par une autre surface de travail, mais RÉÉCRITE :
-     la version d'origine portait l'attribut `hidden` AVEC un style inline
-     `display:flex`. Or un style inline écrase toujours `[hidden]{display:none}` du
-     navigateur : la fenêtre « Vous allez quitter le site » s'affichait donc DÈS LE
-     CHARGEMENT et, couvrant tout l'écran (inset:0), bloquait tous les boutons.
-     Ici : `display:none` par défaut dans la même déclaration inline — aucun conflit
-     possible — et on bascule sur `flex` uniquement à l'ouverture.
-     Verrouillé par tests/artifact/test-site-applink.mjs (aucun overlay au chargement). -->
-<div id="sortie-garde" role="dialog" aria-modal="true" aria-labelledby="sg-t"
-     style="position:fixed;inset:0;z-index:9998;background:rgba(3,7,18,.86);
-            display:none;align-items:center;justify-content:center;padding:20px">
-  <div style="max-width:440px;background:#0B1424;border:1px solid rgba(255,255,255,.14);
-              border-radius:14px;padding:26px;font-size:14.5px;line-height:1.65;color:#E5E7EB">
-    <h3 id="sg-t" style="margin:0 0 12px;font-size:17px;font-weight:800;color:#fff">Vous allez quitter le site</h3>
-    <p style="margin:0 0 8px">Ce lien mène vers un site qui n'appartient pas à l'association. Aucune donnée ne lui est transmise par ce site.</p>
-    <p style="margin:0 0 18px;color:#9CA3AF;font-size:13px">Destination :
-      <span id="sg-url" style="word-break:break-all;font-family:ui-monospace,monospace"></span></p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button id="sg-ok" type="button" style="flex:1;min-width:130px;padding:12px 18px;border:0;border-radius:9px;background:#D42C2C;color:#fff;font-weight:700;font-size:14px;cursor:pointer">Continuer</button>
-      <button id="sg-no" type="button" style="flex:1;min-width:130px;padding:12px 18px;border-radius:9px;background:transparent;border:1px solid rgba(255,255,255,.22);color:#E5E7EB;font-weight:700;font-size:14px;cursor:pointer">Rester sur le site</button>
-    </div>
-  </div>
+  </main>
 </div>
+
 <script>
+/* Site officiel v2 — câblage serveur + animations (design Claude Design Labs).
+   Offline-first : le site reste intégralement lisible sans réseau ; les seuls appels
+   sortants sont /api/health et /api/module-registry vers le serveur souverain de
+   l'association (même origine), sondés uniquement sur le domaine officiel. */
 (function () {
-  var d = document.getElementById("sortie-garde");
-  if (!d) return;
-  var u = document.getElementById("sg-url"), cible = null;
-  function ferme() { d.style.display = "none"; cible = null; }
-  ferme(); /* état initial garanti, quoi qu'il arrive */
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest('a[href^="http"]');
-    if (!a) return;
-    if (a.hostname === location.hostname) return;      /* lien interne : on ne gêne pas */
-    if (a.target === "_blank") return;                  /* nouvel onglet : on ne quitte rien */
-    e.preventDefault();
-    cible = a.href; u.textContent = a.href; d.style.display = "flex";
-    document.getElementById("sg-ok").focus();
+  'use strict';
+
+  /* ── Session (parité passerelle : les apps déposent sr_session en localStorage) ── */
+  var KNOWN = { yannick: 'Yannick Roth', zeliha: 'Zeliha' };
+  var NAV = { yannick: 'Yannick', zeliha: 'Zeliha' };
+  function readSession() {
+    try {
+      var s = JSON.parse(localStorage.getItem('sr_session') || 'null');
+      return s && s.id ? String(s.id) : null;
+    } catch (e) { return null; }
+  }
+  function renderSession() {
+    var id = readSession();
+    var label = document.getElementById('nav-console-label');
+    var dot = document.getElementById('nav-dot');
+    if (label) label.textContent = id ? ('Reprendre · ' + (NAV[id] || id)) : 'Console';
+    if (dot) dot.hidden = !id;
+    return id;
+  }
+  renderSession();
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'sr_session') { renderSession(); renderServer(lastHealth); }
   });
-  document.getElementById("sg-ok").addEventListener("click", function () { if (cible) location.href = cible; });
-  document.getElementById("sg-no").addEventListener("click", ferme);
-  d.addEventListener("click", function (e) { if (e.target === d) ferme(); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") ferme(); });
+
+  /* ── Sonde du serveur souverain (même logique éprouvée qu'app-router.html) ──
+     navigator.onLine ment ; on exige du JSON {status:"ok"}. Sondé uniquement sur
+     le domaine officiel : ailleurs (miroir GitHub Pages, fichier local), l'état
+     « hors ligne » est affiché honnêtement, sans requête ni bruit console. */
+  var OFFICIAL = /(^|\.)swissrescueomnimed\.ch$/.test(location.hostname);
+  var lastHealth = null;
+  function renderServer(health) {
+    lastHealth = health;
+    var id = readSession();
+    var line = document.getElementById('server-line');
+    var sdot = document.getElementById('server-dot');
+    var pdot = document.getElementById('pass-dot');
+    var pstat = document.getElementById('pass-status');
+    var link = document.getElementById('server-link');
+    var up = !!(health && health.status === 'ok');
+    var green = '#3DD68C', grey = '#77839A';
+    if (sdot) { sdot.style.background = up ? green : grey; sdot.style.animation = up ? 'pulseDot 2s infinite' : 'none'; }
+    if (pdot) { pdot.style.background = up ? green : grey; pdot.style.animation = up ? 'pulseDot 2s infinite' : 'none'; }
+    if (pstat) pstat.textContent = up ? 'Genève · souverain · en ligne' : 'Genève · souverain · hors ligne';
+    if (link) {
+      link.style.borderColor = up ? 'rgba(61,214,140,.25)' : 'rgba(255,255,255,.1)';
+      link.style.background = up ? 'rgba(61,214,140,.05)' : 'rgba(255,255,255,.02)';
+      link.style.color = up ? '#8FD9B5' : '#8A94A6';
+    }
+    if (line) {
+      if (up && id) line.textContent = 'Session active : ' + (KNOWN[id] || id) + ' — vos données suivent sur chaque appareil';
+      else if (up) line.textContent = 'Serveur souverain en ligne — connectez-vous dans l’app, le site vous reconnaît';
+      else line.textContent = 'Serveur souverain hors ligne — les applications fonctionnent sans lui';
+    }
+  }
+  function probeHealth() {
+    if (!OFFICIAL || typeof fetch !== 'function' || typeof AbortController !== 'function') { renderServer(null); return; }
+    var ctl = new AbortController();
+    var t = setTimeout(function () { ctl.abort(); }, 2500);
+    fetch('/api/health', { signal: ctl.signal, cache: 'no-store' })
+      .then(function (r) {
+        clearTimeout(t);
+        var ct = (r.headers.get('content-type') || '');
+        if (!r.ok || ct.indexOf('application/json') < 0) return null; /* maintenance / portail captif */
+        return r.json().catch(function () { return null; });
+      })
+      .then(function (j) { renderServer(j); if (j && j.status === 'ok') probeModules(); })
+      .catch(function () { clearTimeout(t); renderServer(null); });
+  }
+  /* Nombre de modules de l'app complète : valeur du REGISTRE embarquée par défaut
+     (lib/module-registry.ts v2.1.0 = 84 nœuds, vérifié par exécution), remplacée par la valeur vivante
+     du serveur quand il répond, étiquetée comme telle. Jamais de chiffre inventé. */
+  function probeModules() {
+    var ctl = new AbortController();
+    var t = setTimeout(function () { ctl.abort(); }, 2500);
+    fetch('/api/module-registry', { signal: ctl.signal, cache: 'no-store' })
+      .then(function (r) {
+        clearTimeout(t);
+        if (!r.ok || (r.headers.get('content-type') || '').indexOf('application/json') < 0) return null;
+        return r.json().catch(function () { return null; });
+      })
+      .then(function (j) {
+        if (!j) return;
+        var n = j.totalNodes || (j.nodes && j.nodes.length);
+        var el = document.getElementById('module-count');
+        if (n && el) el.textContent = n + ' modules actifs — registre serveur v' + (j.version || '?');
+      })
+      .catch(function () { clearTimeout(t); });
+  }
+  probeHealth();
+
+  /* ── Spotlight des cartes (souris uniquement, sans effet au clavier/tactile) ── */
+  document.addEventListener('mousemove', function (e) {
+    document.querySelectorAll('.card-spotlight').forEach(function (c) {
+      var r = c.getBoundingClientRect();
+      if (e.clientX >= r.left - 80 && e.clientX <= r.right + 80 && e.clientY >= r.top - 80 && e.clientY <= r.bottom + 80) {
+        c.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        c.style.setProperty('--mouse-y', (e.clientY - r.top) + 'px');
+      }
+    });
+  });
+
+  /* ── Animations GSAP + ScrollTrigger (respecte prefers-reduced-motion) ── */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return;
+  var tries = 0;
+  function init() {
+    var g = window.gsap, ST = window.ScrollTrigger;
+    if (!g || !ST) { if (++tries < 40) setTimeout(init, 150); return; } /* scripts en defer ; abandon silencieux si bloqués */
+    g.registerPlugin(ST);
+    document.querySelectorAll('[data-split]').forEach(function (el) {
+      var txt = el.textContent; el.textContent = '';
+      txt.split('').forEach(function (ch) { var s = document.createElement('span'); s.style.display = 'inline-block'; s.style.whiteSpace = 'pre'; s.textContent = ch; el.appendChild(s); });
+      g.fromTo(el.children, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.25, ease: 'power3.out', stagger: .045 });
+    });
+    g.fromTo('[data-rise]', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.25, ease: 'power3.out', delay: .5 });
+    document.querySelectorAll('[data-count]').forEach(function (el) {
+      var to = parseFloat(el.getAttribute('data-count')); var o = { v: 0 };
+      g.to(o, { v: to, duration: 2, ease: 'power1.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true }, onUpdate: function () { el.textContent = Math.round(o.v); } });
+    });
+    document.querySelectorAll('[data-bar]').forEach(function (el) {
+      g.fromTo(el, { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 94%', once: true } });
+    });
+    document.querySelectorAll('section').forEach(function (sec) {
+      g.fromTo(sec, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .85, ease: 'power2.out', scrollTrigger: { trigger: sec, start: 'top 88%', once: true } });
+    });
+    /* Défilement molette lissé (clavier et tactile inchangés) */
+    var max = function () { return document.documentElement.scrollHeight - window.innerHeight; };
+    var target = window.scrollY, cur = target, raf = null;
+    var loop = function () {
+      cur += (target - cur) * .1;
+      if (Math.abs(target - cur) < .5) { cur = target; raf = null; } else raf = requestAnimationFrame(loop);
+      window.scrollTo({ top: cur, behavior: 'instant' });
+    };
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.metaKey) return;
+      e.preventDefault();
+      target = Math.max(0, Math.min(max(), target + e.deltaY));
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: false });
+    window.addEventListener('scroll', function () { if (!raf) { target = cur = window.scrollY; } });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
 </body>
 </html>
-

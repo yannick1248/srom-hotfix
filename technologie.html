@@ -2,7 +2,7 @@
 <!--
   SwissRescue OmniMed — Page Technologie
   © 2024-2026 Association SwissRescue OmniMed, Genève, Suisse
-  Art. 60-79 CC | Demande de brevet PCT/OMPI en cours | nLPD 2023 | RGPD
+  Art. 60-79 CC | Demande de brevet PCT/OMPI en préparation | nLPD 2023 | RGPD
   Contact: info@swissrescueomnimed.ch
 -->
 <html lang="fr-CH">
@@ -12,7 +12,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H206 L238 190 L272 318 L300 268 H360' fill='none' stroke='white' stroke-width='26' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#060E1F">
 <title>Technologie — SwissRescue OmniMed</title>
-<meta name="description" content="Notre technologie sous demande de brevet PCT/OMPI, chiffrement Shamir 3/5, triage médical IA. moteur propriétaire, 3 modes, 11 fonctionnalités avancées.">
+<meta name="description" content="Notre technologie : moteur propriétaire de triage médical, chiffrement AES-256-GCM, 3 modes, 11 fonctionnalités avancées. Demande de brevet en préparation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -173,9 +173,9 @@ footer{border-top:1px solid var(--border);padding:40px 0}
 <div class="page-hero">
   <div class="page-hero-bg" aria-hidden="true"></div>
   <div class="container page-hero-content">
-    <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Architecture sous demande de brevet PCT/OMPI</div>
+    <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Demande de brevet PCT/OMPI en préparation</div>
     <h1>La technologie qui<br><span>sauve des vies</span></h1>
-    <p class="hero-lead">Moteur propriétaire d'intelligence artificielle. Un chiffrement militaire Shamir 3/5. 209 protocoles médicaux. Une architecture conçue pour ne jamais tomber en panne — même sans réseau.</p>
+    <p class="hero-lead">Moteur propriétaire d'intelligence artificielle. Chiffrement AES-256-GCM des données côté serveur. Les protocoles de réanimation BLS / ACLS / PALS (9 algorithmes adulte, enfant, nourrisson) et 24 fiches de gestes qui sauvent, embarqués hors-ligne. Une architecture conçue pour ne jamais tomber en panne — même sans réseau.</p>
   </div>
 </div>
 
@@ -296,32 +296,10 @@ footer{border-top:1px solid var(--border);padding:40px 0}
       <div class="heading-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
-      <h2>Chiffrement Shamir 3/5 — Sécurité militaire</h2>
-      <p class="section-sub">Les données médicales sont fragmentées en 5 parts chiffrées distribuées entre 5 gardiens indépendants. La reconstruction nécessite minimum 3 parts simultanées. Même Infomaniak ne peut pas accéder seul aux données.</p>
+      <h2>Chiffrement AES-256-GCM des données médicales</h2>
+      <p class="section-sub">Les données médicales traitées côté serveur sont chiffrées en AES-256-GCM — un chiffrement authentifié : toute altération des données chiffrées est détectée au déchiffrement. L'hébergement reste en Suisse (Infomaniak, ISO 27001), conformément à la nLPD.</p>
     </div>
-    <div class="shamir-grid reveal" aria-label="Fragments de chiffrement Shamir">
-      <div class="shamir-fragment active">
-        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <div class="shamir-label">Fragment 1</div><div class="shamir-role">Patient</div>
-      </div>
-      <div class="shamir-fragment active">
-        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-        <div class="shamir-label">Fragment 2</div><div class="shamir-role">Hôpital A</div>
-      </div>
-      <div class="shamir-fragment active">
-        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-        <div class="shamir-label">Fragment 3</div><div class="shamir-role">Hôpital B</div>
-      </div>
-      <div class="shamir-fragment">
-        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-        <div class="shamir-label">Fragment 4</div><div class="shamir-role">Secours</div>
-      </div>
-      <div class="shamir-fragment">
-        <div class="shamir-fragment-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-        <div class="shamir-label">Fragment 5</div><div class="shamir-role">Escrow</div>
-      </div>
-    </div>
-    <p class="shamir-note reveal">Fragments surlignés en vert : 3 fragments suffisent pour la reconstruction. Le schéma polynôme de Shamir garantit qu'aucun sous-ensemble de 2 fragments ne révèle d'information. AES-256-GCM protège chaque fragment individuellement.</p>
+    <p class="shamir-note reveal"><strong>Projet à l'étude — non encore implémenté :</strong> un partage de secret de Shamir (3 parts sur 5) répartirait la reconstruction des clés entre plusieurs gardiens indépendants. Tant que cette capacité n'est pas implémentée et prouvée, nous ne l'annonçons pas comme existante : cette page ne décrit que le chiffrement réellement en service.</p>
   </div>
 </section>
 
@@ -359,7 +337,7 @@ footer{border-top:1px solid var(--border);padding:40px 0}
       </div>
       <div class="feature-row reveal">
         <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <div><div class="feature-title">rPPG — fréquence cardiaque sans capteur</div><div class="feature-desc">Mesure la fréquence cardiaque et la saturation en O₂ par photopléthysmographie à distance. Méthode CHROM (Haan &amp; Jeanne 2013). Précision clinique ±2 bpm.</div><div class="feature-stack">CHROM method · Goertzel FFT · bandpass IIR 0.67–3.0 Hz</div></div>
+        <div><div class="feature-title">rPPG — fréquence cardiaque sans capteur</div><div class="feature-desc">Estime la fréquence cardiaque par la caméra, par photopléthysmographie à distance (méthode CHROM, Haan &amp; Jeanne 2013), avec un indice de confiance affiché. Jamais une mesure clinique certifiée.</div><div class="feature-stack">CHROM method · Goertzel FFT · bandpass IIR 0.67–3.0 Hz</div></div>
       </div>
       <div class="feature-row reveal">
         <div class="feature-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
@@ -390,8 +368,8 @@ footer{border-top:1px solid var(--border);padding:40px 0}
 <section class="section">
   <div class="container">
     <div class="cta-block reveal">
-      <h2>Documentée, déposée, prête</h2>
-      <p class="section-sub" style="margin:0 auto 32px;max-width:480px">L'architecture moteur propriétaire fait l'objet d'une demande internationale déposée auprès de l'OMPI ; aucun brevet n'est délivré à ce jour. Chaque composant est production-ready et conforme aux standards médicaux internationaux.</p>
+      <h2>Documentée, testée, transparente</h2>
+      <p class="section-sub" style="margin:0 auto 32px;max-width:480px">L'architecture du moteur propriétaire fait l'objet d'une demande de brevet PCT/OMPI en préparation ; aucun brevet n'est délivré à ce jour. OmniMed est un outil d'aide à la décision et de préparation aux urgences : il ne remplace jamais un avis médical et n'est pas un dispositif médical certifié.</p>
       <a href="don.html" class="btn btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         Soutenir la recherche
@@ -410,7 +388,7 @@ footer{border-top:1px solid var(--border);padding:40px 0}
         <a href="transparence.html">Transparence</a><a href="don.html">Soutenir</a><a href="contact.html">Contact</a>
       </div>
     </div>
-    <p class="footer-motto">info@swissrescueomnimed.ch · <em>Primum non nocere</em> · Demande de brevet PCT/OMPI en cours</p>
+    <p class="footer-motto">info@swissrescueomnimed.ch · <em>Primum non nocere</em> · Demande de brevet PCT/OMPI en préparation</p>
   </div>
 </footer>
 
