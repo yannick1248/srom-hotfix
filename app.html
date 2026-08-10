@@ -10733,6 +10733,236 @@ window.OMNI_MODULES=[
 })();
 </script>
 <script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").then(function(reg){try{reg.update();setInterval(function(){try{reg.update();}catch(e){}},3600000);}catch(e){}}).catch(function(){});var _rf=false;navigator.serviceWorker.addEventListener("controllerchange",function(){if(_rf)return;_rf=true;location.reload();});});}</script>
+<script id="srom-ai-abstraction">
+/* ═══════════════════════════════════════════════════════════════════════════
+   COUCHE D'ABSTRACTION IA — window.sromAI
+   ---------------------------------------------------------------------------
+   Objectif : qu'AUCUN module de l'application n'appelle jamais directement un
+   fournisseur d'IA. Tout passe par ici. On peut alors changer de fournisseur
+   (ou en ajouter un souverain) sans réécrire un seul module appelant.
+
+   Règle de souveraineté (nLPD, art. 321 CP) — non négociable :
+     · Par DÉFAUT, aucune donnée patient ne sort de l'appareil.
+     · Un fournisseur qui fait sortir des données est marqué egress:true et
+       ne peut JAMAIS être choisi implicitement : il faut un choix explicite.
+     · La Web Speech API du navigateur (Google/Apple) est INTERDITE pour de
+       l'audio patient. Elle reste déclarée — pour pouvoir être refusée en
+       connaissance de cause, et utilisable hors contexte patient.
+     · Une clé d'API n'est jamais écrite dans le code ni dans le HTML : elle
+       est injectée à la configuration, à l'exécution.
+
+   Ce qui n'existe PAS encore est marqué "roadmap" et ÉCHOUE proprement.
+   On ne simule aucun résultat de transcription : un faux compte rendu dans un
+   dossier médical serait pire que pas de compte rendu du tout.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  var CLE_STOCKAGE_PROVIDER = "srom-ai-stt-provider";
+
+  /* Catalogue des fournisseurs. `egress` = les données quittent-elles
+     l'appareil. `souverainPatient` = utilisable pour de la donnée patient. */
+  var PROVIDERS = {
+    onDevice: {
+      id: "onDevice",
+      nom: "Sur l'appareil (Whisper embarqué)",
+      egress: false,
+      souverainPatient: true,
+      statut: "roadmap",
+      pourquoi: "Transcription entièrement locale : rien ne quitte l'appareil, fonctionne hors ligne. C'est la cible pour toute donnée patient.",
+      limite: "Pas encore embarqué dans cette version. Tant que ce n'est pas fait, la dictée de données patient n'est pas disponible — on ne la remplace par aucun substitut qui ferait sortir la voix."
+    },
+    infomaniak: {
+      id: "infomaniak",
+      nom: "Infomaniak AI Service (Whisper, Suisse)",
+      egress: true,
+      egressVers: "Infomaniak SA, hébergement en Suisse",
+      souverainPatient: true,
+      exigeCle: true,
+      exigeDPA: true,
+      statut: "configurable",
+      pourquoi: "Whisper hébergé en Suisse, API compatible OpenAI. Les données restent en Suisse et ne servent pas à entraîner de modèle.",
+      limite: "Les données sortent de l'appareil vers un tiers suisse : exige une clé d'API ET un contrat de sous-traitance (DPA) signé avant tout usage sur des données patient."
+    },
+    navigateur: {
+      id: "navigateur",
+      nom: "Dictée du navigateur (Web Speech API)",
+      egress: true,
+      egressVers: "Google ou Apple, selon le navigateur — hors Suisse",
+      souverainPatient: false,
+      statut: "disponible",
+      pourquoi: "Disponible immédiatement, sans clé ni installation.",
+      limite: "INTERDITE pour de l'audio patient : la voix est envoyée à Google/Apple. Réservée à des notes non identifiantes, et jamais activée sans choix explicite."
+    }
+  };
+
+  /* Clés d'API : gardées en mémoire de session uniquement, jamais écrites dans
+     le DOM, jamais journalisées, jamais persistées sur le disque par défaut. */
+  var _cles = Object.create(null);
+
+  function definirCle(providerId, cle) {
+    if (!PROVIDERS[providerId]) throw new Error("Fournisseur inconnu : " + providerId);
+    if (!PROVIDERS[providerId].exigeCle) throw new Error(PROVIDERS[providerId].nom + " n'utilise pas de clé.");
+    if (typeof cle !== "string" || cle.length < 8) throw new Error("Clé invalide.");
+    _cles[providerId] = cle;
+    return true;
+  }
+  function aUneCle(providerId) { return typeof _cles[providerId] === "string" && _cles[providerId].length >= 8; }
+  function oublierCles() { _cles = Object.create(null); return true; }
+
+  function decrire(providerId) {
+    var p = PROVIDERS[providerId];
+    if (!p) return null;
+    var c = {};
+    for (var k in p) if (Object.prototype.hasOwnProperty.call(p, k)) c[k] = p[k];
+    c.pretA = estPret(providerId);
+    return c;
+  }
+
+  function estPret(providerId) {
+    var p = PROVIDERS[providerId];
+    if (!p) return false;
+    if (p.statut === "roadmap") return false;
+    if (p.exigeCle && !aUneCle(providerId)) return false;
+    if (providerId === "navigateur") {
+      return typeof window !== "undefined" && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    }
+    return true;
+  }
+
+  /* Fournisseur choisi. AUCUN défaut à egress:true — l'absence de choix
+     signifie « pas de transcription », jamais « transcription par le premier
+     service venu ». */
+  var _provider = null;
+  try {
+    var s = window.localStorage && window.localStorage.getItem(CLE_STOCKAGE_PROVIDER);
+    if (s && PROVIDERS[s]) _provider = s;
+  } catch (e) { /* stockage indisponible : on reste sans fournisseur */ }
+
+  function definirProvider(providerId) {
+    if (providerId === null) {
+      _provider = null;
+      try { window.localStorage.removeItem(CLE_STOCKAGE_PROVIDER); } catch (e) {}
+      return true;
+    }
+    if (!PROVIDERS[providerId]) throw new Error("Fournisseur inconnu : " + providerId);
+    _provider = providerId;
+    try { window.localStorage.setItem(CLE_STOCKAGE_PROVIDER, providerId); } catch (e) {}
+    return true;
+  }
+  function obtenirProvider() { return _provider; }
+
+  /**
+   * Le fournisseur est-il acceptable pour le contexte demandé ?
+   * @param {string} providerId
+   * @param {Object} opts - { donneePatient: boolean }
+   * @returns {{ok:boolean, raison:string}}
+   */
+  function verifierUsage(providerId, opts) {
+    opts = opts || {};
+    var p = PROVIDERS[providerId];
+    if (!p) return { ok: false, raison: "Fournisseur inconnu." };
+    if (p.statut === "roadmap") return { ok: false, raison: p.nom + " n'est pas encore disponible. " + p.limite };
+    if (opts.donneePatient && !p.souverainPatient) {
+      return { ok: false, raison: "INTERDIT pour des données patient : " + p.limite };
+    }
+    if (p.exigeCle && !aUneCle(providerId)) {
+      return { ok: false, raison: p.nom + " exige une clé d'API configurée" + (p.exigeDPA ? " et un DPA signé" : "") + "." };
+    }
+    if (providerId === "navigateur" && !estPret("navigateur")) {
+      return { ok: false, raison: "Ce navigateur ne propose pas de dictée." };
+    }
+    return { ok: true, raison: "" };
+  }
+
+  /**
+   * Transcription. Contrat unique quel que soit le fournisseur.
+   * @param {Blob|MediaStream|null} audio
+   * @param {Object} opts - { donneePatient:boolean, provider:string, langue:string }
+   * @returns {Promise<{texte:string, provider:string}>}
+   */
+  function transcrire(audio, opts) {
+    opts = opts || {};
+    var pid = opts.provider || _provider;
+    if (!pid) {
+      return Promise.reject(new Error(
+        "Aucun moteur de transcription choisi. Par défaut, rien ne sort de l'appareil : " +
+        "saisissez au clavier, ou choisissez explicitement un moteur."));
+    }
+    var v = verifierUsage(pid, opts);
+    if (!v.ok) return Promise.reject(new Error(v.raison));
+
+    if (pid === "onDevice") {
+      /* Volontairement non implémenté — et ne DOIT pas être simulé. */
+      return Promise.reject(new Error(PROVIDERS.onDevice.limite));
+    }
+    if (pid === "infomaniak") {
+      /* Le point d'appel réel sera branché ici (API compatible OpenAI).
+         Tant que la clé et le DPA ne sont pas en place, on échoue clairement
+         plutôt que d'envoyer quoi que ce soit. */
+      return Promise.reject(new Error(
+        "Infomaniak AI Service n'est pas encore branché dans cette version. " +
+        "L'abstraction est prête : il reste à fournir la clé (jamais en clair dans le code) et le DPA."));
+    }
+    if (pid === "navigateur") {
+      return Promise.reject(new Error(
+        "La dictée du navigateur est temps réel : elle passe par sromAI.dicteeNavigateur(), pas par transcrire()."));
+    }
+    return Promise.reject(new Error("Fournisseur non pris en charge : " + pid));
+  }
+
+  /**
+   * Dictée temps réel du navigateur. Isolée ici pour qu'aucun module ne
+   * l'appelle en direct. Refuse si le contexte est « donnée patient ».
+   */
+  function dicteeNavigateur(opts) {
+    opts = opts || {};
+    var v = verifierUsage("navigateur", opts);
+    if (!v.ok) throw new Error(v.raison);
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var reco = new SR();
+    reco.lang = opts.langue || "fr-CH";
+    reco.continuous = opts.continu !== false;
+    reco.interimResults = false;
+    return reco;
+  }
+
+  /** Fournisseurs utilisables pour de la donnée patient, aujourd'hui. */
+  function providersPatientDisponibles() {
+    return Object.keys(PROVIDERS).filter(function (id) { return verifierUsage(id, { donneePatient: true }).ok; });
+  }
+
+  window.sromAI = {
+    stt: {
+      providers: Object.keys(PROVIDERS),
+      decrire: decrire,
+      estPret: estPret,
+      verifierUsage: verifierUsage,
+      definirProvider: definirProvider,
+      obtenirProvider: obtenirProvider,
+      transcrire: transcrire,
+      dicteeNavigateur: dicteeNavigateur,
+      providersPatientDisponibles: providersPatientDisponibles
+    },
+    config: {
+      definirCle: definirCle,
+      aUneCle: aUneCle,
+      oublierCles: oublierCles
+    },
+    /* Utile aux tests et à l'écran « sous le capot » : ce qui sort, et où. */
+    auditSouverainete: function () {
+      return Object.keys(PROVIDERS).map(function (id) {
+        var p = PROVIDERS[id];
+        return {
+          id: id, nom: p.nom, egress: p.egress, egressVers: p.egressVers || null,
+          souverainPatient: p.souverainPatient, statut: p.statut, pretA: estPret(id)
+        };
+      });
+    }
+  };
+})();
+
+</script>
 <script id="srom-notes-soap">
 /* ═══════════════════════════════════════════════════════════════════════════
    NOTES EN VRAC → RAPPORT SOAP — 100 % local, aucune requête réseau.
@@ -10940,36 +11170,42 @@ window.OMNI_MODULES=[
       }
     });
 
-    /* Dictée — Web Speech API : l'audio SORT de l'appareil. Jamais activée en
-       silence : le 1er appui montre l'avertissement, le 2e démarre l'écoute. */
+    /* Dictée — passe OBLIGATOIREMENT par window.sromAI (couche d'abstraction).
+       Aucun appel direct à un moteur de reconnaissance ici : c'est ce qui
+       permettra de basculer vers Whisper embarqué ou Infomaniak sans toucher
+       à ce module. Le contexte est déclaré « donnée patient » : l'abstraction
+       REFUSE d'elle-même tout fournisseur non souverain. */
     var dictBtn = $("nt-dictee"), reco = null, avertVu = false;
     if (dictBtn) {
-      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) {
+      var AI = window.sromAI && window.sromAI.stt;
+      var dispoPatient = AI ? AI.providersPatientDisponibles() : [];
+
+      if (!AI) {
         dictBtn.disabled = true;
-        dictBtn.textContent = "Dictée indisponible sur ce navigateur";
+        dictBtn.textContent = "Dictée indisponible";
+      } else if (dispoPatient.length === 0) {
+        /* État honnête d'aujourd'hui : aucun moteur souverain n'est encore
+           branché. On ne propose donc PAS de repli qui ferait sortir la voix
+           du patient — on le dit, et on renvoie au clavier. */
+        dictBtn.textContent = "Dictée patient : en attente d'un moteur souverain";
+        dictBtn.addEventListener("click", function () {
+          var avert = $("nt-dictee-avert");
+          if (avert) avert.style.display = "";
+          if (window.sromToast) window.sromToast("Aucun moteur de dictée souverain disponible — saisissez au clavier.");
+        });
       } else {
         dictBtn.addEventListener("click", function () {
           var avert = $("nt-dictee-avert");
-          if (!avertVu) {
-            avertVu = true;
-            if (avert) avert.style.display = "";
-            dictBtn.textContent = "J'ai lu — démarrer la dictée";
-            return;
-          }
+          if (!avertVu) { avertVu = true; if (avert) avert.style.display = ""; dictBtn.textContent = "J'ai lu — démarrer la dictée"; return; }
           if (reco) { try { reco.stop(); } catch (e) {} reco = null; dictBtn.textContent = "Dictée"; return; }
           try {
-            reco = new SR();
-            reco.lang = "fr-CH"; reco.continuous = true; reco.interimResults = false;
+            reco = AI.dicteeNavigateur({ donneePatient: true, langue: "fr-CH" });
             reco.onresult = function (e) {
               var t = "";
               for (var i = e.resultIndex; i < e.results.length; i++) {
                 if (e.results[i].isFinal) t += e.results[i][0].transcript + "\n";
               }
-              if (t) {
-                var z = $("nt-vrac");
-                z.value += (z.value && !/\n$/.test(z.value) ? "\n" : "") + t.trim();
-              }
+              if (t) { var z = $("nt-vrac"); z.value += (z.value && !/\n$/.test(z.value) ? "\n" : "") + t.trim(); }
             };
             reco.onerror = function (ev) {
               if (window.sromToast) window.sromToast("Dictée interrompue (" + (ev.error || "erreur") + ") — tapez au clavier.");
@@ -10978,8 +11214,8 @@ window.OMNI_MODULES=[
             reco.onend = function () { dictBtn.textContent = "Dictée"; reco = null; };
             reco.start();
             dictBtn.textContent = "Arrêter la dictée";
-          } catch (e) {
-            if (window.sromToast) window.sromToast("Dictée impossible sur ce navigateur — tapez au clavier.");
+          } catch (err) {
+            if (window.sromToast) window.sromToast(err && err.message ? err.message : "Dictée indisponible — tapez au clavier.");
             reco = null;
           }
         });
