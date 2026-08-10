@@ -314,10 +314,37 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
         </div>
       </div>
 
+      <!-- POSITION DE L'ASSOCIATION SUR L'ARGENT — écrite noir sur blanc, avant les
+           montants. Le fondateur : « on ne quémande pas, on est là, on propose, on
+           n'attend rien en retour ». Ce bloc doit rester AVANT les boutons de don :
+           l'ordre de lecture est la position, pas la sollicitation. -->
+      <div class="hair" style="border-radius:18px;padding:26px 30px;margin-bottom:14px;background:rgba(255,255,255,.015);border-left:2px solid rgba(240,119,111,.5)">
+        <p style="font-size:16.5px;color:#fff;line-height:1.55;font-weight:500;margin:0">
+          Nous ne quémandons pas. Nous sommes là, nous proposons, et nous n'attendons rien en retour.
+        </p>
+        <p style="font-size:14.5px;color:#8A94A6;margin-top:12px;line-height:1.65;font-weight:450;max-width:640px">
+          L'application est gratuite et le restera. Elle fonctionne sans compte, sans publicité,
+          sans revente de données — que vous donniez ou non ne change strictement rien à ce que
+          vous recevez. Si vous voulez donner, vous le pouvez, et cela fait plaisir ; mais ce
+          n'est pas pour cela que nous sommes ici.
+        </p>
+        <p style="font-size:14.5px;color:#8A94A6;margin-top:12px;line-height:1.65;font-weight:450;max-width:640px">
+          Nous acceptons ce qui sert l'intérêt public. Nous refusons ce qui viendrait acheter
+          une orientation, une donnée ou un silence : aucun soutien ne peut modifier un contenu
+          médical, aucun partenaire n'accède aux données des patients, et toute contrepartie
+          demandée vaut refus.
+        </p>
+        <p style="font-size:13.5px;color:#5F6B7D;margin-top:16px;line-height:1.6;font-weight:450;font-style:italic;max-width:640px">
+          Le serment d'Hippocrate laisse la taille de la pierre « aux praticiens qui s'en
+          occupent ». Nous faisons de même : notre métier est la médecine — le calcul, nous le
+          laissons aux calculeux.
+        </p>
+      </div>
+
       <div id="don" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
         <div class="card-spotlight hover-card hair" style="background:rgba(255,255,255,.02);border-radius:18px;padding:32px">
           <div style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0776F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3.4 1-4.5 2.5C10.9 4 9.3 3 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg><span style="font-size:15px;font-weight:650;color:#fff">Faire un don</span></div>
-          <p style="font-size:13.5px;color:#8A94A6;margin-top:10px;line-height:1.6;font-weight:450">Chaque franc finance le développement, l'hébergement souverain et la gratuité pour tous.</p>
+          <p style="font-size:13.5px;color:#8A94A6;margin-top:10px;line-height:1.6;font-weight:450">Si vous le souhaitez, et seulement si vous le souhaitez : chaque franc va au développement, à l'hébergement souverain en Suisse et à la gratuité pour tous. Rien d'autre.</p>
           <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
             <a href="https://buy.stripe.com/8x24gBeAxbHicFI78R1ck04" target="_blank" rel="noopener" class="hair" style="border-radius:9px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#C9D2DF;background:rgba(255,255,255,.03)" aria-label="Don de 25 francs par Stripe">25.–</a>
             <a href="https://buy.stripe.com/eVq4gB2RPdPqeNQgJr1ck05" target="_blank" rel="noopener" style="border:1px solid rgba(240,119,111,.4);border-radius:9px;padding:9px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#fff;background:rgba(212,44,44,.12)" aria-label="Don de 50 francs par Stripe">50.–</a>
@@ -519,5 +546,117 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
+<script>
+/* ══ APPELS & LIENS OPÉRATIONNELS EN TOUTES CIRCONSTANCES ══════════════════════
+   Règle du projet : le site apprend ce que l'application apprend. Dans un cadre
+   intégré (aperçu, intégration tierce), les liens tel: ne composent pas et les
+   liens externes peuvent être interceptés. On ne laisse JAMAIS un bouton mort :
+   composeur de secours avec le numéro en grand + copie, et ouverture forcée
+   des liens externes dans un nouvel onglet. */
+(function () {
+  var IN_FRAME = (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
+  var SVC = { "144": "Ambulance · urgence vitale", "1414": "REGA · secours héliporté", "117": "Police",
+    "118": "Pompiers", "145": "Tox Info (intoxications)", "143": "La Main Tendue (24 h/24)",
+    "147": "Pro Juventute (jeunes)", "142": "Aide aux victimes", "112": "Urgence (Europe)" };
+  function dialer(num) {
+    var ov = document.getElementById("srom-dialer");
+    if (!ov) {
+      ov = document.createElement("div");
+      ov.id = "srom-dialer";
+      ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
+      ov.setAttribute("aria-label", "Appeler un numéro d'urgence");
+      ov.style.cssText = "position:fixed;inset:0;z-index:9999;background:rgba(6,14,31,.94);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px";
+      document.body.appendChild(ov);
+    }
+    ov.innerHTML =
+      "<div style='max-width:360px;width:100%;background:#0C1828;border:1px solid #D42C2C;border-radius:18px;padding:24px;text-align:center;font-family:inherit'>" +
+      "<div style='font-size:12px;letter-spacing:.12em;color:#94A3B8;text-transform:uppercase'>Appeler</div>" +
+      "<div style='font-size:60px;font-weight:900;color:#fff;line-height:1.05;margin:6px 0'>" + num + "</div>" +
+      "<div style='font-size:13px;color:#94A3B8;margin-bottom:16px'>" + (SVC[num] || "") + "</div>" +
+      "<a href='tel:" + num + "' id='srom-call' style='display:block;background:#D42C2C;color:#fff;font-weight:700;font-size:18px;text-decoration:none;padding:15px;border-radius:12px'>☎ Appeler maintenant</a>" +
+      "<button id='srom-copy' style='margin-top:10px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#F1F5F9;font:inherit;font-size:14px;padding:12px;border-radius:10px;cursor:pointer'>Copier le numéro</button>" +
+      "<p style='font-size:11.5px;color:#94A3B8;margin:14px 0 0;line-height:1.5'>Si l'appel ne se lance pas (aperçu intégré), ouvrez la page en plein écran ou composez le <strong style='color:#fff'>" + num + "</strong> sur votre téléphone.</p>" +
+      "<button id='srom-close' style='background:none;border:none;color:#94A3B8;margin-top:12px;cursor:pointer;font:inherit;text-decoration:underline'>Fermer</button>" +
+      "</div>";
+    ov.style.display = "flex";
+    ov.querySelector("#srom-copy").addEventListener("click", function () {
+      var self = this;
+      var done = function () { self.textContent = "✓ Copié — " + num; };
+      try { navigator.clipboard.writeText(num).then(done, done); } catch (e) { done(); }
+    });
+    ov.querySelector("#srom-close").addEventListener("click", function () { ov.style.display = "none"; });
+    ov.querySelector("#srom-call").focus();
+  }
+  /* Numéros d'urgence : jamais un bouton mort */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href^='tel:']");
+    if (!a) return;
+    var num = a.getAttribute("href").slice(4).replace(/[^\d+]/g, "");
+    if (!num) return;
+    if (IN_FRAME) { e.preventDefault(); dialer(num); }
+  }, true);
+  /* Liens externes (application, dons) : ouverture en nouvel onglet même intégré */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href^='http']");
+    if (!a || !IN_FRAME) return;
+    try {
+      if (new URL(a.href).origin === location.origin) return;   /* lien interne : normal */
+    } catch (err) { return; }
+    e.preventDefault();
+    var w = window.open(a.href, "_blank", "noopener");
+    if (!w) {                                    /* popup bloquée : proposer le lien en clair */
+      var box = document.createElement("div");
+      box.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0C1828;border-top:1px solid #D42C2C;padding:14px 16px;color:#F1F5F9;font-size:13.5px;text-align:center";
+      box.innerHTML = "Ouvrez ce lien dans un nouvel onglet : <a href='" + a.href + "' target='_blank' rel='noopener' style='color:#FF8080;text-decoration:underline'>" + a.href + "</a>";
+      document.body.appendChild(box);
+      setTimeout(function () { box.remove(); }, 9000);
+    }
+  }, true);
+  /* Liens vers les applications : en aperçu intégré (ex. artefact claude.ai), un
+     chemin relatif ne désigne aucun fichier voisin réel et mène à une page morte.
+     En production réelle (même domaine, fichiers voisins déployés), les chemins
+     relatifs restent intrinsèques — cette bascule ne s'active qu'en aperçu intégré.
+     Principe fondateur : en ligne, l'entrée est l'application COMPLÈTE ; en aperçu,
+     l'artefact disponible reste la référence pour ne jamais servir de page morte. */
+  var APP_ARTIFACT_URL = "https://claude.ai/code/artifact/1ad390be-8407-49b9-b98d-fc67d77ae4eb";
+  /* Résolveur d'entrée « application » — à l'épreuve de TOUTE surface, sans 404 possible.
+     Le lien HTML reste "app.html" (fichier voisin réel, l'application COMPLÈTE) pour que
+     le double-clic hors ligne (zip, fichier local) et l'hébergement statique fonctionnent
+     tels quels. Seul le cas de l'aperçu intégré (artefact) a besoin d'une bascule : un
+     chemin relatif n'y désigne aucun fichier voisin réel et mènerait à une page morte. */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href="app.html"],a[href="app-router.html"]');
+    if (!a) return;
+    if (IN_FRAME) {
+      e.preventDefault();
+      var w = window.open(APP_ARTIFACT_URL, "_blank", "noopener");
+      if (!w) {
+        var box = document.createElement("div");
+        box.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0C1828;border-top:1px solid #D42C2C;padding:14px 16px;color:#F1F5F9;font-size:13.5px;text-align:center";
+        box.innerHTML = "Ouvrez l'application dans un nouvel onglet : <a href='" + APP_ARTIFACT_URL + "' target='_blank' rel='noopener' style='color:#FF8080;text-decoration:underline'>" + APP_ARTIFACT_URL + "</a>";
+        document.body.appendChild(box);
+        setTimeout(function () { box.remove(); }, 9000);
+      }
+      return;
+    }
+    /* sinon : lien relatif app.html — fichier voisin réel, aucune interception nécessaire */
+  }, true);
+  /* Les numéros d'urgence de la section « Urgences » doivent TOUS être appelables */
+  document.querySelectorAll(".em-card").forEach(function (card) {
+    if (card.tagName === "A") return;
+    var n = (card.querySelector(".em-number") || {}).textContent;
+    if (!n) return;
+    card.style.cursor = "pointer";
+    card.setAttribute("role", "link");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", "Appeler le " + n.trim());
+    var go = function () { IN_FRAME ? dialer(n.trim()) : (location.href = "tel:" + n.trim()); };
+    card.addEventListener("click", go);
+    card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+  window._sromDialer = dialer;
+})();
+</script>
+
 </body>
 </html>
