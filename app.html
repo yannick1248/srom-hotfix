@@ -510,6 +510,14 @@ header.app{ padding:8px 2px 12px; gap:12px; border-bottom:1px solid var(--am-lin
 .am-coh-alert.ok{ display:flex; color:var(--green); background:color-mix(in srgb,var(--green) 10%,transparent); border:1px solid color-mix(in srgb,var(--green) 40%,transparent); }
 .am-coh-alert.bad{ display:flex; color:var(--red-text); background:color-mix(in srgb,var(--red) 11%,transparent); border:1px solid color-mix(in srgb,var(--red) 45%,transparent); }
 .am-coh-alert svg{ flex-shrink:0; margin-top:1px; }
+.am-cal{ background:color-mix(in srgb,var(--blue) 7%, var(--surface)); border:1px solid color-mix(in srgb,var(--blue) 34%, var(--border)); border-radius:12px; padding:12px 14px; margin:12px 0 6px; }
+.am-cal>b{ display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--blue); font-weight:800; }
+.am-cal p{ font-size:11.5px; color:#C2CBD8; margin:5px 0 9px; line-height:1.5; }
+.am-cal-btns{ display:flex; gap:8px; flex-wrap:wrap; }
+.am-cal-btns button{ flex:1; min-width:150px; }
+.am-cal-status{ margin-top:9px; font-size:11.5px; font-weight:700; color:var(--muted); }
+.am-cal-status.set{ color:var(--green); }
+.am-cal-status.arm{ color:var(--amber); }
 .scene-fs{ position:fixed; top:0; left:0; right:0; bottom:0; z-index:200; background:#05070D; display:none; }
 .scene-fs.on{ display:block; }
 @media (min-width:480px){ .scene-fs{ top:18px; bottom:18px; left:50%; right:auto; transform:translateX(-50%); width:min(430px,100%); border-radius:38px; overflow:hidden; } }
@@ -596,7 +604,7 @@ header.app{ padding:8px 2px 12px; gap:12px; border-bottom:1px solid var(--am-lin
  </div>
 
  <style id="srom-addons-2026">
-/* Bloc additif 2026 — retour-site, accès rapide, favoris, photogrammétrie. Retirable sans impact fonctionnel. */
+/* Bloc additif 2026 — retour-site, accès rapide, favoris, album photo. Retirable sans impact fonctionnel. */
 .am-backsite{ text-decoration:none; display:inline-flex; align-items:center; }
 .am-quick{ margin:14px 0 4px; }
 .am-quick-h{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
@@ -643,7 +651,6 @@ header.app{ padding:8px 2px 12px; gap:12px; border-bottom:1px solid var(--am-lin
 .am-pg-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
 .am-pg-thumb button{ position:absolute; top:2px; right:2px; width:20px; height:20px; border-radius:50%; border:none; background:rgba(4,9,20,.8); color:#fff; font-size:12px; line-height:1; cursor:pointer; }
 .am-pg-badge{ position:absolute; left:3px; bottom:3px; background:rgba(4,9,20,.75); color:#fff; font-size:9px; padding:1px 4px; border-radius:4px; }
-#pg-prep:disabled{ opacity:.5; cursor:not-allowed; }
 /* ══ PASSE RESPONSIVE + HIÉRARCHIE VISUELLE (2026) — additif, retirable ══ */
 :root{ --sa-t:env(safe-area-inset-top,0px); --sa-r:env(safe-area-inset-right,0px); --sa-b:env(safe-area-inset-bottom,0px); --sa-l:env(safe-area-inset-left,0px); }
 html,body{ overflow-x:hidden; }
@@ -861,7 +868,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <button class="mod" data-v="citoyen" style="--tile:var(--green)"><span class="tile">CS</span><span><span class="m-t">Citoyen sauveteur</span><br><span class="m-d">Formation · engagement · alerte</span></span></button>
  <button class="mod" data-v="scores" style="--tile:var(--blue)"><span class="tile">GCS</span><span><span class="m-t">Scores cliniques</span><br><span class="m-d">Glasgow · qSOFA · Wells · NEWS2</span></span></button>
  <button class="mod" data-v="scorespro" style="--tile:var(--blue)"><span class="tile">S31</span><span><span class="m-t">Scores professionnels</span><br><span class="m-d">31 scores · moteur original</span></span></button>
- <button class="mod" data-v="triage" style="--tile:var(--amber)"><span class="tile">SALT</span><span><span class="m-t">Afflux massif (START)</span><br><span class="m-d">Intégré au triage unifié</span></span></button>
+ <button class="mod" data-v="start" style="--tile:var(--amber)"><span class="tile">SALT</span><span><span class="m-t">Afflux massif (START)</span><br><span class="m-d">Intégré au triage unifié</span></span></button>
  <button class="mod" data-v="vitals" style="--tile:var(--green)"><span class="tile">PPG</span><span><span class="m-t">Vitales rPPG</span><br><span class="m-d">Pouls par caméra (simulé)</span></span></button>
  <button class="mod" data-v="voice" style="--tile:var(--green)"><span class="tile">F0</span><span><span class="m-t">Détresse vocale</span><br><span class="m-d">Analyse fréquence fondamentale</span></span></button>
  <button class="mod" data-v="capteurs" style="--tile:var(--amber)"><span class="tile">FALL</span><span><span class="m-t">Capteurs &amp; chute</span><br><span class="m-d">Détection de chute · transmission secours</span></span></button>
@@ -1199,6 +1206,8 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <button class="launch" id="open-full" style="margin-top:10px">Ouvrir en plein écran →</button>
  </div>
  <button class="launch" id="measure-real" style="margin-top:14px">Mesurer mon pouls par la caméra (15 s)</button>
+ <button class="launch sec" id="vitals-demo" style="margin-top:8px;width:100%">Voir un exemple (démonstration)</button>
+ <div id="vitals-demo-out" class="verdict" role="status" style="display:none"></div>
  <p class="note" id="ppg-note">Couvrez entièrement l'objectif de la caméra arrière avec la pulpe du doigt (le flash s'allume si supporté). Le signal analysé est la variation réelle du canal rouge de votre peau — photopléthysmographie, traitée localement. &lt; 60 bradycardie · 60–100 normal · &gt; 100 tachycardie.</p>
  </div>
  </div>
@@ -1212,6 +1221,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <div class="card">
  <canvas id="f0canvas" class="trace" width="840" height="110" role="img" aria-label="Trace de fréquence fondamentale"></canvas>
  <button class="launch" id="voice-live" style="margin-top:14px">Analyser ma voix au micro (10 s)</button>
+ <button class="launch sec" id="voice-demo" style="margin-top:8px;width:100%">Voir un exemple (démonstration)</button>
  <div class="verdict" id="voice-verdict" role="status" aria-live="polite"></div>
  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
  <label class="launch sec" style="display:block;text-align:center;cursor:pointer">
@@ -1227,7 +1237,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  </div>
  </div>
 
- <!-- ═══ PHOTOGRAMMÉTRIE 3D ═══ -->
+ <!-- ═══ MESURES SUR PHOTO CALIBRÉE (planimétrie + goniométrie) ═══ -->
  <div class="view" id="v-capteurs">
  <button class="back" data-back>← Modules</button>
  <h2>Capteurs &amp; détection de chute</h2>
@@ -1245,6 +1255,48 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <div class="am-orient"><a class="o-144" href="tel:144">Appeler le 144 maintenant</a></div>
  </div>
 </div>
+<script>/* ══ OMNI_PERM — socle d'autorisation partagé (contexte sûr · iframe · permissions.query) ══
+   N'AJOUTE aucun blocage : il informe mieux et centralise la détection. Exposé TÔT pour que les
+   modules visio/scène (IIFE distinctes) y accèdent au clic, sans jamais remplacer le geste. */
+window.OMNI_PERM = (function () {
+ var SECURE = (typeof window.isSecureContext === "boolean") ? window.isSecureContext : true;
+ var EMBEDDED = false; try { EMBEDDED = window.self !== window.top; } catch (e) { EMBEDDED = true; }
+ /* permissions.query : Firefox/Safari n'exposent PAS camera/microphone → dégrade en 'unknown',
+    jamais d'exception, jamais de blocage (try/catch double : appel ET rejet de la promesse). */
+ function probe(name) {
+  try {
+   if (!navigator.permissions || !navigator.permissions.query) return Promise.resolve("unknown");
+   return navigator.permissions.query({ name: name }).then(function (s) { return s.state; }, function () { return "unknown"; });
+  } catch (e) { return Promise.resolve("unknown"); }
+ }
+ /* Message unifié — distingue « contexte non sécurisé » d'« API absente », nomme le cadre. */
+ function help(err, kind) {
+  var n = (err && err.name) || "";
+  if (!SECURE) return kind + " indisponible : contexte non sécurisé (HTTPS requis). Rien n'est transmis.";
+  if (EMBEDDED || n === "SecurityError" || n === "NotAllowedError")
+   return kind + " bloqué·e en mode intégré (cadre) ou refusé·e. Ouvrez l'application en plein écran / autonome, ou autorisez " + kind.toLowerCase() + " (icône 🔒 ou ⓘ → Autorisations → Autoriser). Rien n'est transmis.";
+  if (n === "NotFoundError") return "Aucun périphérique " + kind.toLowerCase() + " détecté sur cet appareil. Rien n'est transmis.";
+  if (n === "NotReadableError") return kind + " occupé·e par une autre application — fermez-la puis réessayez. Rien n'est transmis.";
+  return "Accès " + kind.toLowerCase() + " indisponible (" + (n || "erreur inconnue") + "). Rien n'est transmis.";
+ }
+ /* Pré-check NON bloquant : adapte le libellé d'un bouton quand l'accès est 'denied' et écoute
+    onchange pour le rétablir. Ne remplace JAMAIS le geste utilisateur (l'invite reste au clic). */
+ function hint(name, btn, deniedText) {
+  if (!btn) return;
+  var orig = btn.textContent;
+  function apply(state) {
+   if (state === "denied") { btn.setAttribute("data-perm-blocked", "1"); btn.textContent = deniedText; }
+   else if (btn.getAttribute("data-perm-blocked")) { btn.removeAttribute("data-perm-blocked"); btn.textContent = orig; }
+  }
+  probe(name).then(apply);
+  try {
+   if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions.query({ name: name }).then(function (s) { try { s.onchange = function () { apply(s.state); }; } catch (e) {} }, function () {});
+   }
+  } catch (e) {}
+ }
+ return { SECURE: SECURE, EMBEDDED: EMBEDDED, probe: probe, help: help, hint: hint };
+})();</script>
 <script>(function(){var c=document.getElementById("cap-consent"),a=document.getElementById("cap-arm"),st=document.getElementById("cap-status"),sim=document.getElementById("cap-sim");if(!c||!a)return;c.addEventListener("change",function(){a.disabled=!c.checked;});var armed=false;a.addEventListener("click",function(){if(a.disabled)return;armed=!armed;a.textContent=armed?"Surveillance active — arreter":"Activer la surveillance de chute";if(sim)sim.style.display=armed?"block":"none";if(st){st.textContent=armed?"En veille — aucune chute detectee.":"Surveillance inactive.";st.style.color="";st.style.fontWeight="";}});if(sim)sim.addEventListener("click",function(){if(st){st.textContent="Chute detectee — evenement documente (heure, position, accelerometre), pret a transmettre aux intervenants.";st.style.color="var(--red-text)";st.style.fontWeight="700";}});})();</script>
  <div class="view" id="v-visio">
  <button class="back" data-back>← Modules</button>
@@ -1254,6 +1306,8 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <div class="card">
  <div class="am-consent"><input type="checkbox" id="visio-consent" aria-label="Consentement explicite : autoriser caméra et micro pour la téléassistance"><div><b>Consentement explicite.</b> J'autorise l'accès à la caméra et au micro pour la téléassistance. Liaison chiffrée de bout en bout, salle éphémère, <b>aucun enregistrement</b> ; données de santé conservées en Suisse — nLPD &amp; secret médical (art. 321 CP).</div></div>
  <button class="launch sec" id="visio-start" disabled>Démarrer l'aperçu local</button>
+ <button class="launch sec" id="visio-demo" style="margin-top:8px;width:100%">Voir un exemple (démonstration)</button>
+ <div id="visio-demo-out" class="verdict" role="status" style="display:none"></div>
  <p class="note" id="visio-status" style="margin-top:12px" aria-live="polite">Aperçu inactif.</p>
  <div id="visio-stage" style="display:none;margin-top:12px;text-align:center">
  <video id="visio-self" autoplay playsinline muted style="width:100%;max-width:260px;border-radius:14px;background:#000;aspect-ratio:3/4;object-fit:cover"></video>
@@ -1293,12 +1347,16 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  secs=0;if(tmr)tmr.textContent="00:00";
  tick=setInterval(function(){secs++;if(tmr)tmr.textContent=two(Math.floor(secs/60))+":"+two(secs%60);},1000);
  }).catch(function(err){
- var n=err&&err.name||"";
- var msg = n==="NotAllowedError" ? "Caméra refusée. Autorisez la caméra (icône 🔒 ou ⓘ dans la barre d'adresse → Caméra → Autoriser) puis relancez. Rien n'est transmis."
- : n==="NotFoundError" ? "Aucune caméra détectée sur cet appareil. Rien n'est transmis."
- : n==="NotReadableError" ? "Caméra occupée par une autre application — fermez-la puis réessayez. Rien n'est transmis."
- : "Accès caméra indisponible ("+(n||"erreur inconnue")+"). Ouvrez l'application en pleine page. Rien n'est transmis.";
- st.textContent=msg;st.style.color="var(--amber)";
+ /* Parité avec rPPG/plaie : message unifié permHelp + repli plein écran quand embarqué.
+    On conserve « Rien n'est transmis » (souveraineté affichée), quel que soit le message. */
+ var ph = window.permHelp;
+ var base = ph ? ph(err, "Caméra") : (window.OMNI_PERM ? window.OMNI_PERM.help(err, "Caméra") : "Accès caméra indisponible ("+((err&&err.name)||"erreur inconnue")+").");
+ if (!/transmis/i.test(base)) base += " Rien n'est transmis.";
+ st.innerHTML = base;
+ st.style.color="var(--amber)";
+ if (window.IS_EMBEDDED || (window.OMNI_PERM && window.OMNI_PERM.EMBEDDED)) {
+  st.innerHTML += " <button class='launch sec' style='width:auto;padding:8px 14px;margin-top:8px' onclick='window.open(location.href,\"_blank\",\"noopener\")'>Ouvrir en plein écran →</button>";
+ }
  });
  });
  if(stop)stop.addEventListener("click",end);
@@ -1321,19 +1379,21 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <div class="view" id="v-scene">
  <button class="back" data-back>← Modules</button>
  <h2>Analyse de scène</h2>
- <p class="lede">Un seul geste : la caméra passe en plein écran et l'app observe la scène — <b>foule, environnement, démarche</b> réunis — pendant que le secouriste garde les yeux sur ce qu'il filme. Les données sont triées en arrière-plan ; l'analyse IA temps réel s'exécutera côté serveur (à venir).</p>
+ <p class="lede">Un seul geste : la caméra passe en plein écran et l'app calcule, <b>sur cet appareil</b>, quatre indicateurs bas niveau à partir des pixels — <b>niveau d'éclairage</b>, <b>stabilité / mouvement du cadre</b>, <b>dominante rouge</b> (interprétation prudente), et l'<b>horodatage</b>. Ce sont des aides à l'observation, ni une analyse sémantique de la scène ni un diagnostic. Rien n'est envoyé ; aucune personne n'est identifiée.</p>
  <div class="am-cx"><b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>L'image d'abord, le HUD en retrait</b><p>Overlay minimal qui n'obstrue pas l'image : 2 à 3 alertes essentielles seulement. Aide à l'observation du secouriste, jamais un diagnostic.</p></div>
  <div class="card">
  <div class="am-consent"><input type="checkbox" id="scene-consent"><label for="scene-consent"><b>Consentement.</b> J'autorise l'analyse de la scène pour assister l'intervention. Aucune identification de personne ; données de santé chiffrées, conservées en Suisse — nLPD &amp; secret médical (art. 321 CP).</label></div>
  <button class="launch" id="scene-start" disabled>Démarrer l'analyse de scène (plein écran)</button>
+ <button class="launch sec" id="scene-demo" style="margin-top:8px;width:100%">Voir un exemple (démonstration)</button>
+ <div id="scene-demo-out" class="verdict" role="status" style="display:none"></div>
  <p class="note">La caméra s'active dans l'app installée ; en démonstration (fichier local), un aperçu de remplacement s'affiche. Rien n'est envoyé.</p>
  <div class="scene-fs" id="scene-fs" aria-hidden="true">
  <video id="scene-cam" playsinline muted></video>
  <div class="scene-ph" id="scene-ph"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><b>Aperçu caméra — démonstration</b><span>Dans le fichier local, la caméra n'est pas accessible. Dans l'app installée, le flux remplit l'écran, HUD par-dessus.</span></div>
  <div class="scene-hud">
  <div class="sh-top"><span class="sh-live"><i></i>ANALYSE</span><span class="sh-ttl">Scène en cours</span><button class="sh-x" id="scene-close" aria-label="Fermer le plein écran">×</button></div>
- <div class="sh-alerts"><span class="sh-chip warn"><i></i>Foule dense — dégager un accès</span><span class="sh-chip"><i></i>Sol potentiellement glissant</span><span class="sh-chip red"><i></i>Démarche instable repérée</span></div>
- <div class="sh-foot">Données triées en arrière-plan · aucun envoi depuis la démo · moteur IA = serveur</div>
+ <div class="sh-alerts" id="scene-alerts" aria-live="polite"></div>
+ <div class="sh-foot">Indicateurs calculés sur l'image, sur cet appareil · aucun envoi · aide à l'observation, jamais un diagnostic</div>
  </div>
  </div>
  </div>
@@ -1341,6 +1401,50 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
 <script>(function(){
  var o=document.getElementById("scene-start"),fs=document.getElementById("scene-fs"),cl=document.getElementById("scene-close"),v=document.getElementById("scene-cam"),ph=document.getElementById("scene-ph"),cs=document.getElementById("scene-consent"),st=null;
  if(!o||!fs)return;
+ /* ── Indicateurs de scène RÉELS, calculés sur les pixels, 100 % sur l'appareil ──
+    Aucun modèle IA, aucune sémantique (ni foule, ni démarche, ni « sang »): quatre
+    mesures bas niveau, déterministes et bornées. Fonctions PURES exposées pour les
+    tests; un indicateur n'apparaît QUE si son seuil réel est franchi. */
+ function sceneMetrics(d,prev){
+  var n=d.length/4,sumY=0,red=0,diff=0,k=0,luma=new Float32Array(n);
+  for(var i=0;i<d.length;i+=4){
+   var r=d[i],g=d[i+1],b=d[i+2];
+   var Y=0.2126*r+0.7152*g+0.0722*b;      /* luminance BT.709 / WCAG */
+   luma[k]=Y; sumY+=Y;
+   if(r>g+30&&r>b+30&&(Math.max(r,g,b)-Math.min(r,g,b))>40) red++;
+   if(prev&&k<prev.length) diff+=Math.abs(Y-prev[k]);
+   k++;
+  }
+  return { meanY:sumY/n, redFrac:red/n, motion:prev?(diff/n)/255*100:0, luma:luma };
+ }
+ function sceneChipList(m){
+  return [
+   m.meanY<40 ? {txt:"Éclairage insuffisant — utilisez la lampe",cls:"warn"} :
+   m.meanY<70 ? {txt:"Éclairage faible",cls:"warn"} : null,
+   m.motion>18 ? {txt:"Scène instable / mouvement important",cls:"warn"} :
+   m.motion<3  ? {txt:"Cadre stable",cls:""} : null,
+   m.redFrac>0.06 ? {txt:"Dominante rouge marquée — souvent un vêtement, un objet ou l'éclairage (interprétation prudente, non concluante)",cls:"red"} : null,
+   {txt:new Date().toLocaleTimeString("fr-CH"),cls:""}
+  ].filter(Boolean);
+ }
+ window._sceneMetrics=sceneMetrics; window._sceneChipList=sceneChipList;
+ var alertsEl=document.getElementById("scene-alerts");
+ function renderSceneChips(list){
+  if(!alertsEl)return; alertsEl.innerHTML="";
+  list.forEach(function(c){ var s=document.createElement("span"); s.className="sh-chip"+(c.cls?(" "+c.cls):""); s.appendChild(document.createElement("i")); s.appendChild(document.createTextNode(c.txt)); alertsEl.appendChild(s); });
+ }
+ var oc=document.createElement("canvas"); oc.width=64; oc.height=48;
+ var octx=oc.getContext("2d",{willReadFrequently:true});
+ var scenePrev=null,sceneRun=false;
+ function scheduleScene(){ if(!sceneRun)return; if(v&&v.requestVideoFrameCallback) v.requestVideoFrameCallback(sceneTick); else setTimeout(sceneTick,280); }
+ function sceneTick(){
+  if(!sceneRun){return;}
+  if(!st||!v||v.readyState<2){ scheduleScene(); return; }
+  try{ octx.drawImage(v,0,0,64,48); var d=octx.getImageData(0,0,64,48).data; var m=sceneMetrics(d,scenePrev); scenePrev=m.luma; renderSceneChips(sceneChipList(m)); }catch(e){}
+  scheduleScene();
+ }
+ function startScene(){ if(sceneRun)return; sceneRun=true; scenePrev=null; scheduleScene(); }
+ function stopScene(){ sceneRun=false; scenePrev=null; if(alertsEl)alertsEl.innerHTML=""; }
  /* Plein écran = fond sombre: le panneau d'état doit TOUJOURS dire la vérité du moment
  (attente d'autorisation, refus, caméra absente/occupée) — jamais d'écran noir muet. */
  var phB=ph?ph.querySelector("b"):null, phS=ph?ph.querySelector("span"):null;
@@ -1348,7 +1452,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  function phSet(t,s){ if(ph)ph.style.display="flex"; if(phB)phB.textContent=t; if(phS)phS.textContent=s; }
  function phReset(){ if(phB)phB.textContent=PH0.t; if(phS)phS.textContent=PH0.s; if(ph)ph.style.display="flex"; }
  if(cs)cs.addEventListener("change",function(){o.disabled=!cs.checked;});
- function stop(){ if(st){st.getTracks().forEach(function(t){t.stop();});st=null;} if(v){v.srcObject=null;v.style.display="none";} phReset(); }
+ function stop(){ stopScene(); if(st){st.getTracks().forEach(function(t){t.stop();});st=null;} if(v){v.srcObject=null;v.style.display="none";} phReset(); }
  o.addEventListener("click",function(){
   if(o.disabled)return;
   fs.classList.add("on"); fs.setAttribute("aria-hidden","false");
@@ -1361,6 +1465,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
    st=x;
    if(v){ v.srcObject=x; var _p=v.play(); if(_p&&_p.catch)_p.catch(function(){}); v.style.display="block"; }
    if(ph)ph.style.display="none";
+   startScene();
   }).catch(function(err){
    var n=err&&err.name||"";
    if(v)v.style.display="none";
@@ -1375,16 +1480,13 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
 
  <div class="view" id="v-photo3d">
  <button class="back" data-back>← Modules</button>
- <h2>Mesures du membre — photo &amp; 3D</h2>
- <p class="lede">Trois outils complémentaires: <strong>1)</strong> capture guidée <strong>multi-angles</strong> — plusieurs clichés autour du membre (ci-dessous), disponible et <strong>locale</strong>; <strong>2)</strong> maillage 3D interactif de démonstration (faites-le tourner au doigt); <strong>3)</strong> mesure d'angle sur une photo. La <strong>reconstruction 3D métrique</strong> précise à partir des clichés (l'app native en utilise ~20) se fait <strong>côté serveur</strong> — sur la feuille de route, pas encore active.</p>
- <div class="am-coh"><b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12a8 8 0 1 1-4.5-7.2"/></svg>Contrôle de cohérence — dossier patient</b><p>Avant d'enregistrer la photo, l'app vérifie la <b>partie du corps</b> et sa cohérence avec le dossier (bon patient, bonne zone). Elle reconnaît une zone anatomique — elle <b>n'identifie pas la personne</b>. Moteur de reconnaissance : serveur, à venir.</p>
- <div class="am-coh-row"><label>Zone attendue au dossier<select class="am-coh-part"><option>Membre inférieur — pied</option><option>Membre inférieur — jambe</option><option>Membre supérieur — main</option><option>Membre supérieur — bras</option><option>Tronc / abdomen</option><option>Tête / cou</option><option>Autre / non précisé</option></select></label><span class="am-coh-pat">Patient actif : <b>profil en cours</b></span></div>
- <div class="am-coh-btns"><button class="launch sec am-coh-check">Contrôler la cohérence</button><button class="launch sec am-coh-sim">Simuler une incohérence</button></div>
- <div class="am-coh-alert" role="alert"></div></div>
- <!-- ═══ AJOUT 2026 · capture photogrammétrie multi-angles (bloc additif, retirable) ═══ -->
+ <h2>Mesures sur photo calibrée — goniométrie &amp; documentation</h2>
+ <p class="lede">Deux mesures <strong>réelles</strong>, sur cet appareil: <strong>1)</strong> la <strong>mesure d'angle</strong> (goniométrie) sur une photo — invariante à l'échelle, c'est la mesure la <strong>plus fiable</strong> ici; <strong>2)</strong> la <strong>planimétrie calibrée</strong> (aire en cm², diamètre en mm) dans le module <em>Analyse de plaie</em>, activée par une carte de référence. S'y ajoutent un <strong>album de documentation photo horodaté</strong> et un schéma 3D <em>illustratif</em> (non mesuré).</p>
+ <div class="am-coh"><b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12a8 8 0 1 1-4.5-7.2"/></svg>Bon patient, bonne zone — vérification manuelle</b><p>Avant d'enregistrer une photo au dossier, vérifiez vous-même qu'elle correspond au <b>bon patient</b> et à la <b>bonne zone</b> du corps. L'app <b>ne reconnaît pas</b> automatiquement la personne ni la région anatomique : cette vérification vous revient.</p></div>
+ <!-- ═══ AJOUT 2026 · album de documentation photo horodaté (bloc additif, retirable) ═══ -->
  <div class="card am-pg" id="am-pg-card">
- <h2 style="font-size:16px">Capture multi-angles guidée (photogrammétrie)</h2>
- <p class="lede" style="margin-bottom:10px">Prenez <strong>plusieurs clichés</strong> du membre sous différents angles. La capture guidée <strong>fonctionne ici et reste sur cet appareil</strong> (aucun envoi). La reconstruction 3D métrique précise se fait <strong>côté serveur</strong> — feuille de route, pas encore active.</p>
+ <h2 style="font-size:16px">Album de documentation photo horodaté</h2>
+ <p class="lede" style="margin-bottom:10px">Constituez un <strong>album de clichés horodatés</strong> du membre sous plusieurs angles, pour documenter et suivre une lésion. Tout <strong>reste sur cet appareil</strong> (aucun envoi). Pour une <strong>mesure</strong> (angle, aire, diamètre), utilisez la goniométrie ci-dessus et la planimétrie calibrée du module Analyse de plaie.</p>
  <div class="am-pg-consent">
  <label><input type="checkbox" id="pg-consent"> J'ai le <strong>consentement</strong> de la personne pour cette documentation médicale. La captation à l'insu est proscrite.</label>
  </div>
@@ -1395,24 +1497,24 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  </div>
  <div class="am-pg-count" id="pg-count">0 cliché — visez ~12 angles autour du membre</div>
  <div class="am-pg-grid" id="pg-grid" aria-label="Clichés capturés"></div>
- <button class="launch" id="pg-prep" type="button" disabled>🖥️ Préparer la reconstruction 3D (serveur — à venir)</button>
- <div class="verdict" id="pg-verdict" role="status" aria-live="polite" style="display:none"></div>
- <p class="note" style="margin-top:8px">Aide à la documentation d'une lésion — <strong>jamais un diagnostic</strong> ni une mesure clinique certifiée. Reconnaissance de zone anatomique et maillage: moteur serveur, à venir.</p>
+ <p class="note" style="margin-top:8px">Aide à la documentation d'une lésion — <strong>jamais un diagnostic</strong> ni une mesure clinique certifiée. Chaque cliché est horodaté sur l'appareil.</p>
  </div>
  <div class="card">
- <canvas id="limb3d" class="trace" width="840" height="300" style="height:220px;cursor:grab" role="img" aria-label="Maillage 3D du membre, rotation interactive"></canvas>
+ <h2 style="font-size:16px">Schéma 3D illustratif — <span style="color:var(--amber)">non mesuré</span></h2>
+ <p class="lede" style="margin-bottom:10px">Ce maillage est un <strong>schéma synthétique</strong> pour <em>visualiser</em> à quoi ressemblent une angulation ou un œdème — il ne provient <strong>d'aucune photo</strong> et ne mesure rien. Pour une <strong>vraie mesure</strong>, utilisez la goniométrie ci-dessus (angle) ou la planimétrie calibrée (aire/diamètre) du module Analyse de plaie.</p>
+ <canvas id="limb3d" class="trace" width="840" height="300" style="height:220px;cursor:grab" role="img" aria-label="Schéma 3D illustratif du membre, rotation interactive — non mesuré"></canvas>
  <div class="modes" style="margin-top:14px">
  <button class="launch sec p3-btn" data-scn="sain" aria-pressed="true" style="flex:1">Membre sain</button>
  <button class="launch sec p3-btn" data-scn="fracture" aria-pressed="false" style="flex:1">Fracture angulée</button>
  <button class="launch sec p3-btn" data-scn="oedeme" aria-pressed="false" style="flex:1">Œdème local</button>
  </div>
  <div class="verdict" id="p3-verdict" role="status" aria-live="polite"></div>
- <p class="note">Mesures extraites du maillage: angulation de l'axe diaphysaire, asymétrie de circonférence. Seuils cliniques: angulation &gt; 10° <strong>sur la diaphyse d'un os</strong> (jamais au pli d'une articulation, qui plie normalement) = suspicion de fracture déplacée; asymétrie de diamètre &gt; 15 % vs côté sain = œdème significatif.</p>
+ <p class="note">Schéma illustratif, <strong>non mesuré</strong>. Rappel des seuils cliniques (pour information): angulation &gt; 10° <strong>sur la diaphyse d'un os</strong> (jamais au pli d'une articulation, qui plie normalement) = suspicion de fracture déplacée; asymétrie de diamètre &gt; 15 % vs côté sain = œdème significatif. Ces seuils s'apprécient sur une <strong>mesure réelle</strong>, pas sur ce schéma.</p>
  </div>
 
  <div class="card">
- <h2 style="font-size:16px">Mesure d'angle sur photo — articulation ou os</h2>
- <p class="lede" style="margin-bottom:10px">Une articulation <strong>plie normalement</strong>: son angle se compare à l'amplitude usuelle. Seule la <strong>diaphyse d'un os</strong> (entre deux articulations) doit rester rectiligne. Choisissez d'abord ce que vous mesurez:</p>
+ <h2 style="font-size:16px">Mesure d'angle sur photo — articulation ou os <span style="color:var(--green);font-size:11px">mesure réelle</span></h2>
+ <p class="lede" style="margin-bottom:10px">La mesure d'angle est la <strong>mesure la plus fiable</strong> de ce module : un angle est <strong>invariant à l'échelle</strong> (il ne dépend d'aucune référence métrique) et l'app affiche l'<strong>intervalle d'angles 3D compatibles</strong> avec la projection de la photo. Une articulation <strong>plie normalement</strong>: son angle se compare à l'amplitude usuelle. Seule la <strong>diaphyse d'un os</strong> (entre deux articulations) doit rester rectiligne. Choisissez d'abord ce que vous mesurez:</p>
  <div class="modes" style="margin-bottom:10px">
  <button class="launch sec" id="gonio-mode-rom" aria-pressed="true" style="flex:1;border-color:var(--blue)">Amplitude d'une articulation</button>
  <button class="launch sec" id="gonio-mode-axe" aria-pressed="false" style="flex:1">Rectitude d'un os (traumatisme)</button>
@@ -1443,11 +1545,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <button class="back" data-back>← Modules</button>
  <h2>Analyse de plaie par photo</h2>
  <p class="lede">Chargez une photo (ou utilisez l'exemple): l'analyse d'image s'exécute réellement dans votre navigateur, pixel par pixel — rien n'est envoyé sur un serveur.</p>
- <div class="am-coh"><b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12a8 8 0 1 1-4.5-7.2"/></svg>Contrôle de cohérence — dossier patient</b><p>Avant d'enregistrer la photo, l'app vérifie la <b>partie du corps</b> et sa cohérence avec le dossier (bon patient, bonne zone). Elle reconnaît une zone anatomique — elle <b>n'identifie pas la personne</b>. Moteur de reconnaissance : serveur, à venir.</p>
- <div class="am-coh-row"><label>Zone attendue au dossier<select class="am-coh-part"><option>Membre inférieur — pied</option><option>Membre inférieur — jambe</option><option>Membre supérieur — main</option><option>Membre supérieur — bras</option><option>Tronc / abdomen</option><option>Tête / cou</option><option>Autre / non précisé</option></select></label><span class="am-coh-pat">Patient actif : <b>profil en cours</b></span></div>
- <div class="am-coh-btns"><button class="launch sec am-coh-check">Contrôler la cohérence</button><button class="launch sec am-coh-sim">Simuler une incohérence</button></div>
- <div class="am-coh-alert" role="alert"></div></div>
- <script>(function(){document.addEventListener("click",function(e){var ok=e.target.closest&&e.target.closest(".am-coh-check"),bad=e.target.closest&&e.target.closest(".am-coh-sim");if(ok){var b=ok.closest(".am-coh"),a=b.querySelector(".am-coh-alert"),pt=b.querySelector(".am-coh-part");a.className="am-coh-alert ok";a.textContent="Cohérent : la zone (" + (pt?pt.value:"—") + ") correspond au dossier du patient actif. Vérification finale par le moteur serveur.";}if(bad){var b2=bad.closest(".am-coh"),a2=b2.querySelector(".am-coh-alert");a2.className="am-coh-alert bad";a2.innerHTML="<svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'/><path d='M12 9v4M12 17h.01'/></svg><div><b>Incohérence possible.</b> La photo semble montrer une zone ou un patient différent du dossier actif (ex. le pied d'un autre patient dans le dossier d'un patient soigné à la main). Vérifiez le patient et la zone avant d'enregistrer.</div>";}});})();</script>
+ <div class="am-coh"><b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12a8 8 0 1 1-4.5-7.2"/></svg>Bon patient, bonne zone — vérification manuelle</b><p>Avant d'enregistrer une photo au dossier, vérifiez vous-même qu'elle correspond au <b>bon patient</b> et à la <b>bonne zone</b> du corps. L'app <b>ne reconnaît pas</b> automatiquement la personne ni la région anatomique : cette vérification vous revient.</p></div>
  <div class="card">
  <div class="modes">
  <label class="launch sec" style="flex:1;text-align:center;cursor:pointer">
@@ -1456,7 +1554,18 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  </label>
  <button class="launch sec" id="wound-demo" style="flex:1">Exemple synthétique</button>
  </div>
- <canvas id="wound-canvas" class="trace" width="840" height="360" style="height:auto;aspect-ratio:840/360;margin-top:14px" role="img" aria-label="Image analysée avec segmentation de la plaie"></canvas>
+ <canvas id="wound-canvas" class="trace" width="840" height="360" style="height:auto;aspect-ratio:840/360;margin-top:14px;touch-action:none" role="img" aria-label="Image analysée avec segmentation de la plaie"></canvas>
+ <div class="am-cal" id="wound-cal">
+ <b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-5"/></svg>Référence d'échelle — planimétrie calibrée (mm / cm²)</b>
+ <p>Pour une <b>aire en cm²</b> et un <b>diamètre en mm</b>, posez une <b>carte au format bancaire</b> (ISO/IEC 7810 ID-1, grand côté <b>85,60 mm</b>) dans le <b>plan de la lésion</b>, puis touchez les <b>deux extrémités</b> de son grand côté sur la photo. Sans référence, seules des proportions (% du cadre) sont affichées — <b>aucun millimètre</b>.</p>
+ <div class="am-cal-btns">
+ <button class="launch sec" id="wound-cal-start" type="button">📏 Poser la référence (85,60 mm)</button>
+ <button class="launch sec" id="wound-cal-add" type="button" style="display:none">+ 2e référence (robustesse)</button>
+ <button class="launch sec" id="wound-cal-reset" type="button" style="display:none">Effacer la référence</button>
+ </div>
+ <div class="am-cal-status" id="wound-cal-status">Aucune référence posée — mesures en proportion du cadre.</div>
+ <p class="note" style="margin-top:6px">Valable si la carte et la lésion sont <b>coplanaires</b> et l'appareil <b>perpendiculaire</b> ; l'incertitude est toujours affichée. Deux références réduisent l'erreur (Foltyński 2015). Aide à la documentation, <b>pas une mesure certifiée</b>. La correction de perspective (homographie) n'est <b>pas encore implémentée</b>.</p>
+ </div>
  <div class="verdict" id="wound-verdict" role="status" aria-live="polite"></div>
  <p class="note">Analyse réelle par pixel: peau de référence adaptée à la photo, croissance de région (le foyer survit même fragmenté par des poils), puis grille dermatologique <strong>ABCDE mesurée</strong> — Asymétrie, Bordure (compacité), Couleur (variégation), Diamètre. L'app de production y superpose ses moteurs de vision médicale et les bases ISIC/MEDIC. Aide au raisonnement, jamais un diagnostic automatique.</p>
  </div>
@@ -2330,7 +2439,7 @@ window.OMNI_MODULES=[
   "status": "live"
  },
  {
-  "id": "triage",
+  "id": "start",
   "name": "Afflux massif (START)",
   "tile": "SALT",
   "color": "amber",
@@ -3636,14 +3745,30 @@ window.OMNI_MODULES=[
  for (var k in subs) { try { subs[k](m, t, e); } catch (err) {} }
  }
  return {
+ _granted: false,
  available: function () { return typeof DeviceMotionEvent !== "undefined"; },
  needsPermission: function () { return typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function"; },
- /* À appeler depuis un geste utilisateur (exigence iOS), l'explication déjà à l'écran. */
+ /* À appeler depuis un geste utilisateur : iOS EXIGE une activation transitoire pour
+    DeviceMotionEvent.requestPermission() (sinon rejet NotAllowedError). iOS renvoie
+    'granted'/'denied' (MDN). On teste `!== 'granted'` — robuste quel que soit le vocabulaire,
+    SANS présumer d'une valeur W3C 'blocked' non vérifiée. On mémorise le grant (isGranted). */
  ensurePermission: async function () {
  if (!this.available()) return "unsupported";
- if (!this.needsPermission()) return "granted";
- try { return await DeviceMotionEvent.requestPermission(); } catch (e) { return "denied"; }
+ if (typeof window.isSecureContext === "boolean" && !window.isSecureContext) return "insecure";
+ if (!this.needsPermission()) { this._granted = true; return "granted"; } /* Android/desktop : pas d'invite */
+ try {
+ var r = await DeviceMotionEvent.requestPermission();
+ this._granted = (r === "granted");
+ return this._granted ? "granted" : "denied";
+ } catch (e) {
+ /* Sans activation transitoire ≠ refus utilisateur : le distinguer pour re-tenter sur geste. */
+ return (e && e.name === "NotAllowedError") ? "nogesture" : "error";
+ }
  },
+ /* Vrai dès que le mouvement est utilisable : soit aucune invite requise (Android/desktop),
+    soit l'invite iOS déjà accordée (chute/RCP). Sert au capteur du chat pour NE PAS s'abonner
+    en silence sur iOS non accordé (le signal reste simplement absent). */
+ isGranted: function () { return !this.needsPermission() || this._granted === true; },
  subscribe: function (id, fn) {
  if (!subs[id]) count++;
  subs[id] = fn;
@@ -3829,17 +3954,55 @@ window.OMNI_MODULES=[
  document.getElementById("gpx-locate").addEventListener("click", function () {
  var btn = this;
  btn.disabled = true; btn.textContent = "Localisation…";
- function fallback() {
+ /* Un seul dénouement possible (succès, erreur OU garde) — le premier arrivé gagne et
+    désarme les autres. Sans cela, en cadre intégré, le bouton resterait figé « Localisation… ». */
+ var settled = false, guard = null;
+ function done() { settled = true; if (guard) { clearTimeout(guard); guard = null; } }
+ function reset() { btn.disabled = false; btn.textContent = "Obtenir ma position"; }
+ /* Position de DÉMO étiquetée : uniquement pour signal indisponible/délai (code 2/3),
+    JAMAIS pour un refus (code 1) ni un blocage — on n'invente pas une position à la place de l'usager. */
+ function demo(reason) {
+ if (settled) return; done();
  pos = { lat: 46.20440, lon: 6.14320, sim: true };
- fmtPos(); btn.disabled = false; btn.textContent = "Obtenir ma position";
+ fmtPos(); reset();
+ if (reason) { var el = document.getElementById("gpx-coords"); el.textContent = reason + " — " + el.textContent; }
  }
- if (!navigator.geolocation) { fallback(); return; }
+ /* Refus (code 1) OU blocage silencieux (garde) : chemin de réactivation + repli point de
+    repère, AUCUNE position simulée. Le message honnête est affiché, le bouton est réarmé. */
+ function refused(lead) {
+ if (settled) return; done();
+ reset();
+ var emb = !!(window.OMNI_PERM && window.OMNI_PERM.EMBEDDED);
+ document.getElementById("gpx-coords").textContent =
+ (lead || "Position refusée.") + " Autorisez la localisation (icône 🔒 ou ⓘ → Localisation → Autoriser)"
+ + (emb ? " ou ouvrez l'application en plein écran (localisation bloquée en mode intégré / cadre)." : ".")
+ + " Aucune position simulée — sinon, donnez un point de repère (rue, commerce, n° de route).";
+ document.getElementById("gpx-actions").style.display = "none";
+ document.getElementById("gpx-files").style.display = "none";
+ rec("gps", "Localisation indisponible — aucune position simulée; chemin de réactivation affiché");
+ }
+ if (!navigator.geolocation) { demo("Géolocalisation indisponible sur cet appareil"); return; }
+ /* Timeout de GARDE : en cadre intégré (artefact), la Permissions-Policy peut bloquer
+    l'API sans JAMAIS rappeler succès ni erreur — le {timeout:6000} interne n'est alors
+    pas honoré. La garde garantit une issue honnête et le réarmement du bouton. */
+ guard = setTimeout(function () {
+ if (settled) return;
+ refused("Localisation sans réponse (bloquée dans cet aperçu intégré).");
+ }, 8000);
  navigator.geolocation.getCurrentPosition(
  function (p) {
+ if (settled) return; done();
  pos = { lat: p.coords.latitude, lon: p.coords.longitude, sim: false };
- fmtPos(); btn.disabled = false; btn.textContent = "Obtenir ma position";
+ fmtPos(); reset();
  },
- fallback, { timeout: 6000 }
+ function (err) {
+ if (settled) return;
+ var c = err && err.code; /* 1 PERMISSION_DENIED · 2 POSITION_UNAVAILABLE · 3 TIMEOUT */
+ if (c === 1) { refused(); return; }
+ demo(c === 3 ? "Délai GPS dépassé — position de démonstration (étiquetée)"
+ : "Signal GPS indisponible — position de démonstration (étiquetée)");
+ },
+ { timeout: 6000, enableHighAccuracy: true }
  );
  });
  function dl(name, content, type) {
@@ -4630,9 +4793,11 @@ window.OMNI_MODULES=[
  BIB.push({ cat: "Score", n: s[0], d: s[1], src: s[2] });
  });
  var CATC = { "Analyte labo": "var(--green)", "Médicament": "var(--violet)", "Abréviation": "var(--blue)", "Protocole": "var(--red)", "Score": "var(--amber)" };
+ /* Normalisation NFD + suppression des diacritiques : « creatinine » doit trouver « Créatinine ». */
+ function bibNorm(s) { return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
  function bibRender(q) {
- q = (q || "").toLowerCase();
- var hits = BIB.filter(function (b) { return !q || (b.n + " " + b.d + " " + b.cat).toLowerCase().indexOf(q) !== -1; });
+ q = bibNorm(q);
+ var hits = BIB.filter(function (b) { return !q || bibNorm(b.n + " " + b.d + " " + b.cat).indexOf(q) !== -1; });
  document.getElementById("bib-results").innerHTML =
  "<p class='note' style='margin:0 0 10px'>" + hits.length + " / " + BIB.length + " entrées</p>" +
  hits.slice(0, 60).map(function (b) {
@@ -4801,18 +4966,25 @@ window.OMNI_MODULES=[
  status.textContent = "Inactive.";
  try { localStorage.removeItem("srom_fall"); } catch (e) {}
  }
+ /* Embarqué : nommer le VRAI blocage (la page hôte ne délègue pas accelerometer/gyroscope
+    via Permissions-Policy) plutôt que « capteur absent (ordinateur ?) » — le capteur EXISTE. */
+ var EMB_MOVE = "Capteur de mouvement bloqué en mode intégré : la page hôte ne délègue pas « accelerometer/gyroscope » via Permissions-Policy. Ouvrez l'application en plein écran / autonome pour la surveillance de chute — rien n'est transmis.";
+ function embedded() { return !!(window.OMNI_PERM && window.OMNI_PERM.EMBEDDED); }
  toggle.addEventListener("click", async function () {
  if (armed) { disarm(); rec("chute", "Surveillance de chute désactivée"); return; }
  if (!OMNI_MOTION.available()) {
- status.textContent = "Capteur de mouvement absent dans ce contexte (ordinateur ?) — la surveillance de chute fonctionne sur téléphone, en page pleine ou app installée.";
+ status.textContent = embedded() ? EMB_MOVE
+ : "Capteur de mouvement absent dans ce contexte (ordinateur ?) — la surveillance de chute fonctionne sur téléphone, en page pleine ou app installée.";
  return; /* repli honnête: pas de simulation */
  }
  /* iOS: expliquer AVANT de demander (la demande doit venir d'un geste utilisateur) */
  if (OMNI_MOTION.needsPermission()) status.textContent = "Autorisation « Mouvement et orientation » demandée: elle sert uniquement à détecter une chute, sur cet appareil — rien n'est transmis.";
  var r = await OMNI_MOTION.ensurePermission();
  if (r !== "granted") {
- status.textContent = r === "unsupported"
- ? "Capteur de mouvement absent dans ce contexte — la surveillance fonctionne sur téléphone."
+ status.textContent = embedded() ? EMB_MOVE
+ : r === "insecure" ? "Capteur mouvement indisponible : contexte non sécurisé (HTTPS requis)."
+ : r === "nogesture" ? "Autorisation mouvement à relancer d'un geste : touchez de nouveau « Activer la surveillance »."
+ : r === "unsupported" ? "Capteur de mouvement absent dans ce contexte — la surveillance fonctionne sur téléphone."
  : "Permission mouvement refusée — réactivable dans les réglages du navigateur (site → Mouvement et orientation).";
  return;
  }
@@ -4864,8 +5036,9 @@ window.OMNI_MODULES=[
  });
 
  /* ══ Autorisations — gestion universelle iframe/navigateurs ══ */
- var IS_EMBEDDED = false;
- try { IS_EMBEDDED = window.self !== window.top; } catch (e) { IS_EMBEDDED = true; }
+ /* Détection iframe centralisée dans OMNI_PERM (source unique) ; repli local si absent. */
+ var IS_EMBEDDED = window.OMNI_PERM ? window.OMNI_PERM.EMBEDDED
+   : (function () { try { return window.self !== window.top; } catch (e) { return true; } })();
  function openFull() { window.open(location.href, "_blank", "noopener"); }
  document.getElementById("open-full").addEventListener("click", openFull);
  function dlAutonomeBtn() {
@@ -4874,6 +5047,10 @@ window.OMNI_MODULES=[
  }
  function permHelp(err, kind) {
  var name = err && err.name || "";
+ /* Contexte non sécurisé (HTTP simple) ≠ API absente : le distinguer explicitement. */
+ if (typeof window.isSecureContext === "boolean" && !window.isSecureContext) {
+ return "<strong>" + kind + " indisponible : contexte non sécurisé</strong> (HTTPS requis). Ouvrez l'application en HTTPS ou téléchargez l'app autonome. Rien n'est transmis." + dlAutonomeBtn();
+ }
  if (IS_EMBEDDED || name === "SecurityError" || (name === "NotAllowedError" && IS_EMBEDDED)) {
  return "<strong>" + kind + " bloqué·e dans cet aperçu intégré</strong> (sécurité du navigateur, pas un bug). La solution qui marche à coup sûr, sur tous les téléphones: <strong>téléchargez l'application</strong> et ouvrez le fichier depuis vos fichiers ou WhatsApp — là, " + kind.toLowerCase() + " fonctionne." + dlAutonomeBtn();
  }
@@ -4882,8 +5059,14 @@ window.OMNI_MODULES=[
  if (name === "NotReadableError") return kind + " occupé par une autre application — fermez-la et réessayez.";
  return kind + " indisponible (" + name + "). Téléchargez l'app autonome ou ouvrez le lien en pleine page." + dlAutonomeBtn();
  }
+ /* Exposition globale : les IIFE visio (l.~1310) et scène accèdent au MÊME message et à la
+    MÊME détection iframe, à parité avec rPPG/plaie/micro — sans dupliquer la logique. */
+ window.permHelp = permHelp; window.IS_EMBEDDED = IS_EMBEDDED;
 
  /* ══ rPPG RÉEL par caméra ══ */
+ /* Pré-check NON bloquant : si la caméra est déjà 'denied', le bouton le dit AVANT le clic ;
+    onchange le rétablit. Ne remplace jamais le geste (l'invite reste au clic). */
+ if (window.OMNI_PERM) window.OMNI_PERM.hint("camera", document.getElementById("measure-real"), "Caméra bloquée — réactivez-la dans les réglages puis retouchez");
  document.getElementById("measure-real").addEventListener("click", async function () {
  var btn = this, note = document.getElementById("ppg-note");
  var video = document.getElementById("ppg-video");
@@ -4979,6 +5162,8 @@ window.OMNI_MODULES=[
  });
 
  /* ══ Micro RÉEL — F0 en direct ══ */
+ /* Pré-check NON bloquant : si le micro est déjà 'denied', le bouton le dit AVANT le clic. */
+ if (window.OMNI_PERM) window.OMNI_PERM.hint("microphone", document.getElementById("voice-live"), "Micro bloqué — réactivez-le dans les réglages puis retouchez");
  document.getElementById("voice-live").addEventListener("click", async function () {
  var btn = this, vd = document.getElementById("voice-verdict");
  btn.disabled = true; btn.textContent = "Accès micro…";
@@ -4994,6 +5179,9 @@ window.OMNI_MODULES=[
  return;
  }
  var AC = new (window.AudioContext || window.webkitAudioContext)();
+ /* Politique autoplay : reprendre l'AudioContext DANS le geste de clic (ici), sinon il reste
+    'suspended' et l'analyse ne reçoit aucun échantillon sur certains navigateurs. */
+ if (AC.state === "suspended") { try { AC.resume(); } catch (e) {} }
  var src = AC.createMediaStreamSource(stream);
  var an = AC.createAnalyser();
  an.fftSize = 2048;
@@ -5179,7 +5367,7 @@ window.OMNI_MODULES=[
  doigt_mcp: { n: "doigt (MCP)", max: 90 }, cheville: { n: "cheville", max: 50 },
  hanche: { n: "hanche", max: 120 }, epaule: { n: "épaule", max: 180 }
  };
- /* ── PHOTOGRAMMÉTRIE: projection, pas géométrie plane ─────────────────────────
+ /* ── MESURE D'ANGLE SUR PHOTO: projection, pas géométrie plane ────────────────
  GONIO_TILT: inclinaison plausible du plan du membre par rapport au capteur (degrés).
  SCALE_MM: millimètres par pixel, si une référence d'échelle a été calibrée
  (carte au format ID-1, ISO/IEC 7810: 85,60 × 53,98 mm). */
@@ -5283,7 +5471,7 @@ window.OMNI_MODULES=[
  gonioTapPrompt();
  });
 
- /* ══ Photogrammétrie 3D — moteur de rendu maillage ══ */
+ /* ══ Schéma 3D illustratif — moteur de rendu maillage (non mesuré) ══ */
  var L3 = document.getElementById("limb3d"), l3x = L3.getContext("2d");
  var l3rotY = 0.6, l3rotX = -0.25, l3scn = "sain", l3drag = null, l3auto = true;
  function limbProfile(t, scn) {
@@ -5361,17 +5549,17 @@ window.OMNI_MODULES=[
  function l3verdict() {
  var v = document.getElementById("p3-verdict");
  if (l3scn === "fracture") {
- v.className = "verdict show v-P1";
- v.innerHTML = "<h3>Angulation mesurée: 24° — suspicion de fracture déplacée</h3><p>Déviation de l'axe diaphysaire au tiers moyen, bien au-delà du seuil de 10°.</p><p class='v-actions'>Conduite: ne pas mobiliser · immobilisation en position trouvée · retirer bagues/bracelets · contrôle pouls et sensibilité en aval · 144 si déformation majeure ou atteinte vasculo-nerveuse.</p>";
- rec("photo3d", "Angulation 24° — suspicion fracture déplacée");
+ v.className = "verdict show v-P2";
+ v.innerHTML = "<h3>Schéma illustratif : angulation d'axe — <span style='color:var(--amber)'>non mesuré</span></h3><p>Le schéma figure une déviation de l'axe diaphysaire. <strong>Aucun angle n'est mesuré ici.</strong> Pour obtenir un angle réel, utilisez « Mesure d'angle sur photo » ci-dessous — au-delà de 10° sur une diaphyse, une déformation est évoquée.</p>";
+ rec("photo3d", "Schéma illustratif « fracture angulée » (non mesuré)");
  } else if (l3scn === "oedeme") {
  v.className = "verdict show v-P2";
- v.innerHTML = "<h3>Asymétrie de circonférence: +38 % — œdème significatif</h3><p>Augmentation localisée du diamètre au tiers moyen, axe diaphysaire conservé.</p><p class='v-actions'>Conduite: protocole GREC (Glace, Repos, Élévation, Compression) · surveiller l'extension · consulter si douleur osseuse ponctuelle ou impotence fonctionnelle.</p>";
- rec("photo3d", "Œdème +38 % de circonférence, axe conservé");
+ v.innerHTML = "<h3>Schéma illustratif : œdème local — <span style='color:var(--amber)'>non mesuré</span></h3><p>Le schéma figure une augmentation localisée du diamètre. <strong>Aucune circonférence n'est mesurée ici.</strong> Pour objectiver un œdème, comparez au côté sain et mesurez le diamètre en mm avec la planimétrie calibrée (module Analyse de plaie).</p>";
+ rec("photo3d", "Schéma illustratif « œdème local » (non mesuré)");
  } else {
  v.className = "verdict show v-P3";
- v.innerHTML = "<h3>Angulation 0° · circonférence symétrique</h3><p>Maillage régulier, axe diaphysaire rectiligne — pas de signe morphologique de fracture déplacée ni d'œdème.</p>";
- rec("photo3d", "Membre sain — axe rectiligne");
+ v.innerHTML = "<h3>Schéma illustratif : membre régulier — <span style='color:var(--amber)'>non mesuré</span></h3><p>Axe rectiligne et circonférence régulière sur le schéma. <strong>Aucune mesure</strong> n'est réalisée ici : c'est une aide visuelle.</p>";
+ rec("photo3d", "Schéma illustratif « membre sain » (non mesuré)");
  }
  }
  document.querySelectorAll(".p3-btn").forEach(function (b) {
@@ -5405,6 +5593,33 @@ window.OMNI_MODULES=[
 
  /* ══ Analyse de plaie — traitement d'image réel ══ */
  var WC = document.getElementById("wound-canvas"), wcx = WC.getContext("2d");
+ /* ── RÉFÉRENCE D'ÉCHELLE (planimétrie calibrée) ─────────────────────────────
+    WOUND_SCALE_MM = mm par pixel du canevas WC — la MÊME base de coordonnées que
+    analyzeWound. La calibration se clique sur WC ; aucun facteur de sous-échantillonnage
+    n'est appliqué ici (ils vivent uniquement dans analyzeWound). Plusieurs cartes de
+    référence → moyenne (robustesse). */
+ var CARD_MM = 85.60;                 /* ISO/IEC 7810 ID-1, grand côté */
+ var WOUND_CAL_REFS = [];             /* [mm/px, ...] une entrée par carte mesurée */
+ var WOUND_SCALE_MM = null;           /* moyenne des références, ou null si aucune */
+ var _woundClean = null;              /* instantané du canevas AVANT segmentation (pour tracer les repères) */
+ function woundScaleFromPairs(pairs) {
+   var refs = [];
+   for (var i = 0; i + 1 < pairs.length; i += 2) {
+     var d = Math.hypot(pairs[i + 1].x - pairs[i].x, pairs[i + 1].y - pairs[i].y);
+     if (d > 4) refs.push(CARD_MM / d);
+   }
+   return refs;
+ }
+ function woundApplyRefs(refs) {
+   WOUND_CAL_REFS = refs.slice();
+   WOUND_SCALE_MM = refs.length ? refs.reduce(function (a, b) { return a + b; }, 0) / refs.length : null;
+   return WOUND_SCALE_MM;
+ }
+ /* API de test (même math que l'UI) : pose la calibration depuis des points canevas. */
+ window._woundCalibrate = function (pairs) { return woundApplyRefs(woundScaleFromPairs(pairs || [])); };
+ window._woundScaleMM = function () { return WOUND_SCALE_MM; };
+ window._woundClearCal = function () { woundApplyRefs([]); };
+ window._woundPxToMm = function (px) { return WOUND_SCALE_MM ? px * WOUND_SCALE_MM : null; };
  /* Analyse de plaie — refonte « anti faux négatif » (photo réelle du fondateur 07-16:
  lésion sur cuir chevelu masquée par cheveux + flash → l'ancien moteur disait « photo
  saine »). Principes: (1) détecter aussi le rose inflammé et la croûte délavée, pas
@@ -5509,6 +5724,18 @@ window.OMNI_MODULES=[
  }
  wcx.putImageData(img, 0, 0);
  if (!total) total = 1;
+ /* ══ PLANIMÉTRIE CALIBRÉE — mm / cm² UNIQUEMENT si une référence d'échelle est posée ══
+    Base de coordonnées UNIQUE = pixels du canevas WC, celle où la calibration se clique.
+    Le sous-échantillonnage 1 px/2 de analyzeWound n'affecte QUE l'AIRE (chaque échantillon
+    = un bloc 2×2 = 4 px pleine résolution → ×4) ; le DIAMÈTRE est mesuré en coordonnées
+    canevas RÉELLES (minX/maxX ne sont pas des index de grille) → AUCUN ×2. Ne jamais
+    double-compter : sinon l'aire serait fausse d'un facteur 4. Prouvé par test-mesure-calibree. */
+ var SUBW = 2;
+ var diamPxFull = (maxX > minX || maxY > minY) ? Math.max(maxX - minX, maxY - minY) : 0;
+ var diamMm = WOUND_SCALE_MM ? diamPxFull * WOUND_SCALE_MM : null;
+ var areaMm2v = WOUND_SCALE_MM ? (mN * SUBW * SUBW) * WOUND_SCALE_MM * WOUND_SCALE_MM : null;
+ var areaCm2 = (areaMm2v != null) ? areaMm2v / 100 : null;
+ var calUnc = WOUND_CAL_REFS.length >= 2 ? 8 : 15; /* incertitude affichée: 2 repères < 1 (Foltyński 2015) */
  /* ══ CRITÈRES ABCDE — calculés sur les pixels du foyer (aide au raisonnement) ══ */
  var abcde = null;
  if (mN >= 24) {
@@ -5574,7 +5801,7 @@ window.OMNI_MODULES=[
  crit(A, "A — Asymétrie", (abcde.asym * 100).toFixed(0) + "% non apparié", "une lésion bénigne est plutôt symétrique") +
  crit(B, "B — Bordure", "indice " + abcde.compactness.toFixed(1) + (B ? " (irrégulière)": " (régulière)"), "bords nets et réguliers = rassurant") +
  crit(C, "C — Couleur", abcde.nCol + " teinte(s)", "plusieurs couleurs dans une même lésion = à montrer") +
- crit(D, "D — Diamètre", abcde.diamPct.toFixed(0) + "% du cadre", "au-delà de ~6 mm, surveiller") +
+ crit(D, "D — Diamètre", (diamMm != null ? diamMm.toFixed(0) + " mm (± " + calUnc + " %)" : abcde.diamPct.toFixed(0) + "% du cadre"), (diamMm != null ? "au-delà de ~6 mm, surveiller" : "posez la référence d'échelle pour mesurer en mm")) +
  "</table>" +
  "<div style='margin-top:5px'><strong>Synthèse:</strong> " + nAtyp + "/4 critère(s) atypique(s) mesuré(s). " +
  (nAtyp >= 2 ? "Plusieurs critères ABCDE ressortent: <strong>à montrer à un médecin/dermatologue</strong> sans banaliser.":
@@ -5587,6 +5814,9 @@ window.OMNI_MODULES=[
  v.innerHTML = "<h3>Zone évocatrice détectée — " + loc + " de l'image</h3><p>Surface " + pct.toFixed(2) +
  " % (érythème " + pctE.toFixed(2) + " % · profond " + pctD.toFixed(2) + " % · jaunâtre " + pctX.toFixed(2) + " %)." +
  (quality.length ? " Analyse limitée: " + quality.join(", ") + ".": "") + "</p>" +
+ (areaCm2 != null
+   ? "<p class='v-actions'><strong>Planimétrie calibrée:</strong> aire ≈ " + (areaCm2 < 1 ? areaCm2.toFixed(2) : areaCm2.toFixed(1)) + " cm² · diamètre max ≈ " + diamMm.toFixed(0) + " mm (± ~" + calUnc + " %, mesure smartphone non certifiée). Valable si la carte et la lésion sont coplanaires et l'appareil perpendiculaire.</p>"
+   : "<p class='v-actions dim'>Aire en cm² / diamètre en mm : posez la référence d'échelle (carte 85,60 mm) dans le plan de la lésion pour mesurer. Sans référence, aucun millimètre n'est affiché.</p>") +
  (flags.length ? "<p class='v-actions'>Points d'attention: " + flags.join(" · ") + ".</p>": "") +
  abHtml +
  "<p class='v-actions'>" + derm + "</p>";
@@ -5611,6 +5841,11 @@ window.OMNI_MODULES=[
  erytheme: pctE, profond: pctD, jaunatre: pctX,
  quality: quality.slice(), flags: (typeof flags !== "undefined" ? flags.slice(): []),
  abcde: (typeof abcde !== "undefined" && abcde) ? { n: nAtyp, total: 4 }: null,
+ /* Mesures métriques UNIQUEMENT si une référence d'échelle a été posée (sinon null). */
+ diamMm: (typeof diamMm !== "undefined" ? diamMm : null),
+ areaCm2: (typeof areaCm2 !== "undefined" ? areaCm2 : null),
+ areaMm2: (typeof areaMm2v !== "undefined" ? areaMm2v : null),
+ calibrated: WOUND_SCALE_MM != null, calRefs: WOUND_CAL_REFS.length, calUnc: (typeof calUnc !== "undefined" ? calUnc : null),
  concluante: !(quality.length && pct <= 0),
  ts: new Date().toLocaleTimeString("fr-CH", { hour: "2-digit", minute: "2-digit" })
  };
@@ -5629,6 +5864,7 @@ window.OMNI_MODULES=[
  wcx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
  window._woundRect = { x: (w - dw) / 2, y: (h - dh) / 2, w: dw, h: dh };
  URL.revokeObjectURL(img.src);
+ try { _woundClean = wcx.getImageData(0, 0, w, h); } catch (e) { _woundClean = null; }
  analyzeWound();
  };
  img.onerror = function () {
@@ -5672,8 +5908,65 @@ window.OMNI_MODULES=[
  /* liseré exsudat */
  wcx.fillStyle = "rgba(214,168,60,0.85)";
  wcx.beginPath(); wcx.ellipse(w * 0.60, h * 0.44, 16, 9, 0.3, 0, 7); wcx.fill();
+ try { _woundClean = wcx.getImageData(0, 0, w, h); } catch (e) { _woundClean = null; }
  analyzeWound();
  });
+
+ /* ══ Référence d'échelle — pose interactive sur le canevas WC (2 points par carte) ══ */
+ (function () {
+   var startB = document.getElementById("wound-cal-start"),
+       addB = document.getElementById("wound-cal-add"),
+       resetB = document.getElementById("wound-cal-reset"),
+       statusEl = document.getElementById("wound-cal-status");
+   if (!startB || !statusEl) return;
+   var arming = false, pending = []; /* points de la carte en cours (2 attendus) */
+   function fmt(x) { return x.toFixed(x < 1 ? 3 : 2); }
+   function redrawBase() {
+     if (_woundClean) { try { wcx.putImageData(_woundClean, 0, 0); return true; } catch (e) {} }
+     return false;
+   }
+   function drawPending() {
+     redrawBase();
+     wcx.save();
+     wcx.strokeStyle = "#38BDF8"; wcx.fillStyle = "#38BDF8"; wcx.lineWidth = 3;
+     if (pending.length === 2) { wcx.beginPath(); wcx.moveTo(pending[0].x, pending[0].y); wcx.lineTo(pending[1].x, pending[1].y); wcx.stroke(); }
+     pending.forEach(function (p) { wcx.beginPath(); wcx.arc(p.x, p.y, 7, 0, 7); wcx.fill(); });
+     wcx.restore();
+   }
+   function setStatus() {
+     var n = WOUND_CAL_REFS.length;
+     if (arming) { statusEl.className = "am-cal-status arm"; statusEl.textContent = pending.length === 0 ? "Touchez la 1re extrémité du grand côté de la carte…" : "Touchez la 2e extrémité (côté opposé, 85,60 mm)…"; return; }
+     if (!n) { statusEl.className = "am-cal-status"; statusEl.textContent = "Aucune référence posée — mesures en proportion du cadre."; return; }
+     var unc = n >= 2 ? 8 : 15;
+     statusEl.className = "am-cal-status set";
+     statusEl.textContent = n + " référence" + (n > 1 ? "s" : "") + " posée" + (n > 1 ? "s" : "") + " — échelle ≈ " + fmt(WOUND_SCALE_MM) + " mm/px (± ~" + unc + " %). Les mesures s'affichent en mm / cm².";
+     addB.style.display = ""; resetB.style.display = "";
+   }
+   function arm() {
+     if (!_woundClean) { statusEl.className = "am-cal-status arm"; statusEl.textContent = "Chargez d'abord une photo (ou l'exemple), puis posez la référence."; return; }
+     arming = true; pending = []; setStatus(); drawPending();
+   }
+   startB.addEventListener("click", arm);
+   addB.addEventListener("click", arm);
+   resetB.addEventListener("click", function () {
+     window._woundClearCal(); arming = false; pending = [];
+     addB.style.display = "none"; resetB.style.display = "none";
+     if (redrawBase()) analyzeWound(); setStatus();
+   });
+   function tap(cx, cy) {
+     if (!arming) return;
+     var r = WC.getBoundingClientRect();
+     pending.push({ x: (cx - r.left) * (WC.width / r.width), y: (cy - r.top) * (WC.height / r.height) });
+     if (pending.length >= 2) {
+       var refs = WOUND_CAL_REFS.slice().concat(woundScaleFromPairs(pending));
+       woundApplyRefs(refs);
+       arming = false; pending = [];
+       redrawBase(); analyzeWound(); setStatus();
+     } else { drawPending(); setStatus(); }
+   }
+   WC.addEventListener("click", function (e) { tap(e.clientX, e.clientY); });
+   WC.addEventListener("touchstart", function (e) { if (arming) { e.preventDefault(); var t = e.touches[0]; tap(t.clientX, t.clientY); } }, { passive: false });
+ })();
 
  /* ══ Analyse audio réelle (autocorrélation F0) ══ */
  document.getElementById("voice-file").addEventListener("change", function () {
@@ -6431,12 +6724,17 @@ window.OMNI_MODULES=[
  var motionBuf = [], sensorsOn = false;
  function startChatSensors() {
  if (sensorsOn) return; sensorsOn = true;
- /* capteur mouvement partagé (OMNI_MOTION): un seul écouteur devicemotion pour toute l'app */
+ /* capteur mouvement partagé (OMNI_MOTION): un seul écouteur devicemotion pour toute l'app.
+    On ne s'abonne QUE si le mouvement est déjà accordé (Android/desktop, ou iOS accordé via
+    chute/RCP). Sinon, PAS d'abonnement muet : sur iOS 13+ l'écouteur ne recevrait rien, le
+    signal resterait absent — tremorNow() renvoie déjà null et on ne prétend rien mesurer. */
+ if (OMNI_MOTION.available() && OMNI_MOTION.isGranted()) {
  try {
  OMNI_MOTION.subscribe("chat", function (m) {
  motionBuf.push(m); if (motionBuf.length > 60) motionBuf.shift();
  });
  } catch (e) {}
+ }
  var inp = document.getElementById("chat-input");
  if (inp) inp.addEventListener("keydown", function (e) { if (e.key === "Backspace" || e.key === "Delete") SIG.edits++; });
  }
@@ -6751,11 +7049,31 @@ window.OMNI_MODULES=[
  var out = d.querySelector("#disp-pos");
  if (!navigator.geolocation) { out.textContent = " — géolocalisation indisponible: donnez un point de repère (rue, commerce, n° de route)."; return; }
  out.textContent = " — localisation en cours…";
+ /* Même garde que l'écran GPX : en cadre intégré, l'API peut ne jamais rappeler.
+    La garde évite un « localisation en cours… » figé et donne un repli honnête. */
+ var settled = false, guard = setTimeout(function () {
+ if (settled) return; settled = true;
+ var emb = !!(window.OMNI_PERM && window.OMNI_PERM.EMBEDDED);
+ out.textContent = " — localisation sans réponse (bloquée en aperçu intégré)"
+ + (emb ? " ; ouvrez l'app en plein écran" : "")
+ + " : donnez un point de repère précis (rue, commerce, borne kilométrique).";
+ }, 9000);
  navigator.geolocation.getCurrentPosition(function (p) {
+ if (settled) return; settled = true; clearTimeout(guard);
  var la = p.coords.latitude.toFixed(5), lo = p.coords.longitude.toFixed(5);
  out.innerHTML = " → <strong>" + la + ", " + lo + "</strong> (± " + Math.round(p.coords.accuracy) + " m). À lire au régulateur.";
- }, function () {
- out.textContent = " — position refusée/indisponible: donnez un point de repère précis (rue, commerce, borne kilométrique).";
+ }, function (err) {
+ if (settled) return; settled = true; clearTimeout(guard);
+ var c = err && err.code; /* 1 PERMISSION_DENIED · 2 POSITION_UNAVAILABLE · 3 TIMEOUT */
+ if (c === 1) {
+ var emb = !!(window.OMNI_PERM && window.OMNI_PERM.EMBEDDED);
+ out.textContent = " — position refusée. Autorisez la localisation (🔒/ⓘ → Localisation → Autoriser)"
+ + (emb ? " ou ouvrez l'app en plein écran (bloquée en mode intégré / cadre)" : "")
+ + ", ou donnez un point de repère précis (rue, commerce, borne kilométrique).";
+ } else {
+ out.textContent = (c === 3 ? " — délai GPS dépassé" : " — signal GPS indisponible")
+ + ": donnez un point de repère précis (rue, commerce, borne kilométrique).";
+ }
  }, { enableHighAccuracy: true, timeout: 8000 });
  });
  rec("chat", "Dispatch préparé → service " + r.num + " (" + r.why + ")");
@@ -7004,7 +7322,7 @@ window.OMNI_MODULES=[
  ["INTERMÉD.", "Reflux / spasme œsophagien", "Lien avec repas, position couchée; test IPP."],
  ["À EXCLURE", "Dissection aortique", "Douleur déchirante irradiant dans le dos, asymétrie tensionnelle — angio-CT en urgence."]
  ] },
- { id: "dyspnee", sys: "Respiratoire", re: /essouffl|dyspn|manque d'air|respir.*difficil|peine [àa] respirer|mal.{0,6}respirer/i,
+ { id: "dyspnee", sys: "Respiratoire", re: /essouffl|dyspn|manque d'air|respir.*difficil|peine [àa] respirer|mal.{0,6}respirer|n['’ ]?arrive plus [àa] respirer|arrive pas [àa] respirer|peux plus respirer|j['’ ]?[ée]touffe|s?uffoque|je respire mal|souffle court|plus d['’ ]?air/i,
  red: ["au repos ou à la parole", "lèvres bleues (cyanose)", "SpO₂ basse", "douleur thoracique associée"],
  src: "Dyspnée isolée comme mode de révélation d'un SCA chez la femme: Sörensen NA et al., J Am Heart Assoc. 2018;7(6):e007297. doi:10.1161/JAHA.117.007297 (PMID 29525782) — voir corpus/patterns/MTF-001",
  redAdvice: "144 si détresse respiratoire, cyanose ou SpO₂ < 92 %.",
@@ -7185,6 +7503,59 @@ window.OMNI_MODULES=[
  ["INTERMÉD.", "Hypothyroïdie", "Frilosité, prise de poids, constipation, peau sèche; TSH."],
  ["INTERMÉD.", "Apnée du sommeil / cause médicamenteuse", "Ronflements + pauses respiratoires + somnolence diurne; revue des traitements sédatifs, bêta-bloquants."],
  ["À EXCLURE", "Cause grave (infection chronique, cancer, insuffisance d'organe)", "Amaigrissement, sueurs nocturnes, fièvre, ganglions — bilan médical sans tarder."]
+ ] },
+ /* ── Motifs « à ne pas manquer » ajoutés le 07.08.2026 ─────────────────────
+    Critère de sélection unique : le délai au-delà duquel la perte est DÉFINITIVE
+    (organe, fertilité, vue, marche, vie). Chacun manquait au chat. */
+ { id: "testicule", sys: "Urologie — douleur testiculaire aiguë", re: /testicul|bourse|scrotum|couille|mal.{0,15}(aux? )?(testicul|bourse)/i,
+ red: ["douleur brutale d'un seul côté", "testicule remonté ou horizontal", "nausées/vomissements avec la douleur", "survenue nocturne réveillant le patient"],
+ src: "Torsion du cordon spermatique — le taux de sauvetage chute avec la durée d'ischémie : Raffee L et al., Seasonal Variations in Testicular Torsion: A Retrospective Study, Cureus. 2024;16(12):e76508. doi:10.7759/cureus.76508 (308 patients ; sauvetage 75 % dans les 24 h, 3,6 % au-delà de 72 h). Source retrouvée via PubMed.",
+ redAdvice: "URGENCE CHIRURGICALE — toute douleur testiculaire brutale est une torsion jusqu'à preuve du contraire : urgences MAINTENANT, ne rien manger ni boire (anesthésie probable). Chaque heure compte.",
+ ddx: [
+ ["À EXCLURE", "Torsion du cordon spermatique", "Début BRUTAL, douleur intense, testicule remonté/horizontal, nausées — exploration chirurgicale en urgence. Un doppler normal n'élimine PAS la torsion si la clinique est évocatrice."],
+ ["INTERMÉD.", "Orchi-épididymite", "Début plus progressif (heures/jours), fièvre, brûlures en urinant — consultation rapide, mais l'urgence chirurgicale doit d'abord être écartée."],
+ ["INTERMÉD.", "Torsion d'hydatide (appendice testiculaire)", "Enfant/adolescent, douleur du pôle supérieur, parfois point bleuté. Bénin mais indiscernable d'une torsion — même conduite urgente."],
+ ["INTERMÉD.", "Traumatisme / hématome", "Contexte de choc direct ; échographie pour éliminer une rupture de l'albuginée."]
+ ] },
+ { id: "pelvien", sys: "Gynécologie — douleur pelvienne / grossesse", re: /(douleur|mal).{0,25}(pelvi|bas.{0,5}ventre|ovaire|ut[ée]r)|retard de r[èe]gles|saignement.{0,20}(grossesse|enceinte)|enceinte.{0,25}(mal|douleur|saign)|test de grossesse/i,
+ red: ["retard de règles + douleur d'un seul côté", "saignement anormal avec douleur", "malaise, pâleur, vertiges", "douleur de l'épaule avec douleur du ventre"],
+ redAdvice: "144 si malaise, pâleur ou douleur intense : une grossesse extra-utérine peut saigner en dedans sans saignement visible. Toute douleur pelvienne chez une femme en âge d'avoir des enfants impose un test de grossesse — c'est la règle, pas une précaution.",
+ ddx: [
+ ["À EXCLURE", "Grossesse extra-utérine", "Retard de règles + douleur latéralisée ± saignement. Peut rompre et provoquer une hémorragie interne massive. Douleur à l'épaule = sang irritant le diaphragme, signe tardif et grave."],
+ ["À EXCLURE", "Torsion d'annexe (ovaire)", "Douleur brutale, intense, avec vomissements — urgence chirurgicale, l'ovaire se nécrose."],
+ ["INTERMÉD.", "Infection génitale haute (salpingite)", "Douleur des deux côtés, fièvre, pertes anormales — traitement rapide pour préserver la fertilité."],
+ ["INTERMÉD.", "Kyste ovarien (rupture/hémorragie)", "Douleur brutale souvent en milieu de cycle, s'atténuant en heures ; surveillance si état stable."],
+ ["ÉLEVÉE", "Dysménorrhée (douleur de règles)", "Cyclique, connue, calmée par les antalgiques habituels — reste un diagnostic d'élimination si le tableau change."]
+ ] },
+ { id: "oeil", sys: "Ophtalmologie — œil rouge / baisse de vision", re: /(œil|oeil|yeux).{0,25}(rouge|mal|douleur|gonfl)|(baisse|perte|trouble).{0,20}(de la )?(vue|vision)|vois? (flou|double|trouble)|halo.{0,15}lumi[èe]re|voile.{0,15}(noir|devant)/i,
+ red: ["baisse de vision brutale", "douleur oculaire intense avec nausées", "halos colorés autour des lumières", "voile noir ou rideau qui descend", "traumatisme ou projection de produit"],
+ redAdvice: "URGENCE OPHTALMOLOGIQUE le jour même — la vue perdue ne revient pas. Projection chimique : RINCER À L'EAU 20 MINUTES AVANT tout déplacement, puis urgences.",
+ ddx: [
+ ["À EXCLURE", "Glaucome aigu par fermeture de l'angle", "Œil rouge TRÈS douloureux, dur, vision floue avec halos, nausées — cécité possible en quelques heures. Urgence immédiate."],
+ ["À EXCLURE", "Décollement de rétine", "Éclairs lumineux, pluie de mouches noires, puis voile périphérique. Indolore — c'est le piège. Urgence le jour même."],
+ ["À EXCLURE", "Occlusion de l'artère centrale de la rétine", "Perte de vision brutale, totale, indolore, d'un œil — équivalent d'un AVC de l'œil : urgences immédiatement."],
+ ["INTERMÉD.", "Kératite / ulcère de cornée (lentilles)", "Douleur vive, larmoiement, gêne à la lumière, port de lentilles — avis rapide, retirer les lentilles."],
+ ["ÉLEVÉE", "Conjonctivite", "Rouge diffus, sensation de sable, sécrétions, vision CONSERVÉE — bénin. Si la vision baisse, ce n'est PAS une conjonctivite."]
+ ] },
+ { id: "lombaire", sys: "Rachis — lombalgie / sciatique", re: /(mal|douleur).{0,20}(au |de |du |dans le )?(dos|lombair|lombes)|lumbago|tour de rein|sciatique/i,
+ red: ["difficulté à uriner ou fuites", "perte de sensibilité entre les cuisses (selle)", "faiblesse des deux jambes", "fièvre avec douleur du dos", "douleur après un traumatisme", "amaigrissement ou antécédent de cancer"],
+ redAdvice: "144 / urgences SANS ATTENDRE si troubles pour uriner, perte de sensibilité de la zone de la selle ou faiblesse des jambes : syndrome de la queue de cheval, la récupération se joue en heures.",
+ ddx: [
+ ["À EXCLURE", "Syndrome de la queue de cheval", "Troubles sphinctériens (rétention/fuites), anesthésie en selle, déficit moteur bilatéral — chirurgie en urgence, séquelles définitives sinon."],
+ ["À EXCLURE", "Spondylodiscite / abcès épidural", "Fièvre + douleur du dos, terrain (immunodépression, toxicomanie IV, chirurgie récente) — imagerie urgente."],
+ ["À EXCLURE", "Fracture vertébrale", "Traumatisme, ou choc minime chez la personne âgée/ostéoporotique/sous corticoïdes — imagerie."],
+ ["ÉLEVÉE", "Lombalgie commune", "Effort déclenchant, douleur mécanique, AUCUN drapeau rouge — mobilisation précoce, pas d'imagerie systématique, éviter l'alitement."],
+ ["INTERMÉD.", "Sciatique par hernie discale", "Douleur descendant dans une jambe sous le genou, trajet précis ; réévaluer si déficit moteur qui s'aggrave."]
+ ] },
+ { id: "jambe", sys: "Vasculaire — jambe gonflée / douloureuse", re: /(jambe|mollet|cheville).{0,25}(gonfl|enfl|dur|chaud|rouge|douloureu)|(gonfl|enfl).{0,20}(jambe|mollet|cheville)|phl[ée]bite|thrombose/i,
+ red: ["gonflement d'UN SEUL côté", "mollet chaud, dur, douloureux", "essoufflement ou douleur thoracique associée", "immobilisation, plâtre, voyage long ou chirurgie récente"],
+ redAdvice: "144 IMMÉDIATEMENT si essoufflement, douleur thoracique ou malaise s'ajoutent : embolie pulmonaire. Sinon avis médical le jour même — ne pas masser le mollet.",
+ ddx: [
+ ["À EXCLURE", "Thrombose veineuse profonde", "Gonflement unilatéral, mollet chaud/tendu, facteur déclenchant (immobilisation, vol long, chirurgie, cancer, contraception, grossesse) — échodoppler rapide."],
+ ["À EXCLURE", "Embolie pulmonaire (complication)", "Essoufflement brutal, douleur au souffle, cœur rapide, malaise — urgence vitale, 144."],
+ ["INTERMÉD.", "Érysipèle / dermohypodermite", "Rouge vif bien limité, chaud, fièvre, porte d'entrée cutanée — antibiothérapie rapide."],
+ ["INTERMÉD.", "Œdème des deux côtés / insuffisance veineuse", "Gonflement bilatéral vespéral, amélioré jambes surlevées ; si bilatéral, penser aussi cœur, reins, foie, médicaments."],
+ ["ÉLEVÉE", "Entorse / déchirure musculaire", "Contexte de faux mouvement ou de choc, douleur localisée d'emblée."]
  ] }
   ];
  /* Questions discriminantes par motif: chaque réponse ajuste les hypothèses (nom → poids) */
@@ -9252,9 +9623,11 @@ window.OMNI_MODULES=[
  cprobs.push({
  t: "Analyse d'image cutanée" + (S.wound.loc ? " — " + S.wound.loc: ""),
  d: "surface évocatrice " + S.wound.surface.toFixed(2) + " %" +
+ (S.wound.areaCm2 != null ? " · aire calibrée ≈ " + (S.wound.areaCm2 < 1 ? S.wound.areaCm2.toFixed(2) : S.wound.areaCm2.toFixed(1)) + " cm² (± ~" + S.wound.calUnc + " %, non certifié)" : "") +
  (S.wound.abcde ? " · critères ABCDE " + S.wound.abcde.n + "/" + S.wound.abcde.total + " atypiques": "") +
  (S.wound.quality && S.wound.quality.length ? " · image limitée (" + S.wound.quality.join(", ") + ")": ""),
- inv: "Mesures sur pixels: érythème " + S.wound.erytheme.toFixed(2) + " % · profond " + S.wound.profond.toFixed(2) + " % · jaunâtre " + S.wound.jaunatre.toFixed(2) + " % [I]",
+ inv: "Mesures sur pixels: érythème " + S.wound.erytheme.toFixed(2) + " % · profond " + S.wound.profond.toFixed(2) + " % · jaunâtre " + S.wound.jaunatre.toFixed(2) + " %" +
+ (S.wound.diamMm != null ? " · diamètre ≈ " + S.wound.diamMm.toFixed(0) + " mm (référence d'échelle posée)" : " · sans référence d'échelle: pas de mm") + " [I]",
  att: (S.wound.abcde && S.wound.abcde.n >= 2)
  ? "Avis dermatologique — plusieurs critères ABCDE atypiques. Une photo 2D ne remplace pas l'examen (le critère d'évolution ne peut pas être mesuré sur une seule image).": "Photographier à distance fixe pour suivre l'évolution; avis médical si changement, saignement ou douleur."
  });
@@ -9585,7 +9958,7 @@ window.OMNI_MODULES=[
  triage: "Triage IA", gcs: "Glasgow", qsofa: "qSOFA", wells: "Wells EP",
  news2: "NEWS2", start: "START", rppg: "Pouls rPPG", voice: "Voix F0",
  cyp: "CYP3A4", gps: "Position", rcp: "RCP", garrot: "Garrot",
- photo3d: "Photogrammétrie 3D", plaie: "Analyse plaie", gonio: "Goniométrie photo",
+ photo3d: "Mesures photo calibrée", plaie: "Analyse plaie", gonio: "Goniométrie photo",
  docmed: "Analyse document", docgen: "Document généré", chat: "Chat médical",
  autonome: "App autonome", scorespro: "Score professionnel", evaluation: "Évaluation silencieuse",
  guides: "Guide gestes", citoyen: "Citoyen sauveteur", refs: "Référence pro", annuaire: "Annuaire"
@@ -9751,18 +10124,25 @@ window.OMNI_MODULES=[
  if (watchdog) { clearTimeout(watchdog); watchdog = null; }
  btn.textContent = "Mesurer ma cadence réelle";
  }
+ /* Embarqué : nommer le blocage réel (accelerometer/gyroscope non délégués par Permissions-Policy)
+    plutôt que « capteur absent (ordinateur ?) », et rappeler le métronome sonore de repli. */
+ function embedded() { return !!(window.OMNI_PERM && window.OMNI_PERM.EMBEDDED); }
+ var EMB_MOVE = "Capteur de mouvement bloqué en mode intégré : la page hôte ne délègue pas « accelerometer/gyroscope » via Permissions-Policy. Ouvrez l'application en plein écran / autonome. Le métronome sonore ci-dessus reste votre guide.";
  btn.addEventListener("click", async function () {
  if (on) { stop(); return; }
  if (!OMNI_MOTION.available()) {
- note.innerHTML = "<strong style='color:var(--amber)'>Capteur de mouvement absent dans ce contexte</strong> (ordinateur ?) — la mesure de cadence fonctionne sur téléphone. Le métronome sonore ci-dessus reste votre guide. " + NOTE0;
+ note.innerHTML = "<strong style='color:var(--amber)'>" + (embedded() ? EMB_MOVE
+ : "Capteur de mouvement absent dans ce contexte (ordinateur ?) — la mesure de cadence fonctionne sur téléphone. Le métronome sonore ci-dessus reste votre guide.") + "</strong> " + NOTE0;
  return; /* repli honnête, pas de simulation */
  }
  if (OMNI_MOTION.needsPermission()) note.innerHTML = "Autorisation « Mouvement et orientation » demandée: elle sert uniquement à mesurer la cadence des compressions, sur cet appareil. " + NOTE0;
  var r = await OMNI_MOTION.ensurePermission();
  if (r !== "granted") {
- note.innerHTML = "<strong style='color:var(--amber)'>" + (r === "unsupported"
- ? "Capteur de mouvement absent dans ce contexte — la mesure fonctionne sur téléphone."
- : "Permission mouvement refusée — réactivable dans les réglages du navigateur.") + "</strong> Le métronome sonore reste votre guide. " + NOTE0;
+ note.innerHTML = "<strong style='color:var(--amber)'>" + (embedded() ? EMB_MOVE
+ : r === "insecure" ? "Capteur mouvement indisponible : contexte non sécurisé (HTTPS requis)."
+ : r === "nogesture" ? "Autorisation mouvement à relancer d'un geste : touchez de nouveau « Mesurer ma cadence réelle »."
+ : r === "unsupported" ? "Capteur de mouvement absent dans ce contexte — la mesure fonctionne sur téléphone. Le métronome sonore reste votre guide."
+ : "Permission mouvement refusée — réactivable dans les réglages du navigateur. Le métronome sonore reste votre guide.") + "</strong> " + NOTE0;
  return;
  }
  on = true; peaks = []; over = false; lastPeak = 0; evCount = 0;
@@ -9989,7 +10369,7 @@ window.OMNI_MODULES=[
 })();
 </script>
 <script id="srom-addons-2026-js">
-/* Bloc additif 2026 — favoris + photogrammétrie multi-angles. 100% local, retirable. */
+/* Bloc additif 2026 — favoris + album de documentation photo. 100% local, retirable. */
 (function(){ "use strict"; try{
   /* Annuaire : les 480 praticiens bundlés sont des données PROFESSIONNELLES PUBLIQUES
      (chefs de service HUG/CHUV, numéros de centrale publics) — pas des données patients ;
@@ -10026,20 +10406,20 @@ window.OMNI_MODULES=[
   function close(){ if(sheet)sheet.classList.remove("open"); if(lastFocus&&lastFocus.focus){ try{lastFocus.focus();}catch(e){} } }
   var fb=$("fav-edit-btn"); if(fb) fb.addEventListener("click", open);
   renderFavs();
-  /* Photogrammétrie multi-angles */
-  (function(){ var consent=$("pg-consent"),file=$("pg-file"),capLbl=$("pg-cap-lbl"),clr=$("pg-clear"),grid=$("pg-grid"),cnt=$("pg-count"),guide=$("pg-guide"),prep=$("pg-prep"),verdict=$("pg-verdict");
+  /* Album de documentation photo horodaté */
+  (function(){ var consent=$("pg-consent"),file=$("pg-file"),capLbl=$("pg-cap-lbl"),clr=$("pg-clear"),grid=$("pg-grid"),cnt=$("pg-count"),guide=$("pg-guide");
     if(!consent||!file||!grid) return;
     var A=["Face antérieure","Profil externe","Profil interne","Face postérieure","3/4 antéro-externe","3/4 antéro-interne","3/4 postéro-externe","3/4 postéro-interne","Vue proximale","Vue distale","Détail lésion (près)","Détail lésion (autre bord)"];
     var n=0;
+    function hhmm(){ try{ return new Date().toLocaleTimeString("fr-CH",{hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
     function enable(on){ file.disabled=!on; if(clr)clr.disabled=!on; if(capLbl)capLbl.setAttribute("aria-disabled",on?"false":"true"); }
     function nextGuide(){ if(!guide)return; if(n===0)guide.textContent="Cliché 1 — "+A[0]+". Appareil parallèle au membre, cadrage net."; else if(n<A.length)guide.textContent="Cliché "+(n+1)+" — "+A[n]+". Tournez d'environ 30° autour du membre."; else guide.textContent="Cliché "+(n+1)+" — angle libre supplémentaire (recouvrement conseillé)."; }
-    function refreshPrep(){ if(prep) prep.disabled=n<3; }
-    function update(){ if(cnt)cnt.textContent=n+" cliché"+(n>1?"s":"")+" — visez ~12 angles autour du membre"; nextGuide(); refreshPrep(); if(verdict&&n<3)verdict.style.display="none"; }
+    function update(){ if(cnt)cnt.textContent=n+" cliché"+(n>1?"s":"")+" horodaté"+(n>1?"s":"")+" — visez ~12 angles autour du membre"; nextGuide(); }
     consent.addEventListener("change", function(){ var on=consent.checked; enable(on); if(on)nextGuide(); else if(guide)guide.textContent="Cochez le consentement pour activer la capture."; });
-    function renumber(){ grid.querySelectorAll(".am-pg-thumb").forEach(function(el,i){ var b=el.querySelector(".am-pg-badge"); if(b)b.textContent=i+1; }); }
-    function addThumb(src,idx){ var d=document.createElement("div"); d.className="am-pg-thumb";
-      var img=document.createElement("img"); img.src=src; img.alt="Cliché "+idx+(A[idx-1]?(" — "+A[idx-1]):"");
-      var bd=document.createElement("span"); bd.className="am-pg-badge"; bd.textContent=idx;
+    function renumber(){ grid.querySelectorAll(".am-pg-thumb").forEach(function(el,i){ var b=el.querySelector(".am-pg-badge"); if(b){ var ts=b.getAttribute("data-ts")||""; b.textContent=(i+1)+(ts?(" · "+ts):""); } }); }
+    function addThumb(src,idx){ var d=document.createElement("div"); d.className="am-pg-thumb"; var t=hhmm();
+      var img=document.createElement("img"); img.src=src; img.alt="Cliché "+idx+(A[idx-1]?(" — "+A[idx-1]):"")+(t?(" — "+t):"");
+      var bd=document.createElement("span"); bd.className="am-pg-badge"; bd.setAttribute("data-ts",t); bd.textContent=idx+(t?(" · "+t):"");
       var rm=document.createElement("button"); rm.type="button"; rm.setAttribute("aria-label","Supprimer le cliché "+idx); rm.textContent="×";
       rm.addEventListener("click", function(){ d.remove(); n=Math.max(0,n-1); renumber(); update(); });
       d.appendChild(img); d.appendChild(bd); d.appendChild(rm); grid.appendChild(d); }
@@ -10049,8 +10429,7 @@ window.OMNI_MODULES=[
         im.onerror=function(){ if(guide)guide.textContent="Cliché illisible (format non pris en charge, souvent HEIC d'iPhone) — non ajouté. Reprenez en JPEG (iPhone: Réglages → Appareil photo → Formats → « Le plus compatible ») ou choisissez une image de la galerie."; }; im.src=r.result; };
       r.readAsDataURL(f); }
     file.addEventListener("change", function(){ var fs=file.files; if(!fs)return; Array.prototype.slice.call(fs).forEach(handle); file.value=""; });
-    if(clr) clr.addEventListener("click", function(){ grid.innerHTML=""; n=0; update(); if(verdict)verdict.style.display="none"; });
-    if(prep) prep.addEventListener("click", function(){ if(!verdict)return; verdict.style.display="block"; verdict.innerHTML="<strong>"+n+" clichés prêts, en local.</strong> La reconstruction 3D métrique précise (maillage, mesures d'angulation et de circonférence) demande un <strong>traitement serveur</strong> (pipeline capture guidée → maillage). Cette étape est sur la <strong>feuille de route</strong>, pas encore active. Aucun envoi n'a eu lieu."; });
+    if(clr) clr.addEventListener("click", function(){ grid.innerHTML=""; n=0; update(); });
   })();
 }catch(e){ if(window.console&&console.warn) console.warn("addons-2026:",e); } })();
 </script>
@@ -10210,12 +10589,18 @@ window.OMNI_MODULES=[
  var t=null, ctrl=null;
  IN.addEventListener("input", function(){ var q=IN.value.trim(); if(t)clearTimeout(t);
   if(q.length<2){ ST.textContent="Tapez au moins 2 caractères."; LIST.innerHTML=""; return; }
-  render(offline(q), "socle hors-ligne");
+  var local=offline(q); render(local, "socle hors-ligne");
   t=setTimeout(function(){ ST.textContent="Recherche complète (NLM)…";
+   /* Dégradé honnête : si l'appel réseau échoue OU ne répond pas (cadre intégré, coupure),
+      on remplace le statut « Recherche complète… » figé par le socle embarqué chiffré. */
+   var settled=false;
+   function degrade(){ if(settled)return; settled=true; try{if(ctrl)ctrl.abort();}catch(e){} ST.textContent="Hors-ligne — socle embarqué ("+local.length+" résultat(s))"; }
+   var guard=setTimeout(degrade, 6000);
    try{ if(ctrl)ctrl.abort(); ctrl=new AbortController(); }catch(e){ ctrl=null; }
    var url="https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&maxList=60&terms="+encodeURIComponent(q);
-   fetch(url, ctrl?{signal:ctrl.signal}:{}).then(function(r){return r.json();}).then(function(d){ var rows=(d&&d[3])||[];
-    if(rows.length){ render(rows, "ICD-10-CM complet · NLM ("+((d&&d[0])||rows.length)+" au total)"); if(window.__cimCacheRows)window.__cimCacheRows(rows); } }).catch(function(){ ST.textContent+=" · hors-ligne (socle + cache)"; });
+   fetch(url, ctrl?{signal:ctrl.signal}:{}).then(function(r){return r.json();}).then(function(d){ if(settled)return; settled=true; clearTimeout(guard); var rows=(d&&d[3])||[];
+    if(rows.length){ render(rows, "ICD-10-CM complet · NLM ("+((d&&d[0])||rows.length)+" au total)"); if(window.__cimCacheRows)window.__cimCacheRows(rows); }
+    else { ST.textContent="Hors-ligne — socle embarqué ("+local.length+" résultat(s))"; } }).catch(function(){ if(settled)return; settled=true; clearTimeout(guard); ST.textContent="Hors-ligne — socle embarqué ("+local.length+" résultat(s))"; });
   }, 280); });
 }catch(e){ if(window.console&&console.warn)console.warn("cim",e); } })();
 </script>
@@ -10247,6 +10632,29 @@ window.OMNI_MODULES=[
    next(); };
  openDB(function(){ if(window.__cimCache.length<50 && navigator.onLine!==false){ setTimeout(window.__cimSeed,1800); } });
  (function(){ var b=document.getElementById("cim-cache-btn"); if(b) b.addEventListener("click", function(e){ e.preventDefault(); window.__cimSeed(); }); })();
+})();
+</script>
+<script>
+/* EXEMPLES DE DÉMONSTRATION (capteurs). En cadre intégré (artefact), caméra/micro sont
+   bloqués : ces boutons montrent une sortie ILLUSTRATIVE FIXE, explicitement marquée
+   « démonstration — pas une mesure patient ». Le vrai capteur reste prioritaire quand il
+   est disponible (ces exemples ne remplacent jamais une mesure et n'écrivent pas #bpm). */
+(function(){ "use strict";
+ var BADGE="<strong style='display:block;color:var(--amber)'>DÉMONSTRATION — pas une mesure patient</strong>";
+ function wire(btnId, outId, body){
+  var btn=document.getElementById(btnId), out=document.getElementById(outId);
+  if(!btn||!out) return;
+  btn.addEventListener("click", function(){
+   out.className="verdict show v-P2";
+   out.style.display="block";
+   out.innerHTML=BADGE+"<p style='margin-top:6px'>"+body+"</p>";
+   if(typeof rec==="function") rec("demo", btnId.replace("-demo","")+" — exemple de démonstration affiché (pas une mesure)");
+  });
+ }
+ wire("vitals-demo","vitals-demo-out","Exemple de sortie rPPG : <strong>72 bpm</strong> · rythme normal (60–100). Sur un appareil réel, la valeur provient de la variation du canal rouge de votre peau (photopléthysmographie), mesurée sur cet appareil.");
+ wire("voice-demo","voice-verdict","Exemple d'analyse vocale : <strong>F0 165 Hz · jitter 0,6 % · voisement 82 %</strong> — repères indicatifs, non diagnostiques. Sur un appareil réel, ces valeurs sont calculées en direct par autocorrélation.");
+ wire("scene-demo","scene-demo-out","Exemple d'indicateurs de scène : <strong>éclairage faible · mouvement modéré · horodatage 14:32</strong>. Sur un appareil réel, ces indicateurs sont calculés sur les pixels, sur cet appareil — aide à l'observation, jamais un diagnostic.");
+ wire("visio-demo","visio-demo-out","Exemple : <strong>aperçu local actif · minuterie 00:12</strong> · liaison chiffrée bout-en-bout (à venir). Sur un appareil réel, votre caméra s'affiche localement ; rien n'est transmis.");
 })();
 </script>
 <script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").then(function(reg){try{reg.update();setInterval(function(){try{reg.update();}catch(e){}},3600000);}catch(e){}}).catch(function(){});var _rf=false;navigator.serviceWorker.addEventListener("controllerchange",function(){if(_rf)return;_rf=true;location.reload();});});}</script>
