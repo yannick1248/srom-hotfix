@@ -402,6 +402,41 @@
  body.eco-urgence *, body.eco-urgence *::before, body.eco-urgence *::after { animation: none !important; transition: none !important; }
  body.eco-urgence .card { box-shadow: none; }
 </style>
+<style id="grid2col">
+/* Grille des modules en 2 colonnes — recommandation de la session parallèle.
+   Réversible : supprimer ce bloc rétablit l'ancienne grille auto-fill.
+   Objectif : sur un téléphone, voir plus de modules d'un coup d'œil sans
+   scroller, tout en gardant des libellés lisibles. */
+.mod-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}
+.mod{padding:12px 11px;gap:9px;align-items:flex-start}
+.mod .tile{flex:0 0 auto}
+.mod .m-t{font-size:13px;line-height:1.25;display:block;
+ overflow-wrap:anywhere;hyphens:auto}
+.mod .m-d{font-size:10.5px;line-height:1.3;display:block;margin-top:2px;opacity:.78;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dispo-tag{font-size:9.5px}
+/* Écran large : on peut en montrer plus sans tasser. */
+@media (min-width:720px){
+ .mod-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:11px}
+ .mod{padding:14px 13px}
+ .mod .m-t{font-size:13.5px}
+}
+@media (min-width:1080px){
+ .mod-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+/* Confort de lecture général : hiérarchie plus nette entre titre et sous-titre. */
+.mod .m-t{font-weight:650;letter-spacing:-.005em}
+</style>
+<style id="dispo-skin">
+.dispo-tag{display:block;margin-top:5px;font-size:10px;font-weight:600;letter-spacing:.02em;
+ color:var(--amber,#F59E0B);text-transform:none;line-height:1.25}
+.mod-indispo{position:relative}
+.mod-indispo .tile{opacity:.62}
+.dispo-note{margin:10px 0 14px;padding:11px 13px;border-radius:10px;font-size:12.5px;line-height:1.5;
+ border-left:3px solid var(--amber,#F59E0B);background:rgba(245,158,11,.07);color:var(--text-muted,#94a3b8)}
+.dispo-note strong{color:var(--text,#e2e8f0)}
+.dispo-note em{display:block;margin-top:5px;opacity:.85;font-style:normal;font-size:12px}
+</style>
 <style id="nt-skin">
 .nlabel{display:block;font-size:12.5px;font-weight:600;margin:10px 0 4px;color:var(--text-muted,#94a3b8)}
 .ninput{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid var(--border-strong,#334155);background:var(--surface,#0f172a);color:inherit;font:inherit;font-size:14.5px}
@@ -897,7 +932,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <div class="mod-grid">
  <button class="mod" data-v="triage" style="--tile:var(--red)"><span class="tile">TRI</span><span><span class="m-t">Triage clinique unifié</span><br><span class="m-d">Vital + différentiel + afflux massif</span></span></button>
  <button class="mod" data-v="protocoles" style="--tile:var(--red)"><span class="tile">P1</span><span><span class="m-t">Protocoles d'urgence</span><br><span class="m-d">RCP · PLS · FAST · anaphylaxie</span></span></button>
- <button class="mod" data-v="guides" style="--tile:var(--red)"><span class="tile">GDE</span><span><span class="m-t">Guides gestes qui sauvent</span><br><span class="m-d">24 fiches + BLS/ACLS/PALS</span></span></button>
+ <button class="mod" data-v="guides" style="--tile:var(--red)"><span class="tile">GDE</span><span><span class="m-t">Gestes qui sauvent</span><br><span class="m-d">24 fiches + BLS/ACLS/PALS</span></span></button>
  <button class="mod" data-v="start" style="--tile:var(--amber)"><span class="tile">SALT</span><span><span class="m-t">Afflux massif (START)</span><br><span class="m-d">Intégré au triage unifié</span></span></button>
  <button class="mod" data-v="sos" style="--tile:var(--red)"><span class="tile">SOS</span><span><span class="m-t">SOS Morse</span><br><span class="m-d">Flash + torche + vibration · chute</span></span></button>
  <button class="mod" data-v="rcp" style="--tile:var(--red)"><span class="tile">RCP</span><span><span class="m-t">Métronome RCP</span><br><span class="m-d">110/min · audio + compteur 30:2</span></span></button>
@@ -919,7 +954,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <button class="mod" data-v="scores" style="--tile:var(--blue)"><span class="tile">GCS</span><span><span class="m-t">Scores cliniques</span><br><span class="m-d">Glasgow · qSOFA · Wells · NEWS2</span></span></button>
  <button class="mod" data-v="scorespro" style="--tile:var(--blue)"><span class="tile">S31</span><span><span class="m-t">Scores professionnels</span><br><span class="m-d">31 scores · moteur original</span></span></button>
  <button class="mod" data-v="cyp" style="--tile:var(--violet)"><span class="tile">3A4</span><span><span class="m-t">Interactions CYP3A4</span><br><span class="m-d">Sécurité médicamenteuse</span></span></button>
- <button class="mod" data-v="psyeval" style="--tile:var(--violet)"><span class="tile">ÉPA</span><span><span class="m-t">Éval. psychiatrique adaptative</span><br><span class="m-d">Dépistage clinique — PHQ-9, GAD-7, C-SSRS, AUDIT-C</span></span></button>
+ <button class="mod" data-v="psyeval" style="--tile:var(--violet)"><span class="tile">ÉPA</span><span><span class="m-t">Éval. psychiatrique</span><br><span class="m-d">Dépistage clinique — PHQ-9, GAD-7, C-SSRS, AUDIT-C</span></span></button>
  </div>
  </section>
  <section class="mod-fam" role="region" aria-label="Échange, soutien &amp; communication">
@@ -945,7 +980,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <div class="mod-grid">
  <button class="mod" data-v="biblio" style="--tile:var(--blue)"><span class="tile">BIB</span><span><span class="m-t">Bibliothèque</span><br><span class="m-d">Bases de données consultables</span></span></button>
  <button class="mod" data-v="refs" style="--tile:var(--blue)"><span class="tile">MSD</span><span><span class="m-t">Références pro</span><br><span class="m-d">Manuel MSD · HUG · Compendium · Vidal</span></span></button>
- <button class="mod" data-v="annuaire" style="--tile:var(--blue)"><span class="tile">ANN</span><span><span class="m-t">Annuaire médical suisse</span><br><span class="m-d">2 026 institutions · urgences · cantons</span></span></button>
+ <button class="mod" data-v="annuaire" style="--tile:var(--blue)"><span class="tile">ANN</span><span><span class="m-t">Annuaire médical</span><br><span class="m-d">2 026 institutions · urgences · cantons</span></span></button>
  <button class="mod" data-v="cim" style="--tile:var(--blue)"><span class="tile">CIM</span><span><span class="m-t">CIM-10 diagnostics</span><br><span class="m-d">Codes ICD-10 · recherche complète (NLM)</span></span></button>
  </div>
  </section>
@@ -2652,7 +2687,7 @@ Mon médecin / thérapeute: </textarea>
  <!-- ═══ ANNUAIRE MÉDICAL SUISSE ═══ -->
  <div class="view" id="v-annuaire">
  <button class="back" data-back>← Retour</button>
- <h2>Annuaire médical suisse</h2>
+ <h2>Annuaire médical</h2>
  <p class="lede"><strong>2 026 institutions</strong> de santé et sociales (répertoire officiel, sources tracées). Filtrez par canton, cherchez par nom, ville ou spécialité, et <strong>appelez en un tap</strong>.</p>
  <div class="modes" style="margin-bottom:10px">
  <button class="launch sec" id="ann-mode-inst" style="flex:1">Institutions</button>
@@ -8292,6 +8327,60 @@ window.OMNI_MODULES=[
  ["ÉLEVÉE", "Lombalgie commune", "Effort déclenchant, douleur mécanique, AUCUN drapeau rouge — mobilisation précoce, pas d'imagerie systématique, éviter l'alitement."],
  ["INTERMÉD.", "Sciatique par hernie discale", "Douleur descendant dans une jambe sous le genou, trajet précis ; réévaluer si déficit moteur qui s'aggrave."]
  ] },
+ { id: "etouffement", sys: "Urgence vitale — obstruction des voies aériennes", re: /[ée]touffe|s['e ]?[ée]trangle|coinc[ée]\w*\s+dans\s+(la\s+)?gorge|avale\s+de\s+travers|fausse\s+route|obstruction\s+des\s+voies|corps\s+[ée]tranger/i,
+ red: ["ne peut plus parler ni tousser", "porte les mains à la gorge", "lèvres qui bleuissent", "perte de connaissance"],
+ redAdvice: "144 IMMÉDIATEMENT. Si la personne ne peut NI parler NI tousser : 5 claques dans le dos, puis 5 compressions abdominales (Heimlich), en alternance jusqu'à expulsion ou perte de connaissance — puis réanimation. Si elle tousse encore, ENCOURAGEZ la toux et ne tapez pas dans le dos : la toux est plus efficace que tout geste.",
+ ddx: [
+ ["À EXCLURE", "Obstruction complète des voies aériennes", "Silence, impossibilité de parler ou tousser, mains à la gorge : quelques minutes avant l'arrêt. Claques dorsales + Heimlich sans attendre."],
+ ["INTERMÉD.", "Obstruction partielle", "La personne tousse, siffle, parle encore : ne pas intervenir mécaniquement, encourager la toux, surveiller sans quitter des yeux."],
+ ["INTERMÉD.", "Œdème de la gorge (allergie)", "Gonflement des lèvres ou de la langue, urticaire : anaphylaxie — adrénaline IM si auto-injecteur, 144."]
+ ] },
+ { id: "hemorragie", sys: "Traumatologie — plaie et saignement", re: /je\s+saigne|[çc]a\s+saigne|h[ée]morragi|coup[ée]\w*\s+(profond|tr[èe]s\s+fort)|plaie\s+(profonde|qui\s+saigne)|sang\s+qui\s+(coule|gicle)|entaill/i,
+ red: ["le sang gicle ou ne s'arrête pas", "pâleur, sueurs froides, malaise", "plaie profonde ou souillée", "corps étranger planté dans la plaie"],
+ redAdvice: "144 si le saignement ne s'arrête pas, gicle, ou si la personne pâlit et se sent mal. COMPRIMEZ FORT et sans relâcher, directement sur la plaie, avec un tissu propre — ajoutez par-dessus sans jamais retirer. Allongez la personne. NE RETIREZ PAS un objet planté : comprimez autour. Vérifiez la vaccination antitétanique.",
+ ddx: [
+ ["À EXCLURE", "Hémorragie sévère (choc hémorragique)", "Saignement qui ne cède pas à la compression, pâleur, pouls rapide, malaise : urgence vitale — compression et 144, garrot en dernier recours sur un membre."],
+ ["ÉLEVÉE", "Plaie simple", "Saignement qui s'arrête à la compression : nettoyer à l'eau et au savon, protéger. Consulter si profonde, béante, au visage, ou souillée."],
+ ["INTERMÉD.", "Plaie à risque infectieux", "Morsure, plaie souillée, corps étranger : avis médical, vaccination antitétanique, parfois antibiotiques."],
+ ["INTERMÉD.", "Saignement sous anticoagulant", "Sous AVK ou AOD, un saignement banal peut ne pas s'arrêter : avis médical même si la plaie paraît petite."]
+ ] },
+ { id: "brulure", sys: "Traumatologie — brûlure", re: /br[ûu]l[ée]\w*|je\s+me\s+suis\s+br[ûu]l|[ée]chaud[ée]|eau\s+bouillante/i,
+ red: ["brûlure plus grande que la paume de la personne", "visage, mains, pieds, articulations ou parties génitales", "brûlure profonde, blanche, cartonnée ou indolore", "brûlure électrique ou chimique", "gêne respiratoire, suie autour du nez ou de la bouche"],
+ redAdvice: "REFROIDIR TOUT DE SUITE à l'eau tempérée (15-25 °C) pendant 15 à 20 minutes — c'est le geste qui limite la profondeur, et il reste utile même différé. Retirer bagues et vêtements non collés. NE JAMAIS mettre de glace, de beurre ou de dentifrice, ne pas percer les cloques. 144 si étendue, profonde, au visage ou aux mains, électrique, chimique, ou si la respiration est gênée.",
+ ddx: [
+ ["À EXCLURE", "Brûlure grave ou des voies aériennes", "Étendue, profonde, circonférentielle, ou inhalation de fumée (suie, voix rauque, toux) : l'œdème peut fermer les voies aériennes en quelques heures — 144."],
+ ["ÉLEVÉE", "Brûlure superficielle (1er degré)", "Rouge, douloureuse, sans cloque : refroidir, hydrater, surveiller. Guérit seule en quelques jours."],
+ ["INTERMÉD.", "Brûlure du 2e degré", "Cloques, très douloureuse : refroidir, protéger sans percer, avis médical — surtout chez l'enfant et la personne âgée."],
+ ["INTERMÉD.", "Brûlure chimique", "Rincer abondamment et longuement à l'eau AVANT tout déplacement ; ne pas chercher à neutraliser. Garder l'emballage du produit."]
+ ] },
+ { id: "tc", sys: "Traumatologie — traumatisme crânien", re: /cogn[ée]\w*\s+la\s+t[êe]te|tap[ée]\w*\s+la\s+t[êe]te|coup\s+sur\s+la\s+t[êe]te|traumatisme\s+cr[âa]nien|tomb[ée]\w*.{0,24}t[êe]te|chute.{0,20}t[êe]te/i,
+ red: ["perte de connaissance, même brève", "vomissements répétés", "somnolence, confusion, comportement inhabituel", "maux de tête qui s'aggravent", "personne sous anticoagulant", "convulsion, écoulement par le nez ou l'oreille"],
+ redAdvice: "144 en cas de perte de connaissance, vomissements répétés, somnolence, confusion, convulsion, ou si la personne prend un anticoagulant — même si elle semble aller bien. Ne pas la laisser seule les 24 premières heures : un hématome peut se constituer après un intervalle où tout paraît normal.",
+ ddx: [
+ ["À EXCLURE", "Hématome extradural ou sous-dural", "L'intervalle libre est le piège : la personne va bien, puis se dégrade. Toute somnolence, tout vomissement répété ou toute aggravation impose une imagerie en urgence."],
+ ["À EXCLURE", "Traumatisme sous anticoagulant", "Sous AVK ou AOD, un choc mineur peut saigner dans le crâne : avis médical systématique, même sans symptôme."],
+ ["ÉLEVÉE", "Commotion simple", "Pas de perte de connaissance, examen normal : surveillance 24 h par un proche, repos, pas d'écran ni de sport, reconsulter si aggravation."],
+ ["INTERMÉD.", "Lésion cervicale associée", "Douleur du cou, fourmillements : immobiliser la tête dans l'axe, ne pas mobiliser, 144."]
+ ] },
+ { id: "convulsion", sys: "Neurologie — crise convulsive", re: /convuls|crise\s+d['e ]?[ée]pilepsi|[ée]pileptiq|a\s+fait\s+une\s+crise|tremblait\s+de\s+partout|secousses?\s+de\s+tout\s+le\s+corps/i,
+ red: ["crise de plus de 5 minutes", "crises qui se répètent sans reprise de conscience", "première crise de la vie", "fièvre chez l'enfant", "grossesse", "traumatisme associé"],
+ redAdvice: "144 si la crise dure plus de 5 minutes, se répète, ou s'il s'agit d'une première crise. PENDANT : ne rien mettre dans la bouche, ne pas immobiliser, écarter ce qui peut blesser, noter l'heure de début. APRÈS : position latérale de sécurité, rester jusqu'au réveil complet.",
+ ddx: [
+ ["À EXCLURE", "État de mal épileptique", "Crise de plus de 5 minutes, ou crises enchaînées sans reprise de conscience : urgence vitale, 144."],
+ ["À EXCLURE", "Hypoglycémie", "Toute convulsion impose de penser au sucre, surtout chez un diabétique — cause réversible en quelques minutes."],
+ ["À EXCLURE", "Méningite ou lésion cérébrale", "Fièvre, raideur de nuque, déficit persistant, traumatisme : imagerie et avis urgents."],
+ ["ÉLEVÉE", "Crise sur épilepsie connue", "Crise habituelle, réveil progressif : surveillance, reconsulter si elle est plus longue ou différente de d'habitude."],
+ ["INTERMÉD.", "Convulsion fébrile de l'enfant", "Entre 6 mois et 5 ans, avec fièvre : fréquente et le plus souvent bénigne, mais un avis médical le jour même reste nécessaire."]
+ ] },
+ { id: "hypoglycemie", sys: "Métabolique — malaise du diabétique", re: /hypoglyc[ée]mi|sucre\s+trop\s+bas|glyc[ée]mie\s+basse|(diab[ée]tique|diab[èe]te).{0,40}(malaise|tremb|sueur|se\s+sens\s+partir|confus)/i,
+ red: ["confusion, comportement inhabituel", "sueurs froides avec tremblements", "impossibilité d'avaler", "perte de connaissance", "convulsion"],
+ redAdvice: "Si la personne est CONSCIENTE et peut avaler : donnez du sucre TOUT DE SUITE (3 morceaux, un jus, une boisson sucrée — jamais d'édulcorant), puis un féculent une fois le malaise passé. Si elle est INCONSCIENTE ou ne peut pas avaler : NE RIEN DONNER PAR LA BOUCHE, position latérale de sécurité, 144. Dans le doute chez un diabétique, on donne du sucre : une hypoglycémie tue vite, une hyperglycémie non.",
+ ddx: [
+ ["À EXCLURE", "Hypoglycémie sévère", "Confusion, agitation, convulsion, coma : urgence — sucre si la déglutition est possible, sinon 144. Peut ressembler à une ivresse ou à un AVC."],
+ ["INTERMÉD.", "Hyperglycémie / acidocétose", "Soif intense, urines abondantes, haleine fruitée, respiration ample : avis urgent, et surtout ne pas donner de sucre."],
+ ["INTERMÉD.", "Malaise vagal", "Contexte de station debout, chaleur, émotion ; récupération rapide allongé, jambes surélevées."],
+ ["INTERMÉD.", "Cause médicamenteuse", "Insuline ou sulfamides mal dosés, repas sauté, effort inhabituel, alcool : revoir le traitement avec le médecin."]
+ ] },
  { id: "intoxication", sys: "Toxicologie — intoxication / surdosage", re: /aval[ée]\w*\s+(toute?\s+)?(la|le|une|des|mes|ses|son|sa)?\s*(bo[iî]te|plaquette|flacon|tube|comprim|cachet|médicament|pilule)|(pris|prendre)\s+(trop|toute?\s+la\s+bo[iî]te|tous?\s+(mes|les)\s+(cachet|comprim|médicament))|trop\s+de\s+(cachet|comprim|médicament|pilule)|surdos|overdose|intoxicat|empoisonn|a\s+bu\s+(du|de\s+la|un)\s*(produit|javel|détergent|antigel)|aval[ée]\w*\s+(de\s+la\s+)?javel|produit\s+(d['e ]?entretien|ménager)|j['e ]?ai\s+fait\s+une\s+tentative|tentative\s+de\s+suicide|champignon\w*\s+(toxique|vénéneu)|monoxyde\s+de\s+carbone|ingestion\s+volontaire|ingestion\s+massive|consommation\s+d['e ]?opio[ïi]d|opio[ïi]d|benzodiaz[ée]pin|myosis|toxidrome|chauffage\s+d['e ]?appoint|CO\s+ambiant|carboxyh[ée]moglobin|surdosage|paracétamol\s+.{0,20}(grande\s+quantité|massive)|traces\s+d['e ]?injection/i,
  red: ["quantité importante ou inconnue", "somnolence, confusion, difficulté à réveiller", "vomissements ou convulsions", "produit ménager, caustique ou inconnu", "geste intentionnel"],
  redAdvice: "144 IMMÉDIATEMENT si la personne est somnolente, difficile à réveiller, confuse, convulse ou respire mal — une personne inconsciente relève des secours avant tout. Sinon, appelez le 145 (Tox Info Suisse, 24 h/24, gratuit), qui vous dira quoi faire selon le produit et la dose. NE FAITES PAS VOMIR et ne donnez rien à boire sans avis : cela peut aggraver. Gardez l'emballage ou le produit pour les secours. Si le geste est intentionnel, ne laissez pas la personne seule — 143 (La Main Tendue, 24 h/24), 147 pour un mineur.",
@@ -13087,6 +13176,282 @@ window.OMNI_MODULES=[
  CAM_HUB.renderDocs();
  } catch (e) { if (window.console && console.warn) console.warn("cam-hub", e); }
 })();
+</script>
+<script id="srom-dispo">
+/* ═══════════════════════════════════════════════════════════════════════════
+   DISPONIBILITÉ RÉELLE DES MODULES — règle du fondateur : un module qui n'est
+   pas pleinement opérationnel ne doit JAMAIS être présenté comme s'il l'était.
+
+   Choix de conception : l'étiquette est DYNAMIQUE, pas figée. Sept modules
+   dépendent du matériel (caméra, micro, GPS) ou du réseau. Ils fonctionnent
+   parfaitement quand l'app est servie en HTTPS sur un téléphone — et pas du
+   tout depuis un fichier local ou un aperçu intégré. Une mention « en cours
+   de création » écrite en dur mentirait dans le premier cas ; une tuile muette
+   mentirait dans le second. On mesure donc l'état réel au chargement, et on
+   le dit.
+
+   N'ajoute AUCUN blocage : la tuile reste cliquable, le module reste ouvrable.
+   On informe, on n'interdit pas.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  /* Ce que chaque module exige pour fonctionner réellement. */
+  var EXIGENCES = {
+    camera:  ["camera"],
+    vitals:  ["camera"],
+    scene:   ["camera"],
+    photo3d: ["camera"],
+    plaie:   ["camera"],
+    voice:   ["micro"],
+    visio:   ["camera", "micro", "reseau"],
+    gpx:     ["gps"],
+    cim:     ["reseau"]
+  };
+
+  var LIB = {
+    camera: "caméra",
+    micro:  "microphone",
+    gps:    "position (GPS)",
+    reseau: "connexion internet"
+  };
+
+  function secure() {
+    try { return window.OMNI_PERM ? !!window.OMNI_PERM.SECURE : (window.isSecureContext !== false); }
+    catch (e) { return true; }
+  }
+  function embedded() {
+    try { return !!(window.OMNI_PERM && window.OMNI_PERM.EMBEDDED); } catch (e) { return false; }
+  }
+
+  /** Une capacité est-elle réellement utilisable ici et maintenant ? */
+  function dispo(cap) {
+    try {
+      if (cap === "reseau") return navigator.onLine !== false;
+      if (cap === "gps")    return secure() && !!navigator.geolocation;
+      if (cap === "camera" || cap === "micro") {
+        return secure() && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+      }
+    } catch (e) { /* on retombe sur false */ }
+    return false;
+  }
+
+  /** Ce qui manque à un module, en clair. */
+  function manquants(id) {
+    var req = EXIGENCES[id];
+    if (!req) return [];
+    var out = [];
+    for (var i = 0; i < req.length; i++) if (!dispo(req[i])) out.push(req[i]);
+    return out;
+  }
+
+  function phrase(liste) {
+    var noms = liste.map(function (c) { return LIB[c] || c; });
+    if (noms.length === 1) return noms[0];
+    return noms.slice(0, -1).join(", ") + " et " + noms[noms.length - 1];
+  }
+
+  /** Pourquoi ça ne marche pas ici — la vraie raison, pas une formule vague. */
+  function raison(liste) {
+    if (embedded()) {
+      return "Cet aperçu est affiché dans un cadre intégré, qui bloque l'accès au matériel. "
+           + "Ouvrez l'application en plein navigateur, ou installez-la, pour utiliser " + phrase(liste) + ".";
+    }
+    if (!secure() && liste.some(function (c) { return c !== "reseau"; })) {
+      return "L'accès au matériel exige une connexion sécurisée (HTTPS). "
+           + "Depuis un fichier ouvert localement, le navigateur refuse " + phrase(liste) + ". "
+           + "Ouvrez l'application depuis swissrescueomnimed.ch, ou installez-la sur l'écran d'accueil.";
+    }
+    if (liste.indexOf("reseau") >= 0 && liste.length === 1) {
+      return "Ce module a besoin d'internet pour interroger sa source officielle. Hors ligne, "
+           + "seule la partie embarquée reste disponible.";
+    }
+    return "Ce navigateur ne propose pas " + phrase(liste) + ". "
+         + "Sur un téléphone, avec l'application ouverte depuis swissrescueomnimed.ch ou installée "
+         + "sur l'écran d'accueil, ce module fonctionne normalement.";
+  }
+
+  function appliquer() {
+    var grille = document.getElementById("modgrid");
+    if (!grille) return;
+
+    Object.keys(EXIGENCES).forEach(function (id) {
+      var absents = manquants(id);
+      var tuiles = document.querySelectorAll('.mod[data-v="' + id + '"], .am-prio[data-v="' + id + '"]');
+
+      /* ── Tuile : pastille honnête, jamais de blocage ── */
+      Array.prototype.forEach.call(tuiles, function (t) {
+        var vieille = t.querySelector(".dispo-tag");
+        if (vieille) vieille.remove();
+        t.classList.toggle("mod-indispo", absents.length > 0);
+        if (!absents.length) return;
+        var tag = document.createElement("span");
+        tag.className = "dispo-tag";
+        tag.textContent = absents.indexOf("reseau") >= 0 && absents.length === 1
+          ? "hors ligne — partiel"
+          : "besoin de " + phrase(absents);
+        tag.setAttribute("aria-label", "Module partiellement disponible : " + raison(absents));
+        t.appendChild(tag);
+      });
+
+      /* ── Vue : bandeau explicatif en tête, une seule fois ── */
+      var vue = document.getElementById("v-" + id);
+      if (!vue) return;
+      var vieux = vue.querySelector(".dispo-note");
+      if (vieux) vieux.remove();
+      if (!absents.length) return;
+      var note = document.createElement("div");
+      note.className = "dispo-note";
+      note.setAttribute("role", "note");
+      note.innerHTML = "<strong>Ce module n'est pas pleinement utilisable ici.</strong> "
+        + raison(absents).replace(/</g, "&lt;")
+        + " <em>Le reste de l'écran fonctionne : vous pouvez lire les explications et préparer votre geste.</em>";
+      var apres = vue.querySelector("h2");
+      if (apres && apres.nextSibling) vue.insertBefore(note, apres.nextSibling);
+      else vue.insertBefore(note, vue.firstChild);
+    });
+  }
+
+  function demarrer() {
+    appliquer();
+    /* Le réseau change en cours de route : on réévalue plutôt que de figer. */
+    window.addEventListener("online", appliquer);
+    window.addEventListener("offline", appliquer);
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
+  else demarrer();
+
+  /* Exposé pour les tests : permet de vérifier la logique sans navigateur. */
+  window.sromDispo = { EXIGENCES: EXIGENCES, manquants: manquants, dispo: dispo, phrase: phrase, raison: raison, appliquer: appliquer };
+})();
+
+</script>
+<script id="srom-repere-social">
+/* ═══════════════════════════════════════════════════════════════════════════
+   REPÉRAGE VIOLENCE / ADDICTION — première implémentation, INACTIVE PAR DÉFAUT.
+
+   Pourquoi inactive : la liste de motifs (docs/MOTIFS_VIOLENCE_ADDICTION_A_RELIRE.md)
+   attend la relecture des professionnelles du bureau d'action sociale. Décider
+   quels mots déclenchent quelle orientation est un arbitrage de métier, pas un
+   réglage technique — un faux négatif laisse passer une situation grave, un
+   faux positif braque une personne en entretien et coûte le lien.
+
+   Ce module N'ÉCRASE PAS le repérage de précarité existant (socialReason) :
+   il vit à côté, et ne s'affiche que si on l'active explicitement.
+
+   Principes tenus, quoi qu'il arrive :
+     · on ne nomme JAMAIS la personne (« ressources », jamais « victime de… ») ;
+     · on propose, on ne conclut pas ;
+     · on ne bloque jamais l'entretien ;
+     · rien ne quitte l'appareil, rien n'est écrit dans le dossier.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  /* Ressources — coordonnées vérifiées dans l'annuaire embarqué de l'application.
+     À revalider avant mise en service : les dispositifs changent. */
+  var R = {
+    avvec:    { nom: "AVVEC — violences dans le couple", tel: "0800 110 110" },
+    faceface: { nom: "Face à Face", tel: "022 345 12 15" },
+    lavi:     { nom: "Centre LAVI Genève — aide aux victimes", tel: "022 320 01 02" },
+    viol:     { nom: "Viol-Secours", tel: "022 345 20 20" },
+    solidf:   { nom: "Solidarité Femmes", tel: "022 797 10 10" },
+    arabelle: { nom: "Foyer Arabelle — hébergement", tel: "022 320 09 09" },
+    hommes:   { nom: "Ligne hommes victimes de violence domestique", tel: "0800 110 110" },
+    phenix:   { nom: "Fondation Phénix — addictions", tel: "022 404 02 10" },
+    argos:    { nom: "Association Argos", tel: "022 809 62 62" },
+    ligne1:   { nom: "Première Ligne — réduction des risques", tel: "022 748 28 28" },
+    j147:     { nom: "Pro Juventute — enfants et jeunes", tel: "147" },
+    m143:     { nom: "La Main Tendue", tel: "143" },
+    u144:     { nom: "Secours", tel: "144" }
+  };
+
+  /* Motifs EXPLICITES uniquement (section 4a / 5 du document).
+     Les « signaux indirects » (section 4b) ne déclenchent volontairement RIEN :
+     « je suis tombée dans les escaliers » appartient à l'entretien, pas à un
+     automatisme — trop de faux positifs, pour un gain douteux. */
+  var MOTIFS = [
+    { id: "V1", cat: "violence", re: /me\s+frappe|m['e ]?a\s+frapp|me\s+tape|me\s+bat\b|m['e ]?a\s+gifl|des\s+coups|il\s+me\s+cogne/i,
+      res: ["avvec", "faceface", "lavi"] },
+    { id: "V2", cat: "violence", urgent: true, re: /me\s+menace\s+de\s+(mort|me\s+tuer)|menac[ée]\w*\s+avec\s+(un\s+)?(couteau|arme)|il\s+va\s+me\s+tuer/i,
+      res: ["u144", "lavi"] },
+    { id: "V3", cat: "violence", re: /m['e ]?oblige\s+[àa]|me\s+force\s+[àa]|contre\s+mon\s+gr[ée]|viol[ée]e?\b/i,
+      res: ["viol", "lavi"] },
+    { id: "V4", cat: "violence", re: /m['e ]?enferme|m['e ]?emp[êe]che\s+de\s+sortir|confisque\s+mes?\s+(papiers|t[ée]l[ée]phone)/i,
+      res: ["avvec", "lavi"] },
+    { id: "V5", cat: "violence", re: /contr[ôo]le\s+mon\s+argent|prend\s+mon\s+salaire|me\s+laisse\s+pas\s+travailler/i,
+      res: ["avvec"] },
+    { id: "V7", cat: "violence", re: /frappe\s+les\s+enfants|les\s+enfants\s+ont\s+vu|tape\s+(sur\s+)?(mon|les)\s+(fils|fille|enfant)/i,
+      res: ["j147", "lavi"] },
+    { id: "V8", cat: "violence", re: /peur\s+de\s+rentrer|j['e ]?ai\s+peur\s+de\s+(lui|elle|mon\s+mari|ma\s+femme)/i,
+      res: ["avvec", "arabelle"] },
+
+    { id: "A1", cat: "addiction", re: /je\s+bois\s+(tous\s+les\s+jours|chaque\s+jour|pour\s+(tenir|dormir|oublier))|bois\s+trop/i,
+      res: ["phenix", "argos"] },
+    { id: "A2", cat: "addiction", re: /(n['e ]?arrive\s+pas|peux\s+pas|impossible)\s+(d['e ]?|[àa]\s+)arr[êe]ter|j['e ]?ai\s+essay[ée]\s+(d['e ]?|[àa]\s+)arr[êe]ter|pas\s+capable\s+d['e ]?arr[êe]ter/i,
+      res: ["phenix", "argos"] },
+    { id: "A3", cat: "addiction", re: /je\s+consomme|je\s+me\s+shoote|j['e ]?ai\s+replong|rechute/i,
+      res: ["ligne1", "argos"] },
+    { id: "A5", cat: "addiction", re: /je\s+joue\s+(trop|tous\s+les\s+jours)|les\s+paris|machines?\s+[àa]\s+sous/i,
+      res: ["phenix"] },
+    { id: "A7", cat: "addiction", urgent: true, re: /sevrage|tremblements?\s+le\s+matin|delirium/i,
+      res: ["u144", "phenix"] }
+  ];
+
+  /**
+   * Repère des motifs explicites dans un texte d'entretien.
+   * @returns {{actif:boolean, categories:string[], ressources:Array, urgent:boolean, motifs:string[]}}
+   */
+  function reperer(texte) {
+    var t = String(texte || "");
+    var vus = [], cats = {}, res = [], urgent = false;
+    MOTIFS.forEach(function (m) {
+      if (!m.re.test(t)) return;
+      vus.push(m.id);
+      cats[m.cat] = 1;
+      if (m.urgent) urgent = true;
+      m.res.forEach(function (k) { if (res.indexOf(k) < 0) res.push(k); });
+    });
+    return {
+      actif: vus.length > 0,
+      motifs: vus,
+      categories: Object.keys(cats),
+      urgent: urgent,
+      ressources: res.slice(0, 3).map(function (k) { return { cle: k, nom: R[k].nom, tel: R[k].tel }; })
+    };
+  }
+
+  /** Carte de ressources — jamais un verdict sur la personne. */
+  function carte(texte) {
+    var r = reperer(texte);
+    if (!r.actif) return null;
+    var lignes = r.ressources.map(function (x) {
+      return '<a href="tel:' + x.tel.replace(/\s/g, "") + '">' + x.nom + " — " + x.tel + "</a>";
+    });
+    return {
+      titre: r.urgent ? "Ressources — situation possiblement urgente" : "Des services existent pour en parler",
+      /* Aucune qualification de la personne : on décrit ce qui est disponible. */
+      texte: r.urgent
+        ? "Si la personne est en danger immédiat, appelez le 144. Ces services accompagnent aussi après coup :"
+        : "Si cela peut aider, ces services sont gratuits et confidentiels :",
+      html: lignes.join(" · "),
+      urgent: r.urgent
+    };
+  }
+
+  window.sromRepereSocial = {
+    /* INACTIF par défaut : n'affiche rien tant que le bureau n'a pas relu la liste.
+       Passer à true seulement après validation professionnelle. */
+    ACTIF: false,
+    VERSION: "v1-a-relire-2026-08-10",
+    reperer: reperer,
+    carte: carte,
+    ressources: R,
+    motifs: MOTIFS.map(function (m) { return { id: m.id, cat: m.cat, urgent: !!m.urgent }; })
+  };
+})();
+
 </script>
 </html>
 
