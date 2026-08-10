@@ -401,6 +401,12 @@
  body.eco-urgence *, body.eco-urgence *::before, body.eco-urgence *::after { animation: none !important; transition: none !important; }
  body.eco-urgence .card { box-shadow: none; }
 </style>
+<style id="nt-skin">
+.nlabel{display:block;font-size:12.5px;font-weight:600;margin:10px 0 4px;color:var(--text-muted,#94a3b8)}
+.ninput{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid var(--border-strong,#334155);background:var(--surface,#0f172a);color:inherit;font:inherit;font-size:14.5px}
+.ninput:focus{outline:2px solid var(--teal,#14b8a6);outline-offset:1px}
+@media print{.view:not(.active),.back,.modes,.launch{display:none!important}#nt-sortie{font-size:12pt;color:#000}}
+</style>
 <style id="am-skin">
 /* ===================================================================
    SKIN « App Mobile sombre » — surcouche premium (0 requête externe).
@@ -884,7 +890,7 @@ header.app{ padding-top:max(12px, env(safe-area-inset-top,0px)); }
  <button class="mod" data-v="access" style="--tile:var(--green)"><span class="tile">A11Y</span><span><span class="m-t">Accessibilité</span><br><span class="m-d">Dyslexie · daltonisme · contraste</span></span></button>
  <button class="mod" data-v="rcp" style="--tile:var(--red)"><span class="tile">RCP</span><span><span class="m-t">Métronome RCP</span><br><span class="m-d">110/min · audio + compteur 30:2</span></span></button>
  <button class="mod" data-v="docs" style="--tile:var(--green)"><span class="tile">MED</span><span><span class="m-t">Documents médicaux</span><br><span class="m-d">Lecture réelle · génération pro/patient</span></span></button>
- <button class="mod" data-v="rapport" style="--tile:var(--amber)"><span class="tile">DOC</span><span><span class="m-t">Rapport d'intervention</span><br><span class="m-d">Export · partage WhatsApp</span></span></button>
+ <button class="mod" data-v="rapport" style="--tile:var(--amber)"><span class="tile">DOC</span><span><span class="m-t">Rapport d'intervention</span><br><span class="m-d">Export · partage WhatsApp</span></span></button><button class="mod" data-v="notes" style="--tile:var(--teal)"><span class="tile">SOAP</span><span><span class="m-t">Notes → Rapport</span><br><span class="m-d">Notes en vrac → rapport structuré</span></span></button>
  <button class="mod" data-v="biblio" style="--tile:var(--blue)"><span class="tile">BIB</span><span><span class="m-t">Bibliothèque</span><br><span class="m-d">Bases de données consultables</span></span></button>
  <button class="mod" data-v="refs" style="--tile:var(--blue)"><span class="tile">MSD</span><span><span class="m-t">Références pro</span><br><span class="m-d">Manuel MSD · HUG · Compendium · Vidal</span></span></button>
  <button class="mod" data-v="annuaire" style="--tile:var(--blue)"><span class="tile">ANN</span><span><span class="m-t">Annuaire médical suisse</span><br><span class="m-d">2 026 institutions · urgences · cantons</span></span></button>
@@ -2042,6 +2048,65 @@ Mon médecin / thérapeute: </textarea>
  </div>
  </div>
 
+ <!-- ═══ NOTES → RAPPORT (SOAP) ═══ -->
+ <div class="view" id="v-notes">
+ <button class="back" data-back>← Modules</button>
+ <h2>Notes en vrac → Rapport</h2>
+ <p class="lede">Notez au chevet, en vrac, dans l'ordre que vous voulez. L'application range vos notes en rapport structuré <strong>SOAP</strong> (Subjectif · Objectif · Évaluation · Plan), daté et exportable.</p>
+
+ <div class="card" style="border-left:3px solid var(--teal)">
+ <p class="note" style="margin:0"><strong>Tout reste sur cet appareil.</strong> Aucune note, aucune constante, aucun nom ne part sur Internet — la mise en forme est faite ici. Vous seul exportez ce que vous décidez d'exporter.</p>
+ </div>
+
+ <div class="card">
+ <h2 style="font-size:16px">1 · Qui, et pour quoi</h2>
+ <label class="nlabel" for="nt-soignant">Soignant (vous)</label>
+ <input class="ninput" id="nt-soignant" type="text" placeholder="Nom, fonction — ex. D. Roth, secouriste">
+ <label class="nlabel" for="nt-patient">Patient — nom OU identifiant OU anonyme</label>
+ <input class="ninput" id="nt-patient" type="text" placeholder="ex. M. X · dossier 2026-08 · anonyme">
+ <p class="note" style="margin:4px 0 0">Conseil : un identifiant suffit. Moins vous écrivez de nom, moins vous exposez.</p>
+ <label class="nlabel" for="nt-motif">Motif / problème</label>
+ <input class="ninput" id="nt-motif" type="text" placeholder="ex. douleur thoracique depuis 2 h">
+ </div>
+
+ <div class="card">
+ <h2 style="font-size:16px">2 · Vos notes, en vrac</h2>
+ <p class="note" style="margin:0 0 8px">Écrivez comme ça vient. Les constantes (TA, FC, T°, SpO₂, FR, glycémie) sont reconnues où qu'elles soient.</p>
+ <textarea class="ninput" id="nt-vrac" rows="7" placeholder="ex. se plaint d'une douleur qui serre depuis 2h, irradie bras gauche"></textarea>
+ <div class="modes" style="margin-top:8px">
+ <button class="launch sec" id="nt-dictee" style="flex:1">Dictée</button>
+ <button class="launch sec" id="nt-exemple" style="flex:1">Exemple</button>
+ </div>
+ <div id="nt-dictee-avert" class="note" style="display:none;margin-top:8px;border-left:3px solid var(--amber);padding-left:8px">
+ <strong>Avertissement — la dictée du navigateur n'est PAS souveraine.</strong> Elle envoie votre voix à un service externe (Google/Apple selon le navigateur). <strong>Ne dictez jamais de données identifiantes de patient</strong> (nom, date de naissance, adresse) : tapez-les au clavier. La dictée reste utile pour des observations non identifiantes.<br>
+ <em>Une dictée réellement locale (modèle embarqué, aucun envoi) est au programme — elle n'est pas encore là, et nous ne prétendons pas le contraire.</em>
+ </div>
+ </div>
+
+ <div class="card">
+ <h2 style="font-size:16px">3 · Compléments (facultatif)</h2>
+ <label class="nlabel" for="nt-obs">Observations / examen</label>
+ <textarea class="ninput" id="nt-obs" rows="2" placeholder="ex. conscient, orienté, marbrures aux genoux"></textarea>
+ <label class="nlabel" for="nt-const">Constantes</label>
+ <input class="ninput" id="nt-const" type="text" placeholder="ex. TA 145/90 · FC 102 · T° 37.2 · SpO₂ 96 %">
+ <label class="nlabel" for="nt-plan">Actions / plan</label>
+ <textarea class="ninput" id="nt-plan" rows="2" placeholder="ex. 144 appelé, position demi-assise, surveillance"></textarea>
+ </div>
+
+ <button class="launch" id="nt-gen" style="width:100%">Générer le rapport</button>
+
+ <div class="card" id="nt-sortie-card" style="display:none">
+ <h2 style="font-size:16px">Rapport</h2>
+ <pre id="nt-sortie" style="white-space:pre-wrap;word-break:break-word;font-size:13.5px;line-height:1.5;margin:0"></pre>
+ <div class="modes" style="margin-top:12px">
+ <button class="launch sec" id="nt-copy" style="flex:1">Copier</button>
+ <button class="launch sec" id="nt-dl" style="flex:1">Télécharger .txt</button>
+ <button class="launch sec" id="nt-print" style="flex:1">Imprimer / PDF</button>
+ </div>
+ <button class="launch sec" id="nt-vers-rapport" style="width:100%;margin-top:8px">Joindre au rapport d'intervention</button>
+ </div>
+ </div>
+
  <!-- ═══ BIBLIOTHÈQUE ═══ -->
  <div class="view" id="v-biblio">
  <button class="back" data-back>← Modules</button>
@@ -2596,6 +2661,16 @@ window.OMNI_MODULES=[
   "category": "Terrain, documents & traçabilité",
   "short": "Lecture réelle · génération pro/patient",
   "long": "Aide à lire et à préparer des documents de santé, en version professionnelle ou patient. Facilite la compréhension et la transmission.",
+  "status": "live"
+ },
+ {
+  "id": "notes",
+  "name": "Notes \u2192 Rapport",
+  "tile": "SOAP",
+  "color": "teal",
+  "category": "Terrain, documents & tra\u00e7abilit\u00e9",
+  "short": "Notes en vrac \u2192 rapport SOAP",
+  "long": "Range des notes prises au chevet, dans le d\u00e9sordre, en rapport structur\u00e9 SOAP dat\u00e9 et exportable. Tout se fait sur l'appareil.",
   "status": "live"
  },
  {
@@ -10658,5 +10733,264 @@ window.OMNI_MODULES=[
 })();
 </script>
 <script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").then(function(reg){try{reg.update();setInterval(function(){try{reg.update();}catch(e){}},3600000);}catch(e){}}).catch(function(){});var _rf=false;navigator.serviceWorker.addEventListener("controllerchange",function(){if(_rf)return;_rf=true;location.reload();});});}</script>
+<script id="srom-notes-soap">
+/* ═══════════════════════════════════════════════════════════════════════════
+   NOTES EN VRAC → RAPPORT SOAP — 100 % local, aucune requête réseau.
+   window.sromNotesToSOAP est une fonction PURE : mêmes entrées, même sortie.
+   C'est ce qui la rend testable hors navigateur, donc vérifiable.
+   Aide à la RÉDACTION : elle range et met en forme. Elle n'interprète rien
+   médicalement et n'ajoute aucune conclusion que le soignant n'a pas écrite.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  /* Constantes vitales reconnues où qu'elles soient dans le texte. Chaque motif
+     est ancré sur son étiquette pour ne jamais attraper un nombre au hasard
+     (posologie, heure) : mieux vaut ne rien extraire qu'une constante fausse. */
+  var VITALES = [
+    { cle: "TA", lib: "Tension artérielle", re: /\b(?:TA|PA|tension|pression)\s*:?\s*(\d{2,3})\s*[\/x]\s*(\d{2,3})/i, fmt: function (m) { return m[1] + "/" + m[2] + " mmHg"; } },
+    { cle: "FC", lib: "Fréquence cardiaque", re: /\b(?:FC|pouls)\s*:?\s*(\d{2,3})/i, fmt: function (m) { return m[1] + "/min"; } },
+    { cle: "T", lib: "Température", re: /\b(?:T°|T|temp|température)\s*:?\s*(\d{2}(?:[.,]\d)?)\s*(?:°C)?/i, fmt: function (m) { return m[1].replace(",", ".") + " °C"; } },
+    { cle: "SpO2", lib: "Saturation", re: /\b(?:SpO2|SpO₂|sat|saturation)\s*:?\s*(\d{2,3})/i, fmt: function (m) { return m[1] + " %"; } },
+    { cle: "FR", lib: "Fréquence respiratoire", re: /\b(?:FR)\s*:?\s*(\d{1,2})/i, fmt: function (m) { return m[1] + "/min"; } },
+    { cle: "Glyc", lib: "Glycémie", re: /\b(?:glyc|glycémie|dextro|HGT)\s*:?\s*(\d{1,2}(?:[.,]\d)?)/i, fmt: function (m) { return m[1].replace(",", ".") + " mmol/L"; } },
+    { cle: "EVA", lib: "Douleur (EVA)", re: /\b(?:EVA|EN)\s*:?\s*(\d{1,2})\s*\/\s*10/i, fmt: function (m) { return m[1] + "/10"; } },
+    { cle: "Poids", lib: "Poids", re: /\b(?:poids)\s*:?\s*(\d{2,3}(?:[.,]\d)?)\s*kg/i, fmt: function (m) { return m[1].replace(",", ".") + " kg"; } }
+  ];
+
+  /* Indices de classement : on range une phrase selon ce qu'elle EST.
+     Non classée → Subjectif : mieux vaut la ranger dans « ce qui est rapporté »
+     que de la faire disparaître. Aucune note ne doit jamais être perdue. */
+  var IND_O = /\b(?:constat|observ|examen|ausculta|palp|inspect|marbrur|pâleur|pâle|sueur|cyanos|œdème|oedeme|hématome|ecchymos|murmure|râles|conscient|orienté|glasgow|apyrétique|fébrile|téguments|gorge rouge|ganglion)\b/i;
+  var IND_P = /\b(?:appel|144|117|118|143|147|transport|orient|adress|surveill|position|perfus|administr|prescri|contrôle|revoir|traitement|antalgi|oxygén|immobilis|pansement|suture|à jeun|hospitalis|consult|rendez-vous|rdv|réévalu|installé)\b/i;
+  var IND_A = /\b(?:suspicion|évoque|évocateur|probable|compatible avec|en faveur de|diagnostic|hypothèse|impression|à exclure|écarter)\b/i;
+
+  function nettoie(s) {
+    return String(s == null ? "" : s).replace(/\r/g, "").replace(/[ \t]+/g, " ").trim();
+  }
+
+  /* Découpe en phrases : ponctuation OU retour à la ligne — au chevet on écrit
+     souvent une idée par ligne, sans ponctuer. */
+  function phrases(txt) {
+    return nettoie(txt)
+      .split(/\n+/)
+      .reduce(function (acc, ligne) { return acc.concat(ligne.split(/(?:[.;!?])\s+/)); }, [])
+      .map(function (p) { return p.trim().replace(/^[-•*–]\s*/, "").replace(/[.;]+$/, ""); })
+      .filter(function (p) { return p.length > 0; });
+  }
+
+  function extraireVitales(txt) {
+    var out = [], t = String(txt || "");
+    for (var i = 0; i < VITALES.length; i++) {
+      var v = VITALES[i], m = t.match(v.re);
+      if (m) out.push({ cle: v.cle, lib: v.lib, valeur: v.fmt(m) });
+    }
+    return out;
+  }
+
+  function majuscule(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+  /* Une ligne qui n'est QUE des constantes ne doit pas polluer les sections. */
+  function estQueDesConstantes(p) {
+    return /^[\s\d\/.,%°]*(?:(?:TA|PA|FC|T°|T|SpO2|SpO₂|FR|sat|pouls|tension|temp|glyc|dextro|HGT|EVA|poids|mmHg|min|°C|kg|mmol\/L)[\s\d\/.,%°:]*)+$/i.test(p);
+  }
+
+  /**
+   * Range des notes en vrac en rapport SOAP.
+   * @param {Object} d soignant, patient, motif, vrac, obs, constantes, plan, dateISO
+   * @returns {Object} { S, O, A, P, vitales, meta, texte }
+   */
+  function sromNotesToSOAP(d) {
+    d = d || {};
+    var S = [], O = [], A = [], P = [];
+
+    if (nettoie(d.motif)) S.push("Motif : " + nettoie(d.motif));
+
+    phrases(d.vrac).forEach(function (p) {
+      if (estQueDesConstantes(p)) return;          /* repris dans « Constantes » */
+      if (IND_P.test(p)) P.push(majuscule(p));
+      else if (IND_A.test(p)) A.push(majuscule(p));
+      else if (IND_O.test(p)) O.push(majuscule(p));
+      else S.push(majuscule(p));
+    });
+
+    phrases(d.obs).forEach(function (p) { if (!estQueDesConstantes(p)) O.push(majuscule(p)); });
+    phrases(d.plan).forEach(function (p) { P.push(majuscule(p)); });
+
+    var vitales = extraireVitales(nettoie(d.constantes) + " \n " + nettoie(d.vrac));
+
+    function uniq(a) {
+      var vus = {}, r = [];
+      a.forEach(function (x) {
+        var k = x.toLowerCase().replace(/[^a-z0-9à-ÿ]/gi, "");
+        if (!vus[k]) { vus[k] = 1; r.push(x); }
+      });
+      return r;
+    }
+    S = uniq(S); O = uniq(O); A = uniq(A); P = uniq(P);
+
+    var dt = d.dateISO ? new Date(d.dateISO) : new Date();
+    var horod = dt.toLocaleString("fr-CH", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+    var L = [];
+    L.push("RAPPORT DE CONSULTATION — SOAP");
+    L.push("Établi le " + horod);
+    if (nettoie(d.soignant)) L.push("Soignant : " + nettoie(d.soignant));
+    L.push("Patient : " + (nettoie(d.patient) || "non identifié (anonyme)"));
+    L.push("");
+    L.push("S — SUBJECTIF (ce qui est rapporté)");
+    L.push(S.length ? S.map(function (x) { return "  • " + x; }).join("\n") : "  (rien de noté)");
+    L.push("");
+    L.push("O — OBJECTIF (constaté et mesuré)");
+    if (vitales.length) {
+      L.push("  Constantes :");
+      vitales.forEach(function (v) { L.push("    - " + v.lib + " : " + v.valeur); });
+    }
+    if (O.length) L.push(O.map(function (x) { return "  • " + x; }).join("\n"));
+    else if (!vitales.length) L.push("  (rien de noté)");
+    L.push("");
+    L.push("A — ÉVALUATION");
+    L.push(A.length ? A.map(function (x) { return "  • " + x; }).join("\n")
+                    : "  (à compléter par le soignant — l'application ne formule aucune évaluation à votre place)");
+    L.push("");
+    L.push("P — PLAN");
+    L.push(P.length ? P.map(function (x) { return "  • " + x; }).join("\n") : "  (rien de noté)");
+    L.push("");
+    L.push("—");
+    L.push("Mise en forme automatique de notes saisies par un soignant. Le contenu");
+    L.push("clinique est celui du soignant ; l'application n'ajoute aucune");
+    L.push("interprétation. À relire et signer avant classement. Urgence vitale : 144.");
+
+    return {
+      S: S, O: O, A: A, P: P, vitales: vitales,
+      meta: { horodatage: horod, soignant: nettoie(d.soignant), patient: nettoie(d.patient) || "anonyme" },
+      texte: L.join("\n").replace(/\n{3,}/g, "\n\n")
+    };
+  }
+
+  window.sromNotesToSOAP = sromNotesToSOAP;
+
+  /* ── Interface (sans effet si la vue est absente) ───────────────────────── */
+  function $(id) { return document.getElementById(id); }
+
+  function ready() {
+    var gen = $("nt-gen");
+    if (!gen) return;
+    var dernier = "";
+
+    function collecte() {
+      return {
+        soignant: ($("nt-soignant") || {}).value || "",
+        patient: ($("nt-patient") || {}).value || "",
+        motif: ($("nt-motif") || {}).value || "",
+        vrac: ($("nt-vrac") || {}).value || "",
+        obs: ($("nt-obs") || {}).value || "",
+        constantes: ($("nt-const") || {}).value || "",
+        plan: ($("nt-plan") || {}).value || ""
+      };
+    }
+
+    gen.addEventListener("click", function () {
+      var r = sromNotesToSOAP(collecte());
+      dernier = r.texte;
+      $("nt-sortie").textContent = r.texte;
+      $("nt-sortie-card").style.display = "";
+      if (window.sromToast) window.sromToast("Rapport généré — relisez avant de l'utiliser.");
+    });
+
+    if ($("nt-exemple")) $("nt-exemple").addEventListener("click", function () {
+      $("nt-vrac").value = "se plaint d'une douleur qui serre depuis 2h, irradie dans le bras gauche\n"
+        + "TA 145/90 FC 102 T 37.2 SpO2 96%\n"
+        + "pâle, sueurs froides\n"
+        + "a pris son aspirine ce matin\n"
+        + "suspicion de syndrome coronarien\n"
+        + "144 appelé, installé en position demi-assise, surveillance continue";
+      if (!$("nt-motif").value) $("nt-motif").value = "douleur thoracique depuis 2 h";
+    });
+
+    if ($("nt-copy")) $("nt-copy").addEventListener("click", function () {
+      if (!dernier) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(dernier).then(function () { if (window.sromToast) window.sromToast("Rapport copié."); });
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = dernier; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); if (window.sromToast) window.sromToast("Rapport copié."); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+
+    if ($("nt-dl")) $("nt-dl").addEventListener("click", function () {
+      if (!dernier) return;
+      var b = new Blob([dernier], { type: "text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(b);
+      a.download = "rapport-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".txt";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    });
+
+    if ($("nt-print")) $("nt-print").addEventListener("click", function () { if (dernier) window.print(); });
+
+    if ($("nt-vers-rapport")) $("nt-vers-rapport").addEventListener("click", function () {
+      if (!dernier) return;
+      if (window._rec) {
+        window._rec("Notes → Rapport (SOAP)", dernier.split("\n").slice(0, 4).join(" · "));
+        if (window.sromToast) window.sromToast("Joint au rapport d'intervention.");
+      }
+    });
+
+    /* Dictée — Web Speech API : l'audio SORT de l'appareil. Jamais activée en
+       silence : le 1er appui montre l'avertissement, le 2e démarre l'écoute. */
+    var dictBtn = $("nt-dictee"), reco = null, avertVu = false;
+    if (dictBtn) {
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        dictBtn.disabled = true;
+        dictBtn.textContent = "Dictée indisponible sur ce navigateur";
+      } else {
+        dictBtn.addEventListener("click", function () {
+          var avert = $("nt-dictee-avert");
+          if (!avertVu) {
+            avertVu = true;
+            if (avert) avert.style.display = "";
+            dictBtn.textContent = "J'ai lu — démarrer la dictée";
+            return;
+          }
+          if (reco) { try { reco.stop(); } catch (e) {} reco = null; dictBtn.textContent = "Dictée"; return; }
+          try {
+            reco = new SR();
+            reco.lang = "fr-CH"; reco.continuous = true; reco.interimResults = false;
+            reco.onresult = function (e) {
+              var t = "";
+              for (var i = e.resultIndex; i < e.results.length; i++) {
+                if (e.results[i].isFinal) t += e.results[i][0].transcript + "\n";
+              }
+              if (t) {
+                var z = $("nt-vrac");
+                z.value += (z.value && !/\n$/.test(z.value) ? "\n" : "") + t.trim();
+              }
+            };
+            reco.onerror = function (ev) {
+              if (window.sromToast) window.sromToast("Dictée interrompue (" + (ev.error || "erreur") + ") — tapez au clavier.");
+              dictBtn.textContent = "Dictée"; reco = null;
+            };
+            reco.onend = function () { dictBtn.textContent = "Dictée"; reco = null; };
+            reco.start();
+            dictBtn.textContent = "Arrêter la dictée";
+          } catch (e) {
+            if (window.sromToast) window.sromToast("Dictée impossible sur ce navigateur — tapez au clavier.");
+            reco = null;
+          }
+        });
+      }
+    }
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready);
+  else ready();
+})();
+
+</script>
 </html>
 
