@@ -86,6 +86,50 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
 @media (max-width:1080px){.nav-links a.navl{display:none}}
 @media (max-width:860px){.g2,.g2t,.g3{grid-template-columns:1fr!important}.stats{grid-template-columns:1fr 1fr!important}.pass{grid-template-columns:1fr!important}.pass>svg{transform:rotate(90deg);justify-self:center}.agents{grid-template-columns:1fr!important}#don{grid-template-columns:1fr!important}}
 @media (max-width:560px){.stats{grid-template-columns:1fr!important}}
+/* ── Titre héros : jamais un mot coupé (constat iPhone ~390 px, 10.08.2026) ──
+   DEUX causes cumulées, il fallait traiter les deux :
+   1. la borne basse du clamp (44 px) dépassait la largeur utile d'un
+      téléphone — 360 px moins 2×32 px de marge = 296 px pour « Les bons
+      secours, » ;
+   2. l'animation d'apparition remplaçait le titre par un span inline-block
+      PAR CARACTÈRE. Chaque inline-block est une occasion de retour à la
+      ligne pour le navigateur : il coupait donc entre deux lettres, d'où
+      « secour » / « s, ». Aucune règle CSS de césure ne pouvait l'empêcher,
+      puisque ce n'était pas une césure mais un saut entre deux éléments.
+      Le correctif de fond est côté script (découpage par MOT).
+   Les règles ci-dessous verrouillent en plus le comportement de césure. */
+.hero-h1{overflow-wrap:normal;word-break:keep-all;-webkit-hyphens:none;hyphens:none}
+.hero-h1 span{overflow-wrap:normal;word-break:keep-all}
+@media (max-width:700px){
+  .nav-inner,#top{padding-left:20px!important;padding-right:20px!important}
+  .nav-links{gap:12px!important}
+}
+@media (max-width:560px){
+  /* Mesuré à 360 px : le contenu de la barre faisait 354 px pour 328 px utiles
+     — « Soutenir » sortait de 26 px et était rogné par overflow-x:hidden.
+     Le badge « ASSOCIATION » et le nom écrit se retirent ; la marque reste
+     portée par le logo, et le lien garde son aria-label « SwissRescue
+     OmniMed », donc rien n'est perdu pour un lecteur d'écran. Les deux
+     boutons, eux, restent entiers : ce sont les seules actions de la barre. */
+  .brand-tag,.brand-name{display:none}
+  .nav-links{gap:8px!important;flex-shrink:0}
+  .nav-links .btn-g{padding:8px 12px!important}
+  .nav-links .btn-w{padding:8px 14px!important}
+  /* « Console » devient « Reprendre · <module> » quand une session existe :
+     on borne la largeur pour qu'un nom long ne repousse jamais « Soutenir ». */
+  #nav-console{max-width:46vw;overflow:hidden;text-overflow:ellipsis}
+}
+@media (max-width:400px){
+  .nav-inner,#top{padding-left:16px!important;padding-right:16px!important}
+}
+/* Débordement PRÉEXISTANT, mesuré à 320 px (iPhone SE) : les cartes sortaient
+   de 32 px. Un enfant de grille a par défaut min-width:auto, donc il refuse de
+   descendre sous la largeur de son contenu et fait grossir la colonne au-delà
+   de son conteneur (piste calculée à 336 px pour 288 px disponibles).
+   min-width:0 lève ce plancher. Sans effet au-dessus de 860 px. */
+@media (max-width:860px){
+  .g2>*,.g2t>*,.g3>*,.agents>*,.pass>*,#don>*{min-width:0}
+}
 </style>
 <script src="vendor/gsap.min.js" defer></script>
 <script src="vendor/ScrollTrigger.min.js" defer></script>
@@ -96,12 +140,12 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
 
   <!-- NAV -->
   <nav aria-label="Navigation principale" style="position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(5,8,15,.72);border-bottom:1px solid rgba(255,255,255,.06)">
-    <div style="max-width:1120px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between">
+    <div class="nav-inner" style="max-width:1120px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px">
       <a href="#top" style="display:flex;align-items:center;gap:11px" aria-label="SwissRescue OmniMed — haut de page">
         <!-- Logo = tracé de pouls (règle emblèmes §6bis : jamais de croix — Conventions de Genève / LPAP) -->
         <span style="width:30px;height:30px;border-radius:8px;background:#D42C2C;display:flex;align-items:center;justify-content:center;flex-shrink:0" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5-7 4 15 3-9 1.5 3H22"/></svg></span>
-        <span style="font-size:14.5px;font-weight:650;letter-spacing:-.01em">SwissRescue OmniMed</span>
-        <span style="font-size:10px;font-weight:600;color:#77839A;border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:2px 7px;letter-spacing:.06em">ASSOCIATION</span>
+        <span class="brand-name" style="font-size:14.5px;font-weight:650;letter-spacing:-.01em;white-space:nowrap">SwissRescue OmniMed</span>
+        <span class="brand-tag" style="font-size:10px;font-weight:600;color:#77839A;border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:2px 7px;letter-spacing:.06em;white-space:nowrap">ASSOCIATION</span>
       </a>
       <div class="nav-links" style="display:flex;align-items:center;gap:26px">
         <a class="navl" href="#apps">Applications</a>
@@ -126,7 +170,7 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
           <span style="width:6px;height:6px;border-radius:50%;background:#3DD68C;animation:pulseDot 2s infinite" aria-hidden="true"></span>
           <span class="shiny-text" style="font-size:12px;font-weight:550;letter-spacing:.02em">Association à but non lucratif · art. 60-79 CC · Genève</span>
         </div>
-        <h1 aria-label="Les bons secours, au bon moment." style="font-size:clamp(44px,7.5vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1.02;margin-top:34px;color:#fff"><span aria-hidden="true"><span data-split="1" style="display:inline-block">Les bons secours,</span><br><span data-rise="1" style="display:inline-block;background:linear-gradient(105deg,#F0776F 5%,#8FB6E8 90%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em">au bon moment.</span></span></h1>
+        <h1 class="hero-h1" aria-label="Les bons secours, au bon moment." style="font-size:clamp(34px,8.2vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1.02;margin-top:34px;color:#fff"><span aria-hidden="true"><span data-split="1" style="display:inline-block">Les bons secours,</span><br><span data-rise="1" style="display:inline-block;background:linear-gradient(105deg,#F0776F 5%,#8FB6E8 90%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em">au bon moment.</span></span></h1>
         <p style="font-size:17.5px;line-height:1.65;color:#8A94A6;margin:26px auto 0;max-width:560px;text-wrap:pretty;font-weight:450">Deux applications médicales d'urgence, gratuites et souveraines, qui orientent chaque personne en Suisse vers le bon service — même sans réseau.</p>
         <div style="display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap">
           <a class="btn-w" href="app-router.html" style="display:inline-flex;align-items:center;gap:9px;background:#fff;color:#05080F;font-size:14.5px;font-weight:650;padding:13px 24px;border-radius:11px">Ouvrir l'application<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -512,9 +556,28 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
     if (!g || !ST) { if (++tries < 40) setTimeout(init, 150); return; } /* scripts en defer ; abandon silencieux si bloqués */
     g.registerPlugin(ST);
     document.querySelectorAll('[data-split]').forEach(function (el) {
+      /* Découpage par MOT, puis par lettre à l'intérieur du mot.
+         Le niveau « mot » est indispensable : sans lui, chaque lettre est un
+         span inline-block, et le navigateur peut passer à la ligne ENTRE deux
+         lettres. C'est ce qui coupait « secours » en « secour » / « s, » sur
+         iPhone. Le span de mot est insécable ; les retours à la ligne ne
+         peuvent donc plus tomber qu'entre les mots. L'animation lettre par
+         lettre est conservée à l'identique. */
       var txt = el.textContent; el.textContent = '';
-      txt.split('').forEach(function (ch) { var s = document.createElement('span'); s.style.display = 'inline-block'; s.style.whiteSpace = 'pre'; s.textContent = ch; el.appendChild(s); });
-      g.fromTo(el.children, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.25, ease: 'power3.out', stagger: .045 });
+      var lettres = [];
+      txt.split(/(\s+)/).forEach(function (mot) {
+        if (!mot) return;
+        if (/^\s+$/.test(mot)) { el.appendChild(document.createTextNode(mot)); return; }
+        var w = document.createElement('span');
+        w.style.display = 'inline-block'; w.style.whiteSpace = 'nowrap';
+        mot.split('').forEach(function (ch) {
+          var s = document.createElement('span');
+          s.style.display = 'inline-block'; s.style.whiteSpace = 'pre';
+          s.textContent = ch; w.appendChild(s); lettres.push(s);
+        });
+        el.appendChild(w);
+      });
+      g.fromTo(lettres, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.25, ease: 'power3.out', stagger: .045 });
     });
     g.fromTo('[data-rise]', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.25, ease: 'power3.out', delay: .5 });
     document.querySelectorAll('[data-count]').forEach(function (el) {
