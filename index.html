@@ -142,8 +142,14 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
   <nav aria-label="Navigation principale" style="position:fixed;top:0;left:0;right:0;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(5,8,15,.72);border-bottom:1px solid rgba(255,255,255,.06)">
     <div class="nav-inner" style="max-width:1120px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px">
       <a href="#top" style="display:flex;align-items:center;gap:11px" aria-label="SwissRescue OmniMed — haut de page">
-        <!-- Logo = tracé de pouls (règle emblèmes §6bis : jamais de croix — Conventions de Genève / LPAP) -->
-        <span style="width:30px;height:30px;border-radius:8px;background:#D42C2C;display:flex;align-items:center;justify-content:center;flex-shrink:0" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5-7 4 15 3-9 1.5 3H22"/></svg></span>
+        <!-- Logo = BOUCLIER TEAL, tracé identique à docs/logo.svg et à .logo dans
+             app.html (même viewBox 0 0 64 64, mêmes deux tracés, même #1E9E8A).
+             Le carré rouge précédent était une divergence : 8 pages du site
+             portaient déjà ce bouclier, index.html était la seule exception.
+             Règle emblèmes §6bis respectée — un tracé de pouls, jamais de croix
+             (Conventions de Genève / LPAP). Le rouge reste réservé aux actions
+             d'urgence (bouton d'appel), il ne porte plus l'identité. -->
+        <span style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0" aria-hidden="true"><svg viewBox="0 0 64 64" width="30" height="30"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#FFFFFF" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="brand-name" style="font-size:14.5px;font-weight:650;letter-spacing:-.01em;white-space:nowrap">SwissRescue OmniMed</span>
         <span class="brand-tag" style="font-size:10px;font-weight:600;color:#77839A;border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:2px 7px;letter-spacing:.06em;white-space:nowrap">ASSOCIATION</span>
       </a>
@@ -426,7 +432,7 @@ button{transition:opacity .2s,background .2s,border-color .2s,transform .15s}
 
     <!-- FOOTER -->
     <footer style="border-top:1px solid rgba(255,255,255,.06);padding:28px 0 36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:9px"><span style="width:22px;height:22px;border-radius:6px;background:#D42C2C;display:flex;align-items:center;justify-content:center" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5-7 4 15 3-9 1.5 3H22"/></svg></span><span style="font-size:12.5px;color:#77839A;font-weight:450">© 2026 SwissRescue OmniMed — association à but non lucratif en cours de constitution, art. 60-79 CC</span></div>
+      <div style="display:flex;align-items:center;gap:9px"><!-- Même bouclier teal qu'en en-tête : le pied de page portait le même carré rouge. --><span style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0" aria-hidden="true"><svg viewBox="0 0 64 64" width="22" height="22"><path d="M18 12 L46 12 Q51 12 51 17 L51 30 Q51 43 32 54 Q13 43 13 30 L13 17 Q13 12 18 12 Z" fill="#1E9E8A"/><path d="M17 35 H27 L32 21 L37 44 L42 35 H47" fill="none" stroke="#FFFFFF" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="font-size:12.5px;color:#77839A;font-weight:450">© 2026 SwissRescue OmniMed — association à but non lucratif en cours de constitution, art. 60-79 CC</span></div>
       <div style="display:flex;gap:20px;flex-wrap:wrap">
         <a href="app.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">App autonome</a>
         <a href="app-router.html" style="font-size:12.5px;color:#8A94A6;font-weight:500">App complète</a>
