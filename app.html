@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- Association SwissRescue OmniMed - info@swissrescueomnimed.ch -->
 <meta name="theme-color" content="#0E3A5C">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230E3A5C'/%3E%3Cpath d='M17 35 H27 L32 21 L37 44 L42 35 H47' fill='none' stroke='white' stroke-width='4.4' stroke-linecap='round' stroke-linejoin='round' transform='translate(256,268) scale(9.4) translate(-32,-33)'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230E3A5C'/%3E%3Cpath d='M150 96 H360 Q404 96 404 140 V250 Q404 350 256 430 Q108 350 108 250 V140 Q108 96 150 96 Z' fill='%231E9E8A'/%3E%3Cpath d='M150 268 H214 L252 170 L300 360 L338 268 H392' fill='none' stroke='white' stroke-width='30' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <title>SwissRescue OmniMed — Assistant médical d'urgence</title>
 <meta name="application-name" content="SwissRescue OmniMed">
 <meta name="description" content="SwissRescue OmniMed — assistant médical d'urgence hors-ligne: triage, raisonnement clinique, SOS. Aide au raisonnement, jamais un diagnostic.">
@@ -535,6 +535,96 @@ body[data-disp="cercle"][data-dens] #modgrid .mod{padding:4px 2px!important}
 /* Respecter le réglage système : pas d'animation pour qui n'en veut pas. */
 @media (prefers-reduced-motion:reduce){
  .mod,.tri-carte,.disp-b{transition:none!important}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   POSTE DE TRAVAIL — première étape du cockpit praticien (≥ 1024 px).
+
+   LE DÉFAUT MESURÉ, le 11.08, sur écran 1440 px : l'application s'affichait
+   dans une colonne de 376 px, avec 74 % de l'écran vide. Cause : `.am-device`
+   est un CADRE DE TÉLÉPHONE figé à 430 px — un vestige de la maquette
+   d'origine, encoche comprise. Sur un ordinateur, ce cadre ne « s'étire » pas :
+   il reste un téléphone posé au milieu du noir, ce qui est pire. Une encoche
+   d'iPhone dessinée sur un écran 27 pouces est le signe le plus sûr qu'on
+   regarde une maquette et non un outil.
+
+   CE QUE FAIT CETTE ÉTAPE, et ce qu'elle ne fait pas encore.
+   Elle libère le cadre et pose la structure à DEUX PANNEAUX : la liste des
+   modules devient un RAIL PERMANENT à gauche, le module ouvert occupe le
+   panneau principal. On cesse de naviguer par aller-retours ; on voit d'où
+   l'on vient pendant qu'on travaille — c'est la différence entre un assistant
+   de poche et un poste de travail.
+   Elle NE FAIT PAS encore : la liste patients, la GED, les suivis. Le CRM
+   clinique complet vient après ; ceci en est le squelette, pas le tout.
+
+   Aucun DOM n'est déplacé : tout tient au CSS. Une règle qui bouge des nœuds
+   au redimensionnement casse l'état des modules ouverts, et c'est le genre de
+   panne qu'on ne voit qu'en production.
+   Mobile inchangé sous 1024 px : le téléphone reste un assistant de secours.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* Palier tablette (768–1023 px) : on libère déjà le cadre téléphone, sans
+   passer aux deux panneaux. Mesuré à 768 px, l'app restait dans ses 430 px
+   avec 45 % de vide. Une tablette n'est pas un poste de travail, mais ce n'est
+   pas non plus un téléphone : elle mérite sa largeur, en une seule colonne. */
+@media (min-width:768px) and (max-width:1023px){
+ .am-device{width:100%!important;max-width:none!important;margin:0!important;
+  background:transparent!important}
+ .am-notch{display:none!important}
+ .shell{max-width:760px!important;margin:0 auto!important;padding:0 24px 72px!important}
+ header.app{max-width:760px;margin:0 auto}
+}
+@media (min-width:1024px){
+ /* 1. Libérer le cadre téléphone. */
+ .am-device{width:100%!important;max-width:none!important;margin:0!important;
+  background:transparent!important}
+ .am-notch{display:none!important}       /* une encoche sur un écran de bureau */
+ .am-screen{min-height:100vh}
+ /* 2. Le contenant respire : 1440 px utiles, centrés, jamais collés au bord. */
+ .shell{max-width:1440px!important;margin:0 auto!important;padding:0 28px 64px!important}
+ header.app{max-width:1440px;margin:0 auto;padding:14px 0 12px!important}
+
+ /* 3. Deux panneaux : rail de modules · module ouvert.
+    `:has()` sert à ne passer en deux colonnes QUE lorsqu'un module est
+    réellement ouvert — sinon l'accueil occupe toute la largeur, et on n'a pas
+    un panneau vide qui regarde l'utilisateur. */
+ main#main-content:has(.view.active:not(#v-home)){
+  display:grid;grid-template-columns:300px minmax(0,1fr);gap:26px;align-items:start}
+ main#main-content:has(.view.active:not(#v-home)) #v-home{
+  display:block!important;position:sticky;top:12px;
+  max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain;
+  padding-right:8px;border-right:1px solid var(--am-line,rgba(255,255,255,.09))}
+ /* Dans le rail, les modules se lisent en liste : on cherche un nom, pas une
+    forme. La disposition choisie par l'utilisateur continue de s'appliquer au
+    plein écran d'accueil. */
+ main#main-content:has(.view.active:not(#v-home)) #v-home .mod-grid{
+  grid-template-columns:1fr!important;gap:5px!important}
+ main#main-content:has(.view.active:not(#v-home)) #v-home .mod{
+  flex-direction:row!important;align-items:center;gap:10px;padding:8px 10px!important;
+  min-height:auto}
+ main#main-content:has(.view.active:not(#v-home)) #v-home .mod .m-t{font-size:12.5px}
+ main#main-content:has(.view.active:not(#v-home)) #v-home .mod .m-d{display:none}
+ main#main-content:has(.view.active:not(#v-home)) #v-home .disp-barre{display:none}
+ main#main-content:has(.view.active:not(#v-home)) #v-home > h2,
+ main#main-content:has(.view.active:not(#v-home)) #v-home > .lede{display:none}
+ /* Le bouton « ← Modules » perd son sens quand les modules sont déjà là. */
+ main#main-content:has(.view.active:not(#v-home)) .view.active .back{display:none}
+
+ /* 4. Le contenu d'un module ne doit pas s'étirer en lignes illisibles.
+    Au-delà de ~90 caractères, l'œil perd la ligne : on borne le texte courant
+    sans brider les grilles, tableaux et cartes qui, eux, gagnent à la largeur. */
+ .view.active > p, .view.active > .lede, .view.active > .note{max-width:78ch}
+
+ /* 5. Accueil seul : la grille profite enfin de la largeur. */
+ main#main-content:not(:has(.view.active:not(#v-home))) #modgrid .mod-grid{
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
+}
+/* Trois panneaux dès 1600 px : rail · module · contexte. La synthèse reste
+   sous les yeux pendant qu'on travaille, ce qui est tout l'intérêt d'un grand
+   écran. Le troisième panneau n'apparaît que s'il a quelque chose à montrer. */
+@media (min-width:1600px){
+ .shell{max-width:1720px!important}
+ header.app{max-width:1720px}
+ main#main-content:has(.view.active:not(#v-home)){grid-template-columns:320px minmax(0,1fr) 360px}
 }
 </style>
 <style id="dispo-skin">

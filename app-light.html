@@ -40,6 +40,42 @@ details[open] summary::after{content:"−"}
 .back{display:block;text-align:center;padding:15px;margin-top:22px;background:var(--s2);border:1px solid var(--b);border-radius:12px;text-decoration:none;color:var(--t);font-weight:700;font-size:14.5px}
 kbd{background:var(--s2);border:1px solid var(--b);border-radius:5px;padding:1px 6px;font-size:13px;font-family:inherit}
 @media(max-width:360px){.call .n{font-size:34px}.num b{font-size:19px}}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GRAND ÉCRAN — l'app légère n'est plus une colonne perdue dans le noir.
+
+   MESURÉ le 11.08 sur un écran de 1440 px : `main.wrap` restait bloqué à
+   640 px, avec 392 px de vide de chaque côté, et la page ne comportait qu'UNE
+   seule media query — `(max-width: 360px)`. Autrement dit, zéro adaptation
+   au-delà du téléphone. Le contenu était bien centré, mais une colonne de
+   téléphone au milieu d'un écran de bureau ne donne pas l'impression d'un
+   outil : elle donne l'impression d'une page inachevée.
+
+   Ce que cette étape fait, et rien de plus : elle rend la largeur utilisable.
+   L'app légère reste ce qu'elle doit rester — un secours simple, lisible, qui
+   marche partout et sans réseau. On ne lui ajoute AUCUNE fonction ici : la
+   puissance est le rôle de l'app lourde. On corrige la présentation, pas la
+   nature.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (min-width:768px){
+  .wrap{max-width:760px;padding:0 24px}
+  .grid{grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px}
+}
+@media (min-width:1024px){
+  .wrap{max-width:1080px;padding:0 32px}
+  header{padding:14px 32px}
+  /* Les protocoles se lisent en deux colonnes : on en embrasse deux fois plus
+     d'un coup d'œil, et chaque bloc garde une longueur de ligne confortable.
+     `break-inside:avoid` empêche qu'un protocole soit coupé entre deux
+     colonnes — un protocole tronqué en pleine urgence serait pire que rien. */
+  main.wrap > details{break-inside:avoid;margin-bottom:12px}
+  main.wrap{column-gap:26px}
+  .grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .body{max-width:74ch}   /* le texte courant reste lisible même élargi */
+}
+@media (min-width:1440px){
+  .wrap{max-width:1240px}
+}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skip{position:absolute;left:8px;top:-60px;z-index:100;background:var(--r);color:#fff;padding:10px 16px;border-radius:8px;font-weight:800;text-decoration:none;transition:top .15s}
 .skip:focus{top:8px}
