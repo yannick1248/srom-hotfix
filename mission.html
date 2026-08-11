@@ -77,6 +77,33 @@ h3{font-size:17px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
 
 /* Pillars grid */
 .pillars-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+/* La barre de navigation est en position fixe (68 px). Sans cette marge, une
+   arrivée par le lien « lire la pensée entière » déposerait le lecteur AVEC LE
+   TITRE CACHÉ SOUS LA BARRE — il croirait avoir raté le texte. Aucun autre
+   élément de la page n'a de marge d'ancrage : je ne la pose que sur la section
+   que ce lot introduit, pour ne pas modifier le comportement de l'existant. */
+#pensee-fondateur{scroll-margin-top:88px}
+
+/* Pensée du fondateur — registre sobre. Pas de carte, pas d'ombre, pas de
+   pictogramme : c'est une parole, pas un argument de vente. Le seul accent est
+   le teal de l'emblème, sur un filet et sur la première phrase. La largeur est
+   bornée à 680 px (~72 caractères) : au-delà, l'œil perd la ligne et un texte
+   qu'on ne lit pas ne sert à rien. */
+.pensee{margin:0 auto;max-width:680px;padding:6px 0 6px 26px;
+ border-left:2px solid #1E9E8A}
+.pensee blockquote{margin:0}
+.pensee p{font-size:17px;line-height:1.76;color:var(--text-secondary);
+ margin:0 0 18px;text-wrap:pretty}
+.pensee p:last-child{margin-bottom:0}
+.pensee em{font-style:italic;color:var(--text-primary)}
+.pensee-accroche{font-size:20px!important;line-height:1.45!important;font-weight:700;
+ color:var(--text-primary)!important;letter-spacing:-.01em;margin-bottom:20px!important}
+.pensee figcaption{margin-top:24px;font-style:italic;font-size:15px;color:var(--text-muted)}
+@media (max-width:640px){
+ .pensee{padding-left:17px}
+ .pensee p{font-size:15.5px;line-height:1.7}
+ .pensee-accroche{font-size:18px!important}
+}
 .pillar-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .25s}
 .pillar-card:hover{background:var(--surface-hover);border-color:var(--border-strong);transform:translateY(-2px)}
 .pillar-icon{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--blue-dim);border:1px solid rgba(15,76,129,.25);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
@@ -215,6 +242,30 @@ footer{border-top:1px solid var(--border);padding:40px 0}
         <div class="pillar-desc">Demande de brevet PCT/OMPI déposée. Elle ouvre une option de dépôt dans les États signataires ; aucun titre n'est délivré à ce jour. Marques « SwissRescue » et « MedAlert » déposées via le Système de Madrid.</div>
       </div>
     </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- PENSÉE DU FONDATEUR — texte repris TEL QUEL de Pensee_du_fondateur.md,
+     sans une virgule de changée. Placée ici à dessein : après « notre raison
+     d'être » et avant « nos valeurs ». Le pourquoi, puis l'homme qui l'a
+     décidé, puis ce qui en découle — l'ordre raconte quelque chose.
+     Volontairement SANS la classe « reveal » : sur ce site les blocs
+     n'apparaissent que si un IntersectionObserver tourne. Un texte signé ne
+     doit pas dépendre d'un script pour exister (même choix que le mot au
+     donateur sur don.html). -->
+<section class="section" id="pensee-fondateur">
+  <div class="container">
+    <figure class="pensee">
+      <blockquote>
+        <p class="pensee-accroche">Un nom ne s'hérite pas ; il se construit.</p>
+        <p>Cette association ne porte pas un nom d'homme — elle porte une cause. Elle a été bâtie avec presque rien, en très peu de temps&nbsp;: non pour s'en vanter, mais comme preuve. On croit qu'il faut <em>tout</em> — l'argent, les moyens, les conditions parfaites — pour commencer&nbsp;; il suffit d'un point d'appui et de la décision d'agir.</p>
+        <p>Hier, cette application n'existait pas. Aujourd'hui, elle peut orienter un geste, faire gagner de précieuses minutes, peut-être aider à sauver une vie.</p>
+        <p>Car ce qui change les choses n'est ni de savoir, ni de s'indigner — c'est d'agir. Le soin n'attend pas&nbsp;; le bon secours, au bon moment, non plus. Chacun, à sa mesure, peut transformer ce qui l'émeut en un geste — et de ce geste, tout peut commencer.</p>
+      </blockquote>
+      <figcaption>— Le fondateur</figcaption>
+    </figure>
   </div>
 </section>
 
