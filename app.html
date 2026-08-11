@@ -1664,10 +1664,16 @@ window.OMNI_PERM = (function () {
  <button class="launch" id="scene-start" disabled>Démarrer l'analyse de scène (plein écran)</button>
  <button class="launch sec" id="scene-demo" style="margin-top:8px;width:100%">Voir un exemple (démonstration)</button>
  <div id="scene-demo-out" class="verdict" role="status" style="display:none"></div>
- <p class="note">La caméra s'active dans l'app installée ; en démonstration (fichier local), un aperçu de remplacement s'affiche. Rien n'est envoyé.</p>
+ <!-- Cette note était FAUSSE en HTTPS : elle affirmait que la caméra ne
+      s'active que « dans l'app installée » et parlait de « fichier local »
+      même ouverte sur swissrescueomnimed.ch depuis Safari. Constaté sur
+      iPhone le 11.08. Elle est désormais écrite à l'exécution par
+      sromCam.habiller(), d'après le contexte réel (HTTPS, cadre intégré,
+      présence de l'API) — jamais d'après « installée ou non ». -->
+ <p class="note" id="scene-note">Rien n'est envoyé : l'image est analysée sur cet appareil.</p>
  <div class="scene-fs" id="scene-fs" aria-hidden="true">
  <video id="scene-cam" playsinline muted></video>
- <div class="scene-ph" id="scene-ph"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><b>Aperçu caméra — démonstration</b><span>Dans le fichier local, la caméra n'est pas accessible. Dans l'app installée, le flux remplit l'écran, HUD par-dessus.</span></div>
+ <div class="scene-ph" id="scene-ph"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><b id="scene-ph-t">Caméra</b><span id="scene-ph-s">Touchez « Démarrer l'analyse de scène » : la caméra s'ouvre en plein écran et tout est calculé sur cet appareil.</span></div>
  <div class="scene-hud">
  <div class="sh-top"><span class="sh-live"><i></i>ANALYSE</span><span class="sh-ttl">Scène en cours</span><button class="sh-x" id="scene-close" aria-label="Fermer le plein écran">×</button></div>
  <div class="sh-alerts" id="scene-alerts" aria-live="polite"></div>
@@ -1734,8 +1740,18 @@ window.OMNI_PERM = (function () {
  o.addEventListener("click",function(){
   if(o.disabled)return;
   fs.classList.add("on"); fs.setAttribute("aria-hidden","false");
+  /* La cause est CONSTATÉE (protocole, contexte sécurisé, cadre, API) et non
+     supposée — voir le module sromCam. L'ancien message conseillait d'ouvrir
+     « depuis vos fichiers », ce qui est exactement le contexte où la caméra
+     est refusée : le conseil était à l'envers. */
+  if(window.sromCam && !window.sromCam.possible()){
+   phSet("Caméra indisponible ici", window.sromCam.note());
+   window.sromCam.echec("scene-demo");
+   return;
+  }
   if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){
-   phSet("Caméra indisponible dans ce contexte","Ouvrez l'application en pleine page ou depuis vos fichiers pour activer la caméra. Les modules Analyse de plaie et Mesures photo fonctionnent partout via l'appareil photo natif. Rien n'est envoyé.");
+   phSet("Caméra indisponible ici","Ce navigateur ne propose pas d'accès à la caméra. Les modules Analyse de plaie et Mesures photo fonctionnent avec l'appareil photo natif. Rien n'est envoyé.");
+   if(window.sromCam) window.sromCam.echec("scene-demo");
    return;
   }
   /* Pré-explication (une fois par appareil) : l'invite du navigateur est une protection standard. */
@@ -1751,6 +1767,11 @@ window.OMNI_PERM = (function () {
   }).catch(function(err){
    var n=err&&err.name||"";
    if(v)v.style.display="none";
+   /* Échec RÉEL — c'est le seul moment où la démonstration redevient une
+      proposition légitime. Tant que la caméra est accessible, on ne la
+      propose pas : offrir un ersatz à côté d'une caméra qui marche revient
+      à suggérer que l'app ne sait pas faire. */
+   if(window.sromCam) window.sromCam.echec("scene-demo");
    /* Refus = jamais une impasse : les DEUX replis sont nommés au même niveau, plus le geste de ré-autorisation. */
    var DEUX=" Les deux replis restent disponibles au même niveau dans les modules Analyse de plaie, Mesures et Document : bouton « 📷 Appareil photo natif » et photo déjà enregistrée — même analyse.";
    if(n==="NotAllowedError"||n==="SecurityError") phSet("Caméra refusée — rien n'est envoyé","Ré-autoriser la caméra : icône 🔒 (ou ⓘ) de la barre d'adresse → Caméra → Autoriser, puis relancez."+DEUX);
@@ -5771,6 +5792,8 @@ window.OMNI_MODULES=[
  });
  } catch (err) {
  btn.disabled = false; btn.textContent = "Mesure RÉELLE par caméra (15 s)";
+ /* Échec réel de la caméra : l'exemple simulé redevient une proposition utile. */
+ if (window.sromCam) window.sromCam.echec("vitals-demo");
  note.innerHTML = "<strong style='color:var(--amber)'>" + permHelp(err, "Caméra") + "</strong><br>Les DEUX replis restent disponibles au même niveau, partout : bouton « 📷 Appareil photo natif » et import d'une photo (modules Analyse de plaie, Mesures) — même analyse. Ré-autoriser la caméra : icône 🔒 dans la barre d'adresse.";
  return;
  }
@@ -13479,6 +13502,121 @@ window.OMNI_MODULES=[
 
   /* Exposé pour les tests : permet de vérifier la logique sans navigateur. */
   window.sromDispo = { EXIGENCES: EXIGENCES, manquants: manquants, dispo: dispo, phrase: phrase, raison: raison, appliquer: appliquer };
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CAMÉRA — décider par MESURE, jamais par supposition.
+
+   Défaut constaté le 11.08 sur iPhone, Safari, swissrescueomnimed.ch en HTTPS :
+   le module Analyse de scène se présentait comme une simple démonstration et
+   invoquait un contexte de fichier local pour expliquer que la caméra était
+   hors d'atteinte — alors que la page était servie en HTTPS, contexte où
+   Safari accorde getUserMedia. (Les phrases exactes ne sont pas recopiées
+   ici : le test test-camera-https.mjs les interdit dans la page, et les citer
+   ferait échouer la garde que ce correctif installe.)
+   Le code appelait bien getUserMedia au tap — c'est le TEXTE qui mentait, et
+   c'est le texte que l'utilisateur lit. Quelqu'un qui demande une caméra et
+   qu'on informe qu'elle ne marchera pas ne touche pas le bouton.
+
+   La règle appliquée ici : le contexte se CONSTATE (protocole, contexte
+   sécurisé, cadre intégré, présence de l'API), il ne se devine pas à partir
+   de « application installée ou non ». Une PWA installée et un onglet Safari
+   sur le même domaine HTTPS ont exactement les mêmes droits caméra.
+
+   Ce module n'ouvre aucun flux : il ne fait que dire la vérité sur le
+   contexte et régler l'habillage. L'ouverture reste au geste de l'utilisateur,
+   et l'échec réel reste le seul déclencheur du mode démonstration.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  function api() {
+    try { return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia); }
+    catch (e) { return false; }
+  }
+  /* `isSecureContext` est la source de vérité du navigateur. On ne retient
+     `file:` comme cause que si c'est RÉELLEMENT le protocole courant. */
+  function secure() {
+    try {
+      if (typeof window.isSecureContext === "boolean") return window.isSecureContext;
+      var p = location.protocol;
+      return p === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    } catch (e) { return false; }
+  }
+  function fichierLocal() {
+    try { return location.protocol === "file:"; } catch (e) { return false; }
+  }
+  function cadreIntegre() {
+    try {
+      if (window.OMNI_PERM && typeof window.OMNI_PERM.EMBEDDED !== "undefined") return !!window.OMNI_PERM.EMBEDDED;
+      return window.self !== window.top;
+    } catch (e) { return true; } /* accès refusé à window.top = on EST dans un cadre */
+  }
+
+  /** La caméra peut-elle être demandée ici ? (l'autorisation, elle, se demande au tap) */
+  function possible() { return secure() && api() && !cadreIntegre(); }
+
+  /** Pourquoi ce n'est pas possible — la vraie cause constatée, pas une formule. */
+  function obstacle() {
+    if (fichierLocal()) return "fichier-local";
+    if (cadreIntegre()) return "cadre-integre";
+    if (!secure())      return "non-securise";
+    if (!api())         return "api-absente";
+    return null;
+  }
+
+  /** Le texte affiché sous le bouton, écrit d'après le contexte réel. */
+  function note() {
+    switch (obstacle()) {
+      case "fichier-local":
+        return "Cette page est ouverte depuis un fichier local : le navigateur y refuse la caméra. "
+             + "Ouvrez swissrescueomnimed.ch pour l'utiliser. Rien n'est envoyé.";
+      case "cadre-integre":
+        return "Cet aperçu s'affiche dans un cadre intégré, qui bloque la caméra. "
+             + "Ouvrez l'application en plein navigateur. Rien n'est envoyé.";
+      case "non-securise":
+        return "La caméra exige une connexion sécurisée (HTTPS). Ouvrez swissrescueomnimed.ch. Rien n'est envoyé.";
+      case "api-absente":
+        return "Ce navigateur ne propose pas d'accès à la caméra. Les modules Analyse de plaie et Mesures "
+             + "fonctionnent avec l'appareil photo natif. Rien n'est envoyé.";
+      default:
+        return "La caméra s'ouvre au premier geste ; le navigateur demandera votre autorisation. "
+             + "L'image est analysée sur cet appareil — rien n'est envoyé, rien n'est enregistré.";
+    }
+  }
+
+  /** Règle l'habillage d'un module caméra : note honnête, démonstration réservée à l'échec. */
+  function habiller(opt) {
+    opt = opt || {};
+    var n = document.getElementById(opt.note);
+    if (n) n.textContent = note();
+    /* La démonstration n'est PAS une option de même rang que la vraie caméra :
+       elle ne s'affiche que si l'accès est impossible ici, ou après un échec
+       réel (voir echec()). Sinon on propose une caméra qui marche. */
+    var d = document.getElementById(opt.demo);
+    if (d) d.style.display = possible() ? "none" : "";
+    return possible();
+  }
+
+  /** Après un refus ou une panne réelle : là, et seulement là, on ouvre la porte de secours. */
+  function echec(idDemo) {
+    var d = document.getElementById(idDemo);
+    if (d) d.style.display = "";
+  }
+
+  window.sromCam = {
+    api: api, secure: secure, fichierLocal: fichierLocal, cadreIntegre: cadreIntegre,
+    possible: possible, obstacle: obstacle, note: note, habiller: habiller, echec: echec
+  };
+
+  /* Même règle pour le pouls par la caméra (rPPG) : tant que la caméra est
+     accessible, on ne propose pas d'exemple simulé à côté d'une vraie mesure. */
+  function init() {
+    habiller({ note: "scene-note", demo: "scene-demo" });
+    habiller({ demo: "vitals-demo" });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();
 
 </script>
