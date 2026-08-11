@@ -90,6 +90,22 @@ h2{font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.8px;color:var
 .premium-cta{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;padding:10px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;margin-top:10px;transition:all .2s}
 .premium-cta:hover{background:var(--blue-light);transform:translateY(-1px)}
 
+/* Mot au donateur — volontairement sobre : pas d'encadré tapageur, pas de
+   pictogramme, pas de couleur d'accent. Un texte qui parle d'humilité ne peut
+   pas être présenté comme une réclame. Le seul ornement est un filet vertical
+   discret, comme une citation. Largeur limitée à ~62 caractères par ligne :
+   au-delà, l'œil perd la ligne et le texte cesse d'être lu. */
+.mot-donateur{max-width:640px;margin:0 auto;padding:4px 0 4px 22px;
+ border-left:2px solid var(--border-strong)}
+.mot-donateur p{font-size:16.5px;line-height:1.72;color:var(--text-secondary);
+ margin:0 0 17px;text-wrap:pretty}
+.mot-donateur p:last-of-type{margin-bottom:0}
+.mot-signature{font-style:italic;color:var(--text-muted)!important;font-size:15px!important;
+ margin-top:22px!important}
+@media (max-width:640px){
+ .mot-donateur{padding-left:16px}
+ .mot-donateur p{font-size:15.5px;line-height:1.68}
+}
 /* IBAN card */
 .iban-card{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-lg);padding:36px;margin-top:8px}
 .iban-card h3{font-size:18px;font-weight:800;margin-bottom:24px;display:flex;align-items:center;gap:10px}
@@ -192,6 +208,31 @@ footer{border-top:1px solid var(--border);padding:40px 0;margin-top:0}
 </div>
 
 <main>
+<!-- MOT AU DONATEUR — placé AVANT tout appel au don, à dessein : le ton doit
+     précéder la demande. Texte repris tel quel de Mot_du_donateur.md, sans
+     retouche : c'est la parole du porteur, pas la mienne.
+     Il redit la non-déductibilité fiscale à la forme NÉGATIVE, seule correcte
+     (point de vérité #2 — la formule exacte n'est pas recopiée ici, elle est
+     dans le texte lui-même). La page le disait déjà dans sa mention légale,
+     en bas ; ici c'est assumé et non redondant : en haut c'est une
+     franchise offerte avant qu'on demande quoi que ce soit, en bas c'est une
+     mention légale. Les deux n'ont ni le même lecteur ni le même moment. -->
+<section class="section" id="mot-donateur">
+  <div class="container">
+    <!-- Volontairement SANS la classe « reveal ». Les autres blocs de la page
+         apparaissent au défilement, portés par un IntersectionObserver : si ce
+         script ne tourne pas, ils restent à opacité 0. Pour un texte qui dit
+         « nous ne promettons rien de plus que ce que votre don permet », en
+         dépendre serait exactement à l'envers — les boutons de paiement, eux,
+         resteraient visibles. Ce paragraphe s'affiche donc sans condition. -->
+    <div class="mot-donateur">
+      <p>Cet outil est gratuit, et le restera. Personne ne s'enrichit : ce qui est reçu retourne entièrement à la cause — au soin, et au temps rendu à ceux qui soignent.</p>
+      <p>Une bonne action ne se donne pas ; elle se décide. Si vous choisissez de soutenir, ce sera votre geste, pas le nôtre — et nous ne dirons jamais avoir fait plus que ce que votre soutien permet réellement.</p>
+      <p>Nous préférons aussi le dire clairement : les dons ne sont pas déductibles fiscalement, et aucune attestation ne peut être délivrée à ce jour. Vous ne donnez pas pour un reçu — vous donnez pour que quelqu'un, quelque part, reçoive les bons secours au bon moment.</p>
+      <p class="mot-signature">— L'association</p>
+    </div>
+  </div>
+</section>
 <section class="section" id="stripe">
   <div class="container">
     <div class="reveal">
