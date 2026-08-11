@@ -8587,7 +8587,7 @@ window.OMNI_MODULES=[
  ["INTERMÉD.", "Hypertension / récidives fréquentes", "Mesurer la tension; récidives → cautérisation ORL."],
  ["À EXCLURE", "Épistaxis postérieure", "Coule dans la gorge, deux narines, incontrôlable — méchage aux urgences."]
  ] },
- { id: "piqure", sys: "Envenimation / piqûre / morsure", re: /piq[ûu]re|piqu[ée] par|(me suis|s'est|me fais) fait piquer|piqu[ée](?![a-zà-ÿ])|morsure|mordu|gu[êe]pe|abeille|frelon|(?<![a-zà-ÿ])tique(?![a-zà-ÿ])|serpent|araign[ée]e|anaphyla|[oœ]d[èe]me\s+de\s+Quincke|angio[- ]?[oœ]d[èe]me|urticaire\s+g[ée]n[ée]ralis|collapsus\s+.{0,16}allerg/i,
+ { id: "piqure", sys: "Envenimation / piqûre / morsure", re: /piq[ûu]re|piqu[ée] par|(me suis|s'est|me fais) fait piquer|piqu[ée](?![a-zà-ÿ])|morsure|mordu|gu[êe]pe|abeille|frelon|(?<![a-zà-ÿ])tique(?![a-zà-ÿ])|serpent|araign[ée]e|anaphyla|(?:œ|oe)d[èe]me\s+de\s+Quincke|angio[- ]?(?:œ|oe)d[èe]me|urticaire\s+g[ée]n[ée]ralis|collapsus\s+.{0,16}allerg/i,
  red: ["gonflement du visage, des lèvres ou de la gorge", "urticaire généralisée", "malaise, vertiges", "gêne respiratoire ou pour avaler"],
  src: "Anaphylaxie sur piqûre/venin — adrénaline IM en première ligne, décubitus jambes surélevées : Cardona V et al., World Allergy Organization Anaphylaxis Guidance 2020, World Allergy Organ J. 2020;13(10):100472. doi:10.1016/j.waojou.2020.100472 (PMID 33204386) · Muraro A et al., EAACI Guidelines: Anaphylaxis (2021 update), Allergy. 2022;77(2):357-377. doi:10.1111/all.15032 (PMID 34343358)",
  redAdvice: "144 IMMÉDIATEMENT si signes généraux (visage/gorge, urticaire diffuse, malaise): anaphylaxie — adrénaline IM si auto-injecteur (voir Protocoles).",
@@ -8631,7 +8631,7 @@ window.OMNI_MODULES=[
  ["INTERMÉD.", "Kyste ovarien (rupture/hémorragie)", "Douleur brutale souvent en milieu de cycle, s'atténuant en heures ; surveillance si état stable."],
  ["ÉLEVÉE", "Dysménorrhée (douleur de règles)", "Cyclique, connue, calmée par les antalgiques habituels — reste un diagnostic d'élimination si le tableau change."]
  ] },
- { id: "oeil", sys: "Ophtalmologie — œil rouge / baisse de vision", re: /(œil|oeil|yeux).{0,25}(rouge|mal|douleur|gonfl)|(baisse|perte|trouble).{0,20}(de la )?(vue|vision)|vois? (flou|double|trouble)|halo.{0,15}lumi[èe]re|voile.{0,15}(noir|devant)/i,
+ { id: "oeil", sys: "Ophtalmologie — œil rouge / baisse de vision", re: /(œil|oeil|yeux).{0,25}(rouge|mal|douleur|gonfl)|(baisse|perte|trouble).{0,20}(de la )?(vue|vision)|vois? (flou|double|trouble)|halo.{0,15}lumi[èe]re|voile.{0,15}(noir|devant)|(perd\w+|perdu)\s*.{0,24}(la\s+)?(vue|vision)|(vue|vision)\s*.{0,20}d[ '’](un\s+)?[oœ]e?il|amaurose|rideau\s+noir/i,
  red: ["baisse de vision brutale", "douleur oculaire intense avec nausées", "halos colorés autour des lumières", "voile noir ou rideau qui descend", "traumatisme ou projection de produit"],
  redAdvice: "URGENCE OPHTALMOLOGIQUE le jour même — la vue perdue ne revient pas. Projection chimique : RINCER À L'EAU 20 MINUTES AVANT tout déplacement, puis urgences.",
  ddx: [
