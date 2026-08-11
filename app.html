@@ -614,9 +614,20 @@ body[data-disp="cercle"][data-dens] #modgrid .mod{padding:4px 2px!important}
     sans brider les grilles, tableaux et cartes qui, eux, gagnent à la largeur. */
  .view.active > p, .view.active > .lede, .view.active > .note{max-width:78ch}
 
- /* 5. Accueil seul : la grille profite enfin de la largeur. */
- main#main-content:not(:has(.view.active:not(#v-home))) #modgrid .mod-grid{
+ /* 5. Accueil seul : la grille profite enfin de la largeur.
+    RESTREINT à la disposition « Tuiles ». Sans cette restriction, cette règle
+    écrasait les deux autres bascules — mesuré à 1440 px, le mode « Liste »
+    rendait SIX colonnes au lieu d'une. Une bascule qui ne bascule pas est pire
+    qu'une bascule absente : l'utilisateur clique et rien ne se passe. */
+ body[data-disp="brique"] main#main-content:not(:has(.view.active:not(#v-home))) #modgrid .mod-grid{
   grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
+ /* « Liste » reste une liste, même sur grand écran — c'est tout son intérêt :
+    on balaye des noms. On borne juste sa largeur pour ne pas étirer les
+    libellés sur 1400 px. */
+ body[data-disp="ligne"] #modgrid .mod-grid{max-width:820px}
+ /* « Cercles » profite de la largeur sans devenir minuscule. */
+ body[data-disp="cercle"] main#main-content:not(:has(.view.active:not(#v-home))) #modgrid .mod-grid{
+  grid-template-columns:repeat(auto-fill,minmax(120px,1fr))!important}
 }
 /* Trois panneaux dès 1600 px : rail · module · contexte. La synthèse reste
    sous les yeux pendant qu'on travaille, ce qui est tout l'intérêt d'un grand
@@ -14036,6 +14047,101 @@ window.OMNI_MODULES=[
 })();
 
 /* ══════════════════════════════════════════════════════════════════════════
+   DÉTECTION D'APPAREIL — décider par plusieurs indices, jamais par un seul.
+
+   La largeur seule ment dans les deux sens : une fenêtre de navigateur réduite
+   sur un ordinateur ferait passer un poste de travail pour un téléphone, et
+   une tablette en paysage ferait l'inverse. On croise donc trois familles
+   d'indices, comme un diagnostic : la GÉOMÉTRIE (largeur), le POINTEUR (fin et
+   survolant = souris ; grossier = doigt), et ce que déclare le navigateur
+   (User-Agent Client Hints quand ils existent, chaîne UA sinon).
+
+   Ce que la détection décide — deux choses, pas une :
+   1. LA MISE EN PAGE. Ordinateur = poste de travail multi-panneaux ; téléphone
+      = assistant de secours en colonne. Jamais l'un déguisé en l'autre.
+   2. LE PALIER DE PUISSANCE. Sur ordinateur, le poids n'est plus une
+      contrainte : on peut charger délibérément du lourd en local (WebGPU,
+      modèles, vision, calcul). Sur téléphone, on reste léger — une app de
+      secours qui met huit secondes à démarrer n'est pas une app de secours.
+      Ce module ANNONCE le palier ; il ne charge rien de lui-même. Le
+      chargement effectif viendra avec les modules concernés, et chacun devra
+      rester marqué « en cours » tant qu'il n'est pas réellement opérationnel.
+
+   La détection ne masque JAMAIS une fonction : elle choisit une présentation
+   et un budget. Tout ce qui est accessible sur un support l'est sur l'autre.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  function mq(q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } }
+
+  function indices() {
+    var ua = navigator.userAgent || "";
+    var uad = navigator.userAgentData || null;
+    return {
+      largeur: window.innerWidth || document.documentElement.clientWidth || 0,
+      pointeurFin: mq("(pointer: fine)"),
+      survol: mq("(hover: hover)"),
+      pointeurGrossier: mq("(pointer: coarse)"),
+      pointsTactiles: navigator.maxTouchPoints || 0,
+      uaMobileDeclare: uad && typeof uad.mobile === "boolean" ? uad.mobile : null,
+      uaTelephone: /iPhone|iPod|Android.*Mobile|Windows Phone/i.test(ua),
+      uaTablette: /iPad|Android(?!.*Mobile)|Tablet|Silk/i.test(ua)
+    };
+  }
+
+  /** 'ordinateur' · 'tablette' · 'telephone' — d'après le faisceau d'indices. */
+  function detecter(i) {
+    i = i || indices();
+    /* Un téléphone déclaré reste un téléphone, même branché sur un écran. */
+    if (i.uaTelephone || i.uaMobileDeclare === true) return "telephone";
+    if (i.uaTablette) return i.largeur >= 1024 ? "tablette" : "telephone";
+    /* Souris + survol + largeur : la signature d'un ordinateur. Les trois
+       ensemble, parce qu'aucun ne suffit seul. */
+    if (i.pointeurFin && i.survol && i.largeur >= 1024) return "ordinateur";
+    if (i.largeur >= 1024 && !i.pointeurGrossier) return "ordinateur";
+    if (i.largeur >= 768) return "tablette";
+    return "telephone";
+  }
+
+  /* Sur ordinateur on assume le lourd ; ailleurs on reste économe. */
+  function palier(appareil) { return appareil === "ordinateur" ? "haute" : "eco"; }
+
+  function appliquer() {
+    var i = indices(), a = detecter(i), p = palier(a);
+    var b = document.body;
+    if (!b) return { appareil: a, puissance: p, indices: i };
+    b.setAttribute("data-appareil", a);
+    b.setAttribute("data-puissance", p);
+    return { appareil: a, puissance: p, indices: i };
+  }
+
+  var etat = appliquer();
+  /* La fenêtre peut être redimensionnée, un écran externe branché : on
+     réévalue, mais sans agitation — un recalcul par salve de 250 ms.
+     Deux sources d'événement, à dessein : `resize` n'est pas toujours délivré
+     (mesuré : dans un volet de navigateur intégré, il ne l'était pas), alors
+     qu'un changement de media query l'est. Se reposer sur une seule source
+     laissait l'attribut figé sur sa valeur de départ. */
+  var minuteur = null;
+  function replanifier() { clearTimeout(minuteur); minuteur = setTimeout(function () { etat = appliquer(); }, 250); }
+  window.addEventListener("resize", replanifier);
+  ["(min-width: 768px)", "(min-width: 1024px)", "(pointer: fine)", "(hover: hover)"].forEach(function (q) {
+    try {
+      var m = window.matchMedia(q);
+      if (m.addEventListener) m.addEventListener("change", replanifier);
+      else if (m.addListener) m.addListener(replanifier);
+    } catch (e) { /* navigateur ancien : on garde `resize` seul */ }
+  });
+
+  window.sromAppareil = {
+    indices: indices, detecter: detecter, palier: palier, appliquer: appliquer,
+    courant: function () { return { appareil: etat.appareil, puissance: etat.puissance }; },
+    estOrdinateur: function () { return etat.appareil === "ordinateur"; }
+  };
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
    DISPOSITIONS COMMUTABLES — ligne · brique · cercle, et densité.
 
    Trois usages coexistent et aucun n'est « le bon » : on parcourt une liste
@@ -14126,6 +14232,7 @@ window.OMNI_MODULES=[
   else init();
 
   window.sromDisposition = {
+    _marqueur: "dispositions",
     DISPOS: DISPOS, DENS: DENS, appliquer: appliquer,
     courante: function () {
       return { disposition: document.body.getAttribute("data-disp"), densite: document.body.getAttribute("data-dens") };

@@ -321,5 +321,67 @@ if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
   });
 }
 </script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   DÉTECTION D'APPAREIL — même logique que l'application complète.
+
+   La largeur seule ment dans les deux sens : une fenêtre réduite sur un
+   ordinateur passerait pour un téléphone, une tablette en paysage pour un
+   ordinateur. On croise donc trois familles d'indices — géométrie, pointeur
+   (fin et survolant = souris ; grossier = doigt), et déclaration du navigateur.
+
+   Ici la détection ne sert QUE la présentation. L'app autonome reste ce
+   qu'elle doit être : un secours simple qui marche partout, sans réseau. On
+   ne lui ajoute aucun palier de puissance — c'est le rôle de l'app complète.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+  function mq(q) { try { return matchMedia(q).matches; } catch (e) { return false; } }
+  function indices() {
+    var ua = navigator.userAgent || "", uad = navigator.userAgentData || null;
+    return {
+      largeur: innerWidth || document.documentElement.clientWidth || 0,
+      pointeurFin: mq("(pointer: fine)"), survol: mq("(hover: hover)"),
+      pointeurGrossier: mq("(pointer: coarse)"),
+      uaMobileDeclare: uad && typeof uad.mobile === "boolean" ? uad.mobile : null,
+      uaTelephone: /iPhone|iPod|Android.*Mobile|Windows Phone/i.test(ua),
+      uaTablette: /iPad|Android(?!.*Mobile)|Tablet|Silk/i.test(ua)
+    };
+  }
+  function detecter(i) {
+    i = i || indices();
+    if (i.uaTelephone || i.uaMobileDeclare === true) return "telephone";
+    if (i.uaTablette) return i.largeur >= 1024 ? "tablette" : "telephone";
+    if (i.pointeurFin && i.survol && i.largeur >= 1024) return "ordinateur";
+    if (i.largeur >= 1024 && !i.pointeurGrossier) return "ordinateur";
+    if (i.largeur >= 768) return "tablette";
+    return "telephone";
+  }
+  function appliquer() {
+    var a = detecter();
+    if (document.body) document.body.setAttribute("data-appareil", a);
+    return a;
+  }
+  /* Deux sources d'événement : `resize` n'est pas toujours délivré (mesuré :
+     dans un volet de navigateur intégré, il ne l'était pas), un changement de
+     media query l'est. Une seule source laissait l'attribut figé au départ. */
+  var courant = appliquer(), tm = null;
+  function replanifier() { clearTimeout(tm); tm = setTimeout(function () { courant = appliquer(); }, 250); }
+  addEventListener("resize", replanifier);
+  ["(min-width: 768px)", "(min-width: 1024px)", "(pointer: fine)"].forEach(function (q) {
+    try {
+      var m = matchMedia(q);
+      /* Deux API distinctes, deux signatures : addEventListener prend un type,
+         addListener prend seulement la fonction. Les confondre — ce que j'avais
+         fait — inscrit la chaîne « change » comme rappel et n'écoute rien. */
+      if (m.addEventListener) m.addEventListener("change", replanifier);
+      else if (m.addListener) m.addListener(replanifier);
+    } catch (e) { /* navigateur ancien : `resize` seul */ }
+  });
+  window.sromAppareil = { indices: indices, detecter: detecter, appliquer: appliquer,
+    courant: function () { return { appareil: courant }; },
+    estOrdinateur: function () { return courant === "ordinateur"; } };
+})();
+</script>
 </body>
 </html>
